@@ -15,72 +15,89 @@ class HelperTest extends TestCase
     {
         $hepler = new Bliskapaczka_Shipping_Method_Helper();
 
-        // $this->assertEquals(
-        //     'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_X',
-        //     $hepler::SIZE_TYPE_FIXED_SIZE_X
-        // );
-        // $this->assertEquals(
-        //     'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_Y',
-        //     $hepler::SIZE_TYPE_FIXED_SIZE_Y
-        // );
-        // $this->assertEquals(
-        //     'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_Z',
-        //     $hepler::SIZE_TYPE_FIXED_SIZE_Z
-        // );
-        // $this->assertEquals(
-        //     'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_WEIGHT',
-        //     $hepler::SIZE_TYPE_FIXED_SIZE_WEIGHT
-        // );
+        $this->assertEquals(
+            'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_X',
+            $hepler::SIZE_TYPE_FIXED_SIZE_X
+        );
+        $this->assertEquals(
+            'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_Y',
+            $hepler::SIZE_TYPE_FIXED_SIZE_Y
+        );
+        $this->assertEquals(
+            'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_Z',
+            $hepler::SIZE_TYPE_FIXED_SIZE_Z
+        );
+        $this->assertEquals(
+            'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_WEIGHT',
+            $hepler::SIZE_TYPE_FIXED_SIZE_WEIGHT
+        );
 
-        // $this->assertEquals(
-        //     'BLISKAPACZKA_API_KEY',
-        //     $hepler::API_KEY
-        // );
-        // $this->assertEquals(
-        //     'BLISKAPACZKA_TEST_MODE',
-        //     $hepler::TEST_MODE
-        // );
+        $this->assertEquals(
+            'BLISKAPACZKA_API_KEY',
+            $hepler::API_KEY
+        );
+        $this->assertEquals(
+            'BLISKAPACZKA_TEST_MODE',
+            $hepler::TEST_MODE
+        );
 
-        // $this->assertEquals(
-        //     'BLISKAPACZKA_SENDER_EMAIL',
-        //     $hepler::SENDER_EMAIL
-        // );
-        // $this->assertEquals(
-        //     'BLISKAPACZKA_SENDER_FIRST_NAME',
-        //     $hepler::SENDER_FIRST_NAME
-        // );
-        // $this->assertEquals(
-        //     'BLISKAPACZKA_SENDER_LAST_NAME',
-        //     $hepler::SENDER_LAST_NAME
-        // );
-        // $this->assertEquals(
-        //     'BLISKAPACZKA_SENDER_PHONE_NUMBER',
-        //     $hepler::SENDER_PHONE_NUMBER
-        // );
-        // $this->assertEquals(
-        //     'BLISKAPACZKA_SENDER_STREET',
-        //     $hepler::SENDER_STREET
-        // );
-        // $this->assertEquals(
-        //     'BLISKAPACZKA_SENDER_BUILDING_NUMBER',
-        //     $hepler::SENDER_BUILDING_NUMBER
-        // );
-        // $this->assertEquals(
-        //     'BLISKAPACZKA_SENDER_FLAT_NUMBER',
-        //     $hepler::SENDER_FLAT_NUMBER
-        // );
-        // $this->assertEquals(
-        //     'BLISKAPACZKA_SENDER_POST_CODE',
-        //     $hepler::SENDER_POST_CODE
-        // );
-        // $this->assertEquals(
-        //     'BLISKAPACZKA_SENDER_CITY',
-        //     $hepler::SENDER_CITY
-        // );
-        // $this->assertEquals(
-        //     'BLISKAPACZKA_GOOGLE_MAP_API_KEY',
-        //     $hepler::GOOGLE_MAP_API_KEY
-        // );
+        $this->assertEquals(
+            'BLISKAPACZKA_SENDER_EMAIL',
+            $hepler::SENDER_EMAIL
+        );
+        $this->assertEquals(
+            'BLISKAPACZKA_SENDER_FIRST_NAME',
+            $hepler::SENDER_FIRST_NAME
+        );
+        $this->assertEquals(
+            'BLISKAPACZKA_SENDER_LAST_NAME',
+            $hepler::SENDER_LAST_NAME
+        );
+        $this->assertEquals(
+            'BLISKAPACZKA_SENDER_PHONE_NUMBER',
+            $hepler::SENDER_PHONE_NUMBER
+        );
+        $this->assertEquals(
+            'BLISKAPACZKA_SENDER_STREET',
+            $hepler::SENDER_STREET
+        );
+        $this->assertEquals(
+            'BLISKAPACZKA_SENDER_BUILDING_NUMBER',
+            $hepler::SENDER_BUILDING_NUMBER
+        );
+        $this->assertEquals(
+            'BLISKAPACZKA_SENDER_FLAT_NUMBER',
+            $hepler::SENDER_FLAT_NUMBER
+        );
+        $this->assertEquals(
+            'BLISKAPACZKA_SENDER_POST_CODE',
+            $hepler::SENDER_POST_CODE
+        );
+        $this->assertEquals(
+            'BLISKAPACZKA_SENDER_CITY',
+            $hepler::SENDER_CITY
+        );
+        $this->assertEquals(
+            'BLISKAPACZKA_GOOGLE_MAP_API_KEY',
+            $hepler::GOOGLE_MAP_API_KEY
+        );
+    }
+
+    /**
+     * @dataProvider moduleSettings
+     */
+    public function testGetGoogleMapApiKey($apiKey, $expectedValue)
+    {
+        $hepler = new Bliskapaczka_Shipping_Method_Helper();
+        $this->assertEquals($expectedValue, $hepler->getGoogleMapApiKey($apiKey));
+    }
+
+    public function moduleSettings()
+    {
+        return [
+            [['BLISKAPACZKA_GOOGLE_MAP_API_KEY' => false] , 'AIzaSyCUyydNCGhxGi5GIt5z5I-X6hofzptsRjE'],
+            [['BLISKAPACZKA_GOOGLE_MAP_API_KEY' => 'abcd'], 'abcd']
+        ];
     }
 
     public function testGetLowestPrice()
@@ -275,11 +292,8 @@ class HelperTest extends TestCase
     {
         $hepler = new Bliskapaczka_Shipping_Method_Helper();
 
-        $mode = $hepler->getApiMode(1);
+        $mode = $hepler->getApiMode('yes');
         $this->assertEquals('test', $mode);
-
-        $mode = $hepler->getApiMode(0);
-        $this->assertEquals('prod', $mode);
 
         $mode = $hepler->getApiMode();
         $this->assertEquals('prod', $mode);

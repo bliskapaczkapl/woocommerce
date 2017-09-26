@@ -1,9 +1,11 @@
 #!/bin/bash
 
-vendor/bin/phpcs --config-set installed_paths ../../wp-coding-standards/wpcs
-vendor/bin/phpcs -s --colors --standard=WordPress bliskapaczka-shipping.php
-vendor/bin/phpmd bliskapaczka-shipping.php text codesize
-vendor/bin/phpcpd bliskapaczka-shipping.php
+MODULE_DIR=wp-content/plugins/bliskapaczka-shipping-method
+
+$MODULE_DIR/vendor/bin/phpc --config-set installed_paths ../../wp-coding-standards/wpcs
+$MODULE_DIR/vendor/bin/phpcs -s --colors --standard=WordPress $MODULE_DIR/class-bliskapaczka-shipping-method.php
+$MODULE_DIR/vendor/bin/phpmd $MODULE_DIR/class-bliskapaczka-shipping-method.php text codesize
+$MODULE_DIR/vendor/bin/phpcpd $MODULE_DIR/class-bliskapaczka-shipping-method.php
 # vendor/bin/phpdoccheck --directory=app
-vendor/bin/phploc bliskapaczka-shipping.php
-vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/unit/
+$MODULE_DIR/vendor/bin/phploc $MODULE_DIR/class-bliskapaczka-shipping-method.php
+$MODULE_DIR/vendor/bin/phpunit --bootstrap $MODULE_DIR/tests/bootstrap.php $MODULE_DIR/tests/unit/

@@ -5,28 +5,27 @@
  */
 class Bliskapaczka_Shipping_Method_Helper
 {
-	const DEFAULT_GOOGLE_API_KEY = 'AIzaSyCUyydNCGhxGi5GIt5z5I-X6hofzptsRjE';
+    const DEFAULT_GOOGLE_API_KEY =  'AIzaSyCUyydNCGhxGi5GIt5z5I-X6hofzptsRjE';
 
-    const PARCEL_SIZE_TYPE_XML_PATH = 'carriers/sendit_bliskapaczka/parcel_size_type';
-    const PARCEL_TYPE_FIXED_SIZE_X_XML_PATH = 'carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_x';
-    const PARCEL_TYPE_FIXED_SIZE_Y_XML_PATH = 'carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_y';
-    const PARCEL_TYPE_FIXED_SIZE_Z_XML_PATH = 'carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_z';
-    const PARCEL_TYPE_FIXED_SIZE_WEIGHT_XML_PATH = 'carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_weight';
-    
-    const SENDER_EMAIL = 'carriers/sendit_bliskapaczka/sender_email';
-    const SENDER_FIRST_NAME = 'carriers/sendit_bliskapaczka/sender_first_name';
-    const SENDER_LAST_NAME = 'carriers/sendit_bliskapaczka/sender_last_name';
-    const SENDER_PHONE_NUMBER = 'carriers/sendit_bliskapaczka/sender_phone_number';
-    const SENDER_STREET = 'carriers/sendit_bliskapaczka/sender_street';
-    const SENDER_BUILDING_NUMBER = 'carriers/sendit_bliskapaczka/sender_building_number';
-    const SENDER_FLAT_NUMBER = 'carriers/sendit_bliskapaczka/sender_flat_number';
-    const SENDER_POST_CODE = 'carriers/sendit_bliskapaczka/sender_post_code';
-    const SENDER_CITY = 'carriers/sendit_bliskapaczka/sender_city';
+    const SIZE_TYPE_FIXED_SIZE_X = 'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_X';
+    const SIZE_TYPE_FIXED_SIZE_Y = 'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_Y';
+    const SIZE_TYPE_FIXED_SIZE_Z = 'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_Z';
+    const SIZE_TYPE_FIXED_SIZE_WEIGHT = 'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_WEIGHT';
 
-    const API_KEY_XML_PATH = 'carriers/sendit_bliskapaczka/bliskapaczkaapikey';
-    const API_TEST_MODE_XML_PATH = 'carriers/sendit_bliskapaczka/test_mode';
+    const SENDER_EMAIL = 'BLISKAPACZKA_SENDER_EMAIL';
+    const SENDER_FIRST_NAME = 'BLISKAPACZKA_SENDER_FIRST_NAME';
+    const SENDER_LAST_NAME = 'BLISKAPACZKA_SENDER_LAST_NAME';
+    const SENDER_PHONE_NUMBER = 'BLISKAPACZKA_SENDER_PHONE_NUMBER';
+    const SENDER_STREET = 'BLISKAPACZKA_SENDER_STREET';
+    const SENDER_BUILDING_NUMBER = 'BLISKAPACZKA_SENDER_BUILDING_NUMBER';
+    const SENDER_FLAT_NUMBER = 'BLISKAPACZKA_SENDER_FLAT_NUMBER';
+    const SENDER_POST_CODE = 'BLISKAPACZKA_SENDER_POST_CODE';
+    const SENDER_CITY = 'BLISKAPACZKA_SENDER_CITY';
 
-    const GOOGLE_MAP_API_KEY_XML_PATH = 'carriers/sendit_bliskapaczka/google_map_api_key';
+    const API_KEY = 'BLISKAPACZKA_API_KEY';
+    const TEST_MODE = 'BLISKAPACZKA_TEST_MODE';
+
+    const GOOGLE_MAP_API_KEY = 'BLISKAPACZKA_GOOGLE_MAP_API_KEY';
 
     /**
      * Get parcel dimensions in format accptable by Bliskapaczka API
@@ -54,15 +53,16 @@ class Bliskapaczka_Shipping_Method_Helper
 /**
      * Get Google API key. If key is not defined return default.
      *
+     * @param array $settings
      * @return string
      */
-    public function getGoogleMapApiKey()
+    public function getGoogleMapApiKey($settings)
     {
         $googleApiKey = self::DEFAULT_GOOGLE_API_KEY;
 
-        // if (\Configuration::get(self::GOOGLE_MAP_API_KEY)) {
-        //     $googleApiKey = \Configuration::get(self::GOOGLE_MAP_API_KEY);
-        // }
+        if ($settings['BLISKAPACZKA_GOOGLE_MAP_API_KEY']) {
+            $googleApiKey = $settings['BLISKAPACZKA_GOOGLE_MAP_API_KEY'];
+        }
 
         return $googleApiKey;
     }
@@ -131,7 +131,13 @@ class Bliskapaczka_Shipping_Method_Helper
      */
     public function getPriceList()
     {
-        $apiClient = $this->getApiClient();
+        /* @var Bliskapaczka_Shipping_Method $bliskapaczka */
+        $bliskapaczka = new Bliskapaczka_Shipping_Method();
+
+        $apiClient = $this->getApiClient(
+            $bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
+            $bliskapaczka->settings['BLISKAPACZKA_TEST_MODE']
+        );
         $priceList = $apiClient->getPricing(
             array("parcel" => array('dimensions' => $this->getParcelDimensions()))
         );
@@ -167,14 +173,15 @@ class Bliskapaczka_Shipping_Method_Helper
     /**
      * Get Bliskapaczka API Client
      *
+     * @param string $apiKey
+     * @param string $mode
      * @return \Bliskapaczka\ApiClient\Bliskapaczka
      */
-    public function getApiClient()
+    public function getApiClient($apiKey, $mode)
     {
         $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka(
-        	'0854c14f-ab66-42a8-8710-e737bf062fb2', 'test'
-            // Mage::getStoreConfig(self::API_KEY_XML_PATH),
-            // $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
+        	$apiKey,
+            $this->getApiMode($mode)
         );
 
         return $apiClient;
@@ -208,7 +215,7 @@ class Bliskapaczka_Shipping_Method_Helper
         $mode = '';
 
         switch ($configValue) {
-            case '1':
+            case 'yes':
                 $mode = 'test';
                 break;
 

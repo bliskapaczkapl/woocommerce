@@ -9,29 +9,34 @@ class Bliskapaczka_Shipping_Method_Mapper
 	/**
      * Prepare mapped data for Bliskapaczka API
      *
-     * @param Mage_Sales_Model_Order $order
-     * @param Sendit_Bliskapaczka_Helper_Data $helper
+     * @param WC_Order $order
+     * @param Bliskapaczka_Shipping_Method_Helper $helper
      * @return array
      */
     public function getData(WC_Order $order, Bliskapaczka_Shipping_Method_Helper $helper)
     {
         $data = [];
 
-        $shippingAddress = $order->getShippingAddress();
+        $shippingAddress = $order->get_address('shipping');
+        $billingAddress = $order->get_address('billing');
 
-        $data['receiverFirstName'] = $shippingAddress->getFirstname();
-        $data['receiverLastName'] = $shippingAddress->getLastname();
-        $data['receiverPhoneNumber'] = $helper->telephoneNumberCeaning($shippingAddress->getTelephone());
-        $data['receiverEmail'] = $shippingAddress->getEmail();
+        $data['receiverFirstName'] = $shippingAddress['first_name'];
+        $data['receiverLastName'] = $shippingAddress['last_name'];
+        $data['receiverPhoneNumber'] = $helper->telephoneNumberCeaning($billingAddress['phone']);
+        $data['receiverEmail'] = $billingAddress['email'];
 
-        $data['operatorName'] = $shippingAddress->getPosOperator();
-        $data['destinationCode'] = $shippingAddress->getPosCode();
+        foreach ( $order->get_items( array( 'shipping' ) ) as $item_id => $item ) {
+            $shipping_item_id = $item_id;
+        }
+
+        $data['operatorName'] = wc_get_order_item_meta( $shipping_item_id, '_bliskapaczka_posOperator' );
+        $data['destinationCode'] = wc_get_order_item_meta( $shipping_item_id, '_bliskapaczka_posCode' );
 
         $data['parcel'] = [
-            'dimensions' => $this->_getParcelDimensions($helper)
+            'dimensions' => $this->getParcelDimensions($helper)
         ];
 
-        $data = $this->_prepareSenderData($data, $helper);
+        // $data = $this->_prepareSenderData($data, $helper);
 
         return $data;
     }
@@ -39,10 +44,10 @@ class Bliskapaczka_Shipping_Method_Mapper
     /**
      * Get parcel dimensions in format accptable by Bliskapaczka API
      *
-     * @param Sendit_Bliskapaczka_Helper_Data $helper
+     * @param Bliskapaczka_Shipping_Method_Helper $helper
      * @return array
      */
-    protected function _getParcelDimensions(Sendit_Bliskapaczka_Helper_Data $helper)
+    protected function getParcelDimensions(Bliskapaczka_Shipping_Method_Helper $helper)
     {
         return $helper->getParcelDimensions();
     }
@@ -51,12 +56,12 @@ class Bliskapaczka_Shipping_Method_Mapper
      * Prepare sender data in fomrat accptable by Bliskapaczka API
      *
      * @param array $data
-     * @param Sendit_Bliskapaczka_Helper_Data $helper
+     * @param Bliskapaczka_Shipping_Method_Helper $helper
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _prepareSenderData($data, Sendit_Bliskapaczka_Helper_Data $helper)
+    protected function _prepareSenderData($data, Bliskapaczka_Shipping_Method_Helper $helper)
     {
         if (Mage::getStoreConfig($helper::SENDER_EMAIL)) {
             $data['senderEmail'] = Mage::getStoreConfig($helper::SENDER_EMAIL);

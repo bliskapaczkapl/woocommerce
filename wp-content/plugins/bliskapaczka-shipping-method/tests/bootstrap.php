@@ -36,18 +36,19 @@ function autoloader($class)
         $class = strtolower($class);
         $class = 'class-' . $class . '.php';
 
-        $filePath = $GLOBALS['ROOT_DIR'] . '/wp-content/plugins/woocommerce/includes/' . $class;
+        $filePath = $GLOBALS['ROOT_DIR'] . '../woocommerce/includes/' . $class;
         // @codingStandardsIgnoreStart
         require_once($filePath);
         // @codingStandardsIgnoreEnd
     }
 
     if (preg_match('#^(WC_Abstract)#', $class)) {
+        $class = str_replace('_Abstract', '', $class);
     	$class = str_replace('_', '-', $class);
         $class = strtolower($class);
         $class = 'abstract-' . $class . '.php';
 
-        $filePath = $GLOBALS['ROOT_DIR'] . '/wp-content/plugins/woocommerce/includes/abstracts/' . $class;
+        $filePath = $GLOBALS['ROOT_DIR'] . '../woocommerce/includes/abstracts/' . $class;
         // @codingStandardsIgnoreStart
         require_once($filePath);
         // @codingStandardsIgnoreEnd
