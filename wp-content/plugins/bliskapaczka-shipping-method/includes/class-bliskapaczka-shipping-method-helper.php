@@ -60,8 +60,8 @@ class Bliskapaczka_Shipping_Method_Helper
     {
         $googleApiKey = self::DEFAULT_GOOGLE_API_KEY;
 
-        if ($settings['BLISKAPACZKA_GOOGLE_MAP_API_KEY']) {
-            $googleApiKey = $settings['BLISKAPACZKA_GOOGLE_MAP_API_KEY'];
+        if ($settings[self::GOOGLE_MAP_API_KEY]) {
+            $googleApiKey = $settings[self::GOOGLE_MAP_API_KEY];
         }
 
         return $googleApiKey;

@@ -237,7 +237,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			echo " <a href='#bpWidget_wrapper' " .
 				"onclick='Bliskapaczka.showMap(" .
 					esc_html( $helper->getOperatorsForWidget() ) .
-					", \"" .
+					', \"' .
 					esc_html( $helper->getGoogleMapApiKey( $bliskapaczka->settings ) ) .
 					"\")'>" .
 				'Select delivery point</a>';
@@ -289,7 +289,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * @param mixed $packages Some data.
 	 */
 	function update_price_for_chosen_carrier( $packages ) {
+		// @codingStandardsIgnoreStart
 		parse_str( $_POST['post_data'], $checkout_data );
+		// @codingStandardsIgnoreEnd
 		$pos_code = isset( $checkout_data['bliskapaczka_posCode'] ) ? wc_clean( $checkout_data['bliskapaczka_posCode'] ) : '';
 		$pos_operator = isset( $checkout_data['bliskapaczka_posOperator'] ) ? wc_clean( $checkout_data['bliskapaczka_posOperator'] ) : '';
 
@@ -326,14 +328,17 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * Create new order in Bliska Paczka if shipping method is bliskapaczka.
 	 *
 	 * @param int $order_id Order ID.
+	 * @throws Exception If can't send data to bliskapaczka.
 	 */
 	function create_order_via_api( $order_id ) {
 		if ( 0 < $order_id ) {
 			$order = wc_get_order( $order_id );
 		}
 
+		// @codingStandardsIgnoreStart
 		$pos_code = isset( $_POST['bliskapaczka_posCode'] ) ? wc_clean( $_POST['bliskapaczka_posCode'] ) : '';
 		$pos_operator = isset( $_POST['bliskapaczka_posOperator'] ) ? wc_clean( $_POST['bliskapaczka_posOperator'] ) : '';
+		// @codingStandardsIgnoreEnd
 
 		foreach ( $order->get_items( array( 'shipping' ) ) as $item_id => $item ) {
 			$shipping_item_id = $item_id;
@@ -359,7 +364,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 		/* @var Bliskapaczka_Shipping_Method_Mapper $mapper */
 		$mapper = new Bliskapaczka_Shipping_Method_Mapper();
-		$order_data = $mapper->getData( $order, $helper );
+		$order_data = $mapper->getData( $order, $helper, $bliskapaczka->settings );
 
 		try {
 			$api_client = $helper->getApiClient(

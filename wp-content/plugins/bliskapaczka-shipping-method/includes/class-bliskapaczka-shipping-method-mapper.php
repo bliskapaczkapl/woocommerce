@@ -13,7 +13,7 @@ class Bliskapaczka_Shipping_Method_Mapper
      * @param Bliskapaczka_Shipping_Method_Helper $helper
      * @return array
      */
-    public function getData(WC_Order $order, Bliskapaczka_Shipping_Method_Helper $helper)
+    public function getData(WC_Order $order, Bliskapaczka_Shipping_Method_Helper $helper, $settings)
     {
         $data = [];
 
@@ -36,7 +36,7 @@ class Bliskapaczka_Shipping_Method_Mapper
             'dimensions' => $this->getParcelDimensions($helper)
         ];
 
-        // $data = $this->_prepareSenderData($data, $helper);
+        $data = $this->_prepareSenderData($data, $helper, $settings);
 
         return $data;
     }
@@ -57,48 +57,49 @@ class Bliskapaczka_Shipping_Method_Mapper
      *
      * @param array $data
      * @param Bliskapaczka_Shipping_Method_Helper $helper
+     * @param array $settings
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _prepareSenderData($data, Bliskapaczka_Shipping_Method_Helper $helper)
+    protected function _prepareSenderData($data, Bliskapaczka_Shipping_Method_Helper $helper, $settings)
     {
-        if (Mage::getStoreConfig($helper::SENDER_EMAIL)) {
-            $data['senderEmail'] = Mage::getStoreConfig($helper::SENDER_EMAIL);
+        if ($settings[$helper::SENDER_EMAIL]) {
+            $data['senderEmail'] = $settings[$helper::SENDER_EMAIL];
         }
 
-        if (Mage::getStoreConfig($helper::SENDER_FIRST_NAME)) {
-            $data['senderFirstName'] = Mage::getStoreConfig($helper::SENDER_FIRST_NAME);
+        if ($settings[$helper::SENDER_FIRST_NAME]) {
+            $data['senderFirstName'] = $settings[$helper::SENDER_FIRST_NAME];
         }
 
-        if (Mage::getStoreConfig($helper::SENDER_LAST_NAME)) {
-            $data['senderLastName'] = Mage::getStoreConfig($helper::SENDER_LAST_NAME);
+        if ($settings[$helper::SENDER_LAST_NAME]) {
+            $data['senderLastName'] = $settings[$helper::SENDER_LAST_NAME];
         }
 
-        if (Mage::getStoreConfig($helper::SENDER_PHONE_NUMBER)) {
+        if ($settings[$helper::SENDER_PHONE_NUMBER]) {
             $data['senderPhoneNumber'] = $helper->telephoneNumberCeaning(
-                Mage::getStoreConfig($helper::SENDER_PHONE_NUMBER)
+                $settings[$helper::SENDER_PHONE_NUMBER]
             );
         }
 
-        if (Mage::getStoreConfig($helper::SENDER_STREET)) {
-            $data['senderStreet'] = Mage::getStoreConfig($helper::SENDER_STREET);
+        if ($settings[$helper::SENDER_STREET]) {
+            $data['senderStreet'] = $settings[$helper::SENDER_STREET];
         }
 
-        if (Mage::getStoreConfig($helper::SENDER_BUILDING_NUMBER)) {
-            $data['senderBuildingNumber'] = Mage::getStoreConfig($helper::SENDER_BUILDING_NUMBER);
+        if ($settings[$helper::SENDER_BUILDING_NUMBER]) {
+            $data['senderBuildingNumber'] = $settings[$helper::SENDER_BUILDING_NUMBER];
         }
 
-        if (Mage::getStoreConfig($helper::SENDER_FLAT_NUMBER)) {
-            $data['senderFlatNumber'] = Mage::getStoreConfig($helper::SENDER_FLAT_NUMBER);
+        if ($settings[$helper::SENDER_FLAT_NUMBER]) {
+            $data['senderFlatNumber'] = $settings[$helper::SENDER_FLAT_NUMBER];
         }
 
-        if (Mage::getStoreConfig($helper::SENDER_POST_CODE)) {
-            $data['senderPostCode'] = Mage::getStoreConfig($helper::SENDER_POST_CODE);
+        if ($settings[$helper::SENDER_POST_CODE]) {
+            $data['senderPostCode'] = $settings[$helper::SENDER_POST_CODE];
         }
 
-        if (Mage::getStoreConfig($helper::SENDER_CITY)) {
-            $data['senderCity'] = Mage::getStoreConfig($helper::SENDER_CITY);
+        if ($settings[$helper::SENDER_CITY]) {
+            $data['senderCity'] = $settings[$helper::SENDER_CITY];
         }
 
         return $data;

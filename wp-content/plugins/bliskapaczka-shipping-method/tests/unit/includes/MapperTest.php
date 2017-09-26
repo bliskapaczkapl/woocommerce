@@ -29,9 +29,31 @@ class MapperTest extends TestCase
         $this->operatorName = 'INPOST';
         $this->destinationCode = 'KRA010';
 
+        $this->senderEmail = 'zenek.sender.bliskopaczki@bliskapaczka.pl';
+        $this->senderFirstName = 'Zbyszek';
+        $this->senderLastName = 'Dalekopaczki';
+        $this->senderPhoneNumber = '504 445 665';
+        $this->senderStreet = 'ul. Bliskopaczkowa';
+        $this->senderBuildingNumber = '11b';
+        $this->senderFlatNumber = '1';
+        $this->senderPostCode = '76-200';
+        $this->senderCity = 'Wrocław';
+
+        $this->settings = [
+            'BLISKAPACZKA_SENDER_EMAIL' => $this->senderEmail,
+            'BLISKAPACZKA_SENDER_FIRST_NAME' => $this->senderFirstName,
+            'BLISKAPACZKA_SENDER_LAST_NAME' => $this->senderLastName,
+            'BLISKAPACZKA_SENDER_PHONE_NUMBER' => $this->senderPhoneNumber,
+            'BLISKAPACZKA_SENDER_STREET' => $this->senderStreet,
+            'BLISKAPACZKA_SENDER_BUILDING_NUMBER' => $this->senderBuildingNumber,
+            'BLISKAPACZKA_SENDER_FLAT_NUMBER' => $this->senderFlatNumber,
+            'BLISKAPACZKA_SENDER_POST_CODE' => $this->senderPostCode,
+            'BLISKAPACZKA_SENDER_CITY' => $this->senderCity,
+        ];
+
         $this->orderMock = $this->getMockBuilder(\WC_Order::class)
                                      ->disableOriginalConstructor()
-                                     ->disableOriginalClone()
+                                      ->disableOriginalClone()
                                      ->disableArgumentCloning()
                                      ->disallowMockingUnknownTypes()
                                      ->setMethods(
@@ -112,7 +134,7 @@ class MapperTest extends TestCase
     public function testTypeOfReturnedData()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
-        $data = $mapper->getData($this->orderMock, $this->helperMock);
+        $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertTrue(is_array($data));
     }
@@ -120,7 +142,7 @@ class MapperTest extends TestCase
     public function testMapperForReceiverFirstName()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
-        $data = $mapper->getData($this->orderMock, $this->helperMock);
+        $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals($this->receiverFirstName, $data['receiverFirstName']);
     }
@@ -128,7 +150,7 @@ class MapperTest extends TestCase
     public function testMapperForReceiverLastName()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
-        $data = $mapper->getData($this->orderMock, $this->helperMock);
+        $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals($this->receiverLastName, $data['receiverLastName']);
     }
@@ -136,7 +158,7 @@ class MapperTest extends TestCase
     public function testMapperForReceiverPhoneNumber()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
-        $data = $mapper->getData($this->orderMock, $this->helperMock);
+        $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals('504445665', $data['receiverPhoneNumber']);
     }
@@ -144,7 +166,7 @@ class MapperTest extends TestCase
     public function testMapperForReceiverEmail()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
-        $data = $mapper->getData($this->orderMock, $this->helperMock);
+        $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals($this->receiverEmail, $data['receiverEmail']);
     }
@@ -152,7 +174,7 @@ class MapperTest extends TestCase
     public function testMapperForOperatorName()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
-        $data = $mapper->getData($this->orderMock, $this->helperMock);
+        $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals($this->operatorName, $data['operatorName']);
     }
@@ -160,7 +182,7 @@ class MapperTest extends TestCase
     public function testMapperForDestinationCode()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
-        $data = $mapper->getData($this->orderMock, $this->helperMock);
+        $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals($this->destinationCode, $data['destinationCode']);
     }
@@ -168,8 +190,80 @@ class MapperTest extends TestCase
     public function testMapperForParcel()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
-        $data = $mapper->getData($this->orderMock, $this->helperMock);
+        $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertTrue(is_array($data['parcel']));
+    }
+
+    public function testMapperForSenderFirstName()
+    {
+        $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
+
+        $this->assertEquals($this->senderFirstName, $data['senderFirstName']);
+    }
+
+    public function testMapperForSenderLastName()
+    {
+        $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
+
+        $this->assertEquals($this->senderLastName, $data['senderLastName']);
+    }
+
+    public function testMapperForSenderPhoneNumber()
+    {
+        $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
+
+        $this->assertEquals('504445665', $data['senderPhoneNumber']);
+    }
+
+    public function testMapperForSenderEmail()
+    {
+        $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
+
+        $this->assertEquals($this->senderEmail, $data['senderEmail']);
+    }
+
+    public function testMapperForSenderStreet()
+    {
+        $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
+
+        $this->assertEquals($this->senderStreet, $data['senderStreet']);
+    }
+
+    public function testMapperForSenderBuildingNumber()
+    {
+        $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
+
+        $this->assertEquals($this->senderBuildingNumber, $data['senderBuildingNumber']);
+    }
+
+    public function testMapperForSenderFlatNumber()
+    {
+        $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
+
+        $this->assertEquals($this->senderFlatNumber, $data['senderFlatNumber']);
+    }
+
+    public function testMapperForSenderPostCode()
+    {
+        $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
+
+        $this->assertEquals($this->senderPostCode, $data['senderPostCode']);
+    }
+
+    public function testMapperForSenderCity()
+    {
+        $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
+
+        $this->assertEquals($this->senderCity, $data['senderCity']);
     }
 }
