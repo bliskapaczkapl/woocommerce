@@ -8,7 +8,7 @@ before_script:
   - mv vendor wp-content/plugins/bliskapaczka-shipping-method/
 script: 
   - wp-content/plugins/bliskapaczka-shipping-method/vendor/bin/phpcs --config-set installed_paths ../../wp-coding-standards/wpcs
-  - wp-con tent/plugins/bliskapaczka-shipping-method/vendor/bin/phpcs -s --colors --standard=WordPress wp-content/plugins/bliskapaczka-shipping-method/class-bliskapaczka-shipping-method.php
+  - wp-content/plugins/bliskapaczka-shipping-method/vendor/bin/phpcs -s --colors --standard=WordPress wp-content/plugins/bliskapaczka-shipping-method/class-bliskapaczka-shipping-method.php
   - wp-content/plugins/bliskapaczka-shipping-method/vendor/bin/phpcpd wp-content/plugins/bliskapaczka-shipping-method/class-bliskapaczka-shipping-method.php
   - wp-content/plugins/bliskapaczka-shipping-method/vendor/bin/phploc wp-content/plugins/bliskapaczka-shipping-method/class-bliskapaczka-shipping-method.php
   - wp-content/plugins/bliskapaczka-shipping-method/vendor/bin/phpunit --bootstrap wp-content/plugins/bliskapaczka-shipping-method/tests/bootstrap.php wp-content/plugins/bliskapaczka-shipping-method/tests/unit/
