@@ -1,0 +1,22 @@
+{
+    "name": "bliskapaczkapl/bliskapaczka-api-client",
+    "description": "BliczkaPaczka API Client",
+    "require": {
+        "psr/log": "~1.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7",
+        "squizlabs/php_codesniffer": "2.*",
+        "phpmd/phpmd": "^2.4",
+        "sebastian/phpcpd":"^2.0",
+        "block8/php-docblock-checker":"^1.1",
+        "phploc/phploc":"^3.0"
+    },
+    "type": "api client",
+    "autoload": {
+        "files": ["src/helpers.php"],
+        "psr-4": {
+            "Bliskapaczka\\": "src/Bliskapaczka/"
+        }
+    }
+}

@@ -1,0 +1,23 @@
+sudo: required
+
+language: php
+
+php:
+  - '5.6'
+
+services:
+  - docker
+
+before_install:
+  - docker pull madkom/pact-mock-service
+  - docker run -p 1234:1234 -v /tmp/log:/var/log/pacto -v /tmp/contracts:/opt/contracts madkom/pact-mock-service &
+
+before_script: composer install
+script: 
+  - vendor/bin/phpcs -s --colors --standard=PSR2 src/ tests/
+  - vendor/bin/phpmd src/ text codesize
+  - vendor/bin/phpcpd src/
+  - vendor/bin/phpdoccheck --directory=src/ 
+  - vendor/bin/phploc src/
+  - vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/unit
+  - vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/pact/

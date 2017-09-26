@@ -1,0 +1,94 @@
+[
+    {
+        "name": "psr/log",
+        "version": "1.0.2",
+        "version_normalized": "1.0.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/php-fig/log.git",
+            "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+            "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2016-10-10 12:19:37",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Psr\\Log\\": "Psr/Log/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "PHP-FIG",
+                "homepage": "http://www.php-fig.org/"
+            }
+        ],
+        "description": "Common interface for logging libraries",
+        "homepage": "https://github.com/php-fig/log",
+        "keywords": [
+            "log",
+            "psr",
+            "psr-3"
+        ]
+    },
+    {
+        "name": "bliskapaczkapl/bliskapaczka-api-client",
+        "version": "1.0.7",
+        "version_normalized": "1.0.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/bliskapaczkapl/bliskapaczka-api-client.git",
+            "reference": "85650972916d57e2ebf0846023a6d6eca07bfc55"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/85650972916d57e2ebf0846023a6d6eca07bfc55",
+            "reference": "85650972916d57e2ebf0846023a6d6eca07bfc55",
+            "shasum": ""
+        },
+        "require": {
+            "psr/log": "~1.0.0"
+        },
+        "require-dev": {
+            "block8/php-docblock-checker": "^1.1",
+            "phploc/phploc": "^3.0",
+            "phpmd/phpmd": "^2.4",
+            "phpunit/phpunit": "^5.7",
+            "sebastian/phpcpd": "^2.0",
+            "squizlabs/php_codesniffer": "2.*"
+        },
+        "time": "2017-07-25 12:15:27",
+        "type": "api client",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "src/helpers.php"
+            ],
+            "psr-4": {
+                "Bliskapaczka\\": "src/Bliskapaczka/"
+            }
+        },
+        "description": "BliczkaPaczka API Client",
+        "support": {
+            "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/1.0.7",
+            "issues": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/issues"
+        }
+    }
+]
