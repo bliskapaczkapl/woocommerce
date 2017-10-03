@@ -33,7 +33,7 @@ class Bliskapaczka_Shipping_Method_Mapper
         $data['destinationCode'] = wc_get_order_item_meta( $shipping_item_id, '_bliskapaczka_posCode' );
 
         $data['parcel'] = [
-            'dimensions' => $this->getParcelDimensions($helper)
+            'dimensions' => $this->getParcelDimensions($helper, $settings)
         ];
 
         $data = $this->_prepareSenderData($data, $helper, $settings);
@@ -47,9 +47,9 @@ class Bliskapaczka_Shipping_Method_Mapper
      * @param Bliskapaczka_Shipping_Method_Helper $helper
      * @return array
      */
-    protected function getParcelDimensions(Bliskapaczka_Shipping_Method_Helper $helper)
+    protected function getParcelDimensions(Bliskapaczka_Shipping_Method_Helper $helper, $settings)
     {
-        return $helper->getParcelDimensions();
+        return $helper->getParcelDimensions($settings);
     }
 
     /**

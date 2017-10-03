@@ -84,7 +84,40 @@ class HelperTest extends TestCase
     }
 
     /**
-     * @dataProvider moduleSettings
+     * @dataProvider parcelDimensionsModuleSettings
+     */
+    public function getParcelDimensions($settings, $expectedValue)
+    {
+        $hepler = new Bliskapaczka_Shipping_Method_Helper();
+        $this->assertEquals($expectedValue, $hepler->getParcelDimensions($settings));
+    }
+
+    public function parcelDimensionsModuleSettings()
+    {
+        return [
+            [
+                [
+                    'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_X' => 10,
+                    'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_Y' => 10,
+                    'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_Z' => 10,
+                    'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_WEIGHT' => 1
+                ],
+                ["height" => 10, "length" => 10, "width" => 10, "weight" => 1]
+            ],
+            [
+                [
+                    'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_X' => 16,
+                    'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_Y' => 16,
+                    'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_Z' => 10,
+                    'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_WEIGHT' => 10
+                ],
+                ["height" => 16, "length" => 16, "width" => 10, "weight" => 10]
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider googleMapModuleSettings
      */
     public function testGetGoogleMapApiKey($apiKey, $expectedValue)
     {
@@ -92,7 +125,7 @@ class HelperTest extends TestCase
         $this->assertEquals($expectedValue, $hepler->getGoogleMapApiKey($apiKey));
     }
 
-    public function moduleSettings()
+    public function googleMapModuleSettings()
     {
         return [
             [['BLISKAPACZKA_GOOGLE_MAP_API_KEY' => false] , 'AIzaSyCUyydNCGhxGi5GIt5z5I-X6hofzptsRjE'],

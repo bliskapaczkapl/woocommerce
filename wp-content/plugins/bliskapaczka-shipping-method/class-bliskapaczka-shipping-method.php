@@ -189,7 +189,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					$price_list = $api_client->getPricing(
 						array(
 							'parcel' => array(
-								'dimensions' => $helper->getParcelDimensions(),
+								'dimensions' => $helper->getParcelDimensions($this->settings),
 							),
 						)
 					);
@@ -237,7 +237,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			echo " <a href='#bpWidget_wrapper' " .
 				"onclick='Bliskapaczka.showMap(" .
 					esc_html( $helper->getOperatorsForWidget() ) .
-					', \"' .
+					', "' .
 					esc_html( $helper->getGoogleMapApiKey( $bliskapaczka->settings ) ) .
 					"\")'>" .
 				'Select delivery point</a>';
@@ -311,7 +311,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$price_list = $api_client->getPricing(
 				array(
 					'parcel' => array(
-						'dimensions' => $helper->getParcelDimensions(),
+						'dimensions' => $helper->getParcelDimensions($bliskapaczka->settings),
 					),
 				)
 			);

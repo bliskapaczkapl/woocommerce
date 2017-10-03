@@ -31,6 +31,6 @@ Katalog `vendor` należy przenieść do katalogu `wp-content/plugins/bliskapaczk
 
 ### Jak uruchomić testy jednostkowe
 ```
-cd modules/bliskapaczka
-php wp-content/plugins/bliskapaczka-shipping-method/vendor/bin/phpunit --bootstrap wp-content/plugins/bliskapaczka-shipping-method/tests/bootstrap.php wp-content/plugins/bliskapaczka-shipping-method/tests/unit/
+cd wp-content/plugins/bliskapaczka-shipping-method
+php vendor/bin/phpunit --bootstrap wp-content/plugins/bliskapaczka-shipping-method/tests/bootstrap.php wp-content/plugins/bliskapaczka-shipping-method/tests/unit/
 ```

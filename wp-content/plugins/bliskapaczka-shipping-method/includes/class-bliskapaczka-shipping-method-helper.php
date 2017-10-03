@@ -32,13 +32,13 @@ class Bliskapaczka_Shipping_Method_Helper
      *
      * @return array
      */
-    public function getParcelDimensions()
+    public function getParcelDimensions($settings)
     {
         // $type = Mage::getStoreConfig(self::PARCEL_SIZE_TYPE_XML_PATH);
-        $height = 16; # Mage::getStoreConfig(self::PARCEL_TYPE_FIXED_SIZE_X_XML_PATH);
-        $length = 16; #  Mage::getStoreConfig(self::PARCEL_TYPE_FIXED_SIZE_Y_XML_PATH);
-        $width = 16; #  Mage::getStoreConfig(self::PARCEL_TYPE_FIXED_SIZE_Z_XML_PATH);
-        $weight = 1; #  Mage::getStoreConfig(self::PARCEL_TYPE_FIXED_SIZE_WEIGHT_XML_PATH);
+        $height = $settings[self::SIZE_TYPE_FIXED_SIZE_X];
+        $length = $settings[self::SIZE_TYPE_FIXED_SIZE_Y];
+        $width = $settings[self::SIZE_TYPE_FIXED_SIZE_Z];
+        $weight = $settings[self::SIZE_TYPE_FIXED_SIZE_WEIGHT];
 
         $dimensions = array(
             "height" => $height,
@@ -50,7 +50,7 @@ class Bliskapaczka_Shipping_Method_Helper
         return $dimensions;
     }
 
-/**
+    /**
      * Get Google API key. If key is not defined return default.
      *
      * @param array $settings
@@ -139,7 +139,7 @@ class Bliskapaczka_Shipping_Method_Helper
             $bliskapaczka->settings['BLISKAPACZKA_TEST_MODE']
         );
         $priceList = $apiClient->getPricing(
-            array("parcel" => array('dimensions' => $this->getParcelDimensions()))
+            array("parcel" => array('dimensions' => $this->getParcelDimensions($bliskapaczka->settings)))
         );
 
         return json_decode($priceList);
