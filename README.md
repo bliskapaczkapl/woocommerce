@@ -20,6 +20,14 @@ W celu poprawnej instalacji modułu wymagane są:
 
 Tryb testowy, czli komunikacja z testową wersją znajdującą się pod adresem [sandbox-bliskapaczka.pl](https://sandbox-bliskapaczka.pl/) można uruchomić zaznaczająć w ustwieniach modułu opcję `Test mode enabled`.
 
+## Docker demo
+
+`docker pull bliskapaczkapl/woocommerce && docker run -d -p 8080:80 bliskapaczkapl/woocommerce`
+
+Front PrestaShop jest dostępny po wpisaniu w przeglądarcę adresu `http://127.0.0.1:8080`.
+
+Po wejści na powyższy adres należy zainstalować WordPress'a oraz plugin WooCommerce a następnie należy zainstalować i skonfigurować moduł Bliskapaczka.pl według instrukcji powyżej.
+
 ## Rozwój modułu
 
 ### Instalacja zależności
