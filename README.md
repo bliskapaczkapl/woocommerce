@@ -22,7 +22,7 @@ Tryb testowy, czli komunikacja z testową wersją znajdującą się pod adresem 
 
 ## Docker demo
 
-`docker pull bliskapaczkapl/woocommerce && docker run -d -p 8080:80 bliskapaczkapl/woocommerce`
+`docker-compose up`
 
 Front PrestaShop jest dostępny po wpisaniu w przeglądarcę adresu `http://127.0.0.1:8080`.
 
