@@ -1,0 +1,4 @@
+MYSQL_DATABASE=woocommerce
+MYSQL_USER=woocommerce
+MYSQL_PASSWORD=woocommerce
+MYSQL_ROOT_PASSWORD=woocommerce

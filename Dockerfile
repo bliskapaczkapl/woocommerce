@@ -10,7 +10,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     apt-utils \
     sudo \
     nginx \
-    mysql-server \
+    mysql-client \
     php5 \
     php5-fpm \
     php5-cli \
@@ -29,11 +29,6 @@ RUN  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 # Nginx
 COPY woocommerce.conf /etc/nginx/sites-available/woocommerce.conf
 RUN (cd /etc/nginx/sites-enabled && ln -s ../sites-available/woocommerce.conf woocommerce.conf && rm -rf default)
-
-# MySQL
-RUN service mysql start \
-    && mysqladmin -uroot password woocommerce \
-    && mysql -uroot -pwoocommerce -e 'CREATE DATABASE IF NOT EXISTS woocommerce'
 
 ENV WORDPRESS_VERSION 4.8.2
 

@@ -4,7 +4,12 @@ service php5-fpm start
 
 service nginx start
 
-service mysql start
+WOOCOMMERCE_PATH=/var/www/wordpress
+
+sed -i -e "s/SET_DB_HOST/$DB_HOST/g" $WOOCOMMERCE_PATH/wp-config.php
+sed -i -e "s/SET_DB_USER/$MYSQL_USER/g" $WOOCOMMERCE_PATH/wp-config.php
+sed -i -e "s/SET_DB_PASS/$MYSQL_PASSWORD/g" $WOOCOMMERCE_PATH/wp-config.php
+sed -i -e "s/SET_DB_NAME/$MYSQL_DATABASE/g" $WOOCOMMERCE_PATH/wp-config.php
 
 while true; do
 echo "Everything fine"
