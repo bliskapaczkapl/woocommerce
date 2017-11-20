@@ -27,6 +27,7 @@ RUN  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "unlink('composer-setup.php');"
 
 # Nginx
+COPY nginx.conf /etc/nginx/nginx.conf
 COPY woocommerce.conf /etc/nginx/sites-available/woocommerce.conf
 RUN (cd /etc/nginx/sites-enabled && ln -s ../sites-available/woocommerce.conf woocommerce.conf && rm -rf default)
 
