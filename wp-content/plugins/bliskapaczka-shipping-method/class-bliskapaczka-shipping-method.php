@@ -240,7 +240,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					', "' .
 					esc_html( $helper->getGoogleMapApiKey( $bliskapaczka->settings ) ) .
 					'", ' .
-					esc_html( ( $helper->getApiMode( $bliskapaczka->settings == 'test' ) ? 'true' : 'false' ) ) .
+					esc_html( ( 'test' === $helper->getApiMode( $bliskapaczka->settings ) ? 'true' : 'false' ) ) .
 					")'>" .
 				'Select delivery point</a>';
 			echo '<input name="bliskapaczka_posCode" type="hidden" id="bliskapaczka_posCode" value="' . esc_html( WC()->session->get( 'bliskapaczka_posCode' ) ) . '" />';
