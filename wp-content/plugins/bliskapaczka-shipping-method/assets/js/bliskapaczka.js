@@ -2,7 +2,7 @@ function Bliskapaczka()
 {
 }
 
-Bliskapaczka.showMap = function (operators, googleMapApiKey) {
+Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode) {
     aboutPoint = document.getElementById('bpWidget_aboutPoint');
     aboutPoint.style.display = 'none';
 
@@ -27,7 +27,8 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey) {
                 Bliskapaczka.pointSelected(data, operators);
             },
             operators: operators,
-            posType: 'DELIVERY'
+            posType: 'DELIVERY',
+            testMode: testMode
         }
     );
 }
