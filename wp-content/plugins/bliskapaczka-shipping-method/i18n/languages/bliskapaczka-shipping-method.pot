@@ -1,0 +1,162 @@
+# Copyright (C) 2017 Bliskapaczka.pl
+# This file is distributed under the same license as the Bliskapaczka.pl package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Bliskapaczka.pl 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bliskapaczka-"
+"shipping-method\n"
+"POT-Creation-Date: 2017-12-15 08:00:46+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: class-bliskapaczka-shipping-method.php:42
+#: class-bliskapaczka-shipping-method.php:53
+#: class-bliskapaczka-shipping-method.php:86
+msgid "Bliskapaczka Shipping"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:43
+msgid "Custom Shipping Method for Bliskapaczka"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:77
+msgid "Enable"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:79
+msgid "Włącz tę metodę wysyłki"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:83
+msgid "Title"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:85
+msgid "Title to be display on site"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:89
+#: class-bliskapaczka-shipping-method.php:91
+#: class-bliskapaczka-shipping-method.php:102
+msgid "API Key"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:94
+#: class-bliskapaczka-shipping-method.php:96
+msgid "Test mode enabled"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:100
+msgid "Google Map API Key"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:105
+#: class-bliskapaczka-shipping-method.php:107
+#: class-bliskapaczka-shipping-method.php:112
+#: class-bliskapaczka-shipping-method.php:117
+msgid "Fixed parcel type size X (cm)"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:110
+msgid "Fixed parcel type size Y (cm)"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:115
+msgid "Fixed parcel type size Z (cm)"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:120
+#: class-bliskapaczka-shipping-method.php:122
+msgid "Fixed parcel type weight (kg)"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:125
+#: class-bliskapaczka-shipping-method.php:127
+msgid "Sender email"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:130
+#: class-bliskapaczka-shipping-method.php:132
+msgid "Sender first name"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:135
+#: class-bliskapaczka-shipping-method.php:137
+msgid "Sender last name"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:140
+#: class-bliskapaczka-shipping-method.php:142
+msgid "Sender phone number"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:145
+#: class-bliskapaczka-shipping-method.php:147
+msgid "Sender street"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:150
+#: class-bliskapaczka-shipping-method.php:152
+msgid "Sender building numbe"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:155
+#: class-bliskapaczka-shipping-method.php:157
+msgid "Sender flat numbe"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:160
+#: class-bliskapaczka-shipping-method.php:162
+msgid "Sender post code"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:165
+#: class-bliskapaczka-shipping-method.php:167
+msgid "Sender city"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:200
+#: class-bliskapaczka-shipping-method.php:357
+msgid "Bliskapaczka, od"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:245
+msgid "Select delivery point"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:250
+msgid "Selected Point"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:277
+#: class-bliskapaczka-shipping-method.php:281
+msgid "POS Code"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:390
+msgid "View Bliskapaczka Settings"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:390
+msgid "Settings"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Bliskapaczka.pl"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://github.com/bliskapaczkapl/woocommerce"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Bliskapaczka.pl Shipping Method for WooCommerce"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Mateusz Koszutowski"
+msgstr ""
