@@ -35,7 +35,7 @@ ENV WORDPRESS_VERSION 4.8.2
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends unzip wget \
-    && wget https://wordpress.org/wordpress-$WORDPRESS_VERSION.tar.gz  -O /tmp/temp.tar.gz \
+    && wget https://downloads.wordpress.org/release/pl_PL/wordpress-$WORDPRESS_VERSION.tar.gz  -O /tmp/temp.tar.gz \
     && cd ${woocommerce_path}/../ \
     && tar xvf /tmp/temp.tar.gz \
     && rm /tmp/temp.tar.gz \
