@@ -5,7 +5,7 @@
  * Description: Bliskapaczka.pl Shipping Method for WooCommerce
  * Version: 1.0.0
  * Author: Mateusz Koszutowski
- * Text Domain: Bliskapaczka
+ * Text Domain: bliskapaczka-shipping-method
  *
  * @package  Bliskapaczka
  * @author Mateusz Koszutowski
@@ -39,8 +39,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				 */
 				public function __construct() {
 					$this->id                 = 'bliskapaczka';
-					$this->method_title       = __( 'Bliskapaczka Shipping', 'bliskapaczka' );
-					$this->method_description = __( 'Custom Shipping Method for Bliskapaczka', 'bliskapaczka' );
+					$this->method_title       = __( 'Bliskapaczka Shipping', 'bliskapaczka-shipping-method' );
+					$this->method_description = __( 'Custom Shipping Method for Bliskapaczka', 'bliskapaczka-shipping-method' );
 
 					$this->availability = 'including';
 					$this->countries = array(
@@ -50,7 +50,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					$this->init();
 
 					$this->enabled = isset( $this->settings['enabled'] ) ? $this->settings['enabled'] : 'yes';
-					$this->title = isset( $this->settings['title'] ) ? $this->settings['title'] : __( 'Bliskapaczka Shipping', 'bliskapaczka' );
+					$this->title = isset( $this->settings['title'] ) ? $this->settings['title'] : __( 'Bliskapaczka Shipping', 'bliskapaczka-shipping-method' );
 					add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
 				}
 
@@ -74,97 +74,97 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					$helper = new Bliskapaczka_Shipping_Method_Helper();
 					$this->form_fields = array(
 						'enabled' => array(
-							'title' => __( 'Enable', 'bliskapaczka' ),
+							'title' => __( 'Enable', 'bliskapaczka-shipping-method' ),
 							'type' => 'checkbox',
-							'description' => __( 'Włącz tę metodę wysyłki', 'bliskapaczka' ),
+							'description' => __( 'Włącz tę metodę wysyłki', 'bliskapaczka-shipping-method' ),
 							'default' => 'yes',
 						),
 						'title' => array(
-							'title' => __( 'Title', 'bliskapaczka' ),
+							'title' => __( 'Title', 'bliskapaczka-shipping-method' ),
 							'type' => 'text',
-							'description' => __( 'Title to be display on site', 'bliskapaczka' ),
-							'default' => __( 'Bliskapaczka Shipping', 'bliskapaczka' ),
+							'description' => __( 'Title to be display on site', 'bliskapaczka-shipping-method' ),
+							'default' => __( 'Bliskapaczka Shipping', 'bliskapaczka-shipping-method' ),
 						),
 						$helper::API_KEY => array(
-							'title' => __( 'API Key', 'bliskapaczka' ),
+							'title' => __( 'API Key', 'bliskapaczka-shipping-method' ),
 							'type' => 'text',
-							'description' => __( 'API Key', 'bliskapaczka' ),
+							'description' => __( 'API Key', 'bliskapaczka-shipping-method' ),
 						),
 						$helper::TEST_MODE => array(
-							'title' => __( 'Test mode enabled', 'bliskapaczka' ),
+							'title' => __( 'Test mode enabled', 'bliskapaczka-shipping-method' ),
 							'type' => 'checkbox',
-							'description' => __( 'Test mode enabled', 'bliskapaczka' ),
+							'description' => __( 'Test mode enabled', 'bliskapaczka-shipping-method' ),
 							'default' => 'yes',
 						),
 						$helper::GOOGLE_MAP_API_KEY => array(
-							'title' => __( 'Google Map API Key', 'bliskapaczka' ),
+							'title' => __( 'Google Map API Key', 'bliskapaczka-shipping-method' ),
 							'type' => 'text',
-							'description' => __( 'API Key', 'bliskapaczka' ),
+							'description' => __( 'API Key', 'bliskapaczka-shipping-method' ),
 						),
 						$helper::SIZE_TYPE_FIXED_SIZE_X => array(
-							'title' => __( 'Fixed parce type size X (cm)', 'bliskapaczka' ),
+							'title' => __( 'Fixed parcel type size X (cm)', 'bliskapaczka-shipping-method' ),
 							'type' => 'text',
-							'description' => __( 'Fixed parce type size X (cm)', 'bliskapaczka' ),
+							'description' => __( 'Fixed parcel type size X (cm)', 'bliskapaczka-shipping-method' ),
 						),
 						$helper::SIZE_TYPE_FIXED_SIZE_Y => array(
-							'title' => __( 'Fixed parce type size Y (cm)', 'bliskapaczka' ),
+							'title' => __( 'Fixed parcel type size Y (cm)', 'bliskapaczka-shipping-method' ),
 							'type' => 'text',
-							'description' => __( 'Fixed parce type size X (cm)', 'bliskapaczka' ),
+							'description' => __( 'Fixed parcel type size X (cm)', 'bliskapaczka-shipping-method' ),
 						),
 						$helper::SIZE_TYPE_FIXED_SIZE_Z => array(
-							'title' => __( 'Fixed parce type size Z (cm)', 'bliskapaczka' ),
+							'title' => __( 'Fixed parcel type size Z (cm)', 'bliskapaczka-shipping-method' ),
 							'type' => 'text',
-							'description' => __( 'Fixed parce type size X (cm)', 'bliskapaczka' ),
+							'description' => __( 'Fixed parcel type size X (cm)', 'bliskapaczka-shipping-method' ),
 						),
 						$helper::SIZE_TYPE_FIXED_SIZE_WEIGHT => array(
-							'title' => __( 'Fixed parce type weight (kg)', 'bliskapaczka' ),
+							'title' => __( 'Fixed parcel type weight (kg)', 'bliskapaczka-shipping-method' ),
 							'type' => 'text',
-							'description' => __( 'Fixed parce type weight (kg)', 'bliskapaczka' ),
+							'description' => __( 'Fixed parcel type weight (kg)', 'bliskapaczka-shipping-method' ),
 						),
 						$helper::SENDER_EMAIL => array(
-							'title' => __( 'Sender email', 'bliskapaczka' ),
+							'title' => __( 'Sender email', 'bliskapaczka-shipping-method' ),
 							'type' => 'text',
-							'description' => __( 'Sender email', 'bliskapaczka' ),
+							'description' => __( 'Sender email', 'bliskapaczka-shipping-method' ),
 						),
 						$helper::SENDER_FIRST_NAME => array(
-							'title' => __( 'Sender first name', 'bliskapaczka' ),
+							'title' => __( 'Sender first name', 'bliskapaczka-shipping-method' ),
 							'type' => 'text',
-							'description' => __( 'Sender first name', 'bliskapaczka' ),
+							'description' => __( 'Sender first name', 'bliskapaczka-shipping-method' ),
 						),
 						$helper::SENDER_LAST_NAME => array(
-							'title' => __( 'Sender last name', 'bliskapaczka' ),
+							'title' => __( 'Sender last name', 'bliskapaczka-shipping-method' ),
 							'type' => 'text',
-							'description' => __( 'Sender last name', 'bliskapaczka' ),
+							'description' => __( 'Sender last name', 'bliskapaczka-shipping-method' ),
 						),
 						$helper::SENDER_PHONE_NUMBER => array(
-							'title' => __( 'Sender phone number', 'bliskapaczka' ),
+							'title' => __( 'Sender phone number', 'bliskapaczka-shipping-method' ),
 							'type' => 'text',
-							'description' => __( 'Sender phone number', 'bliskapaczka' ),
+							'description' => __( 'Sender phone number', 'bliskapaczka-shipping-method' ),
 						),
 						$helper::SENDER_STREET => array(
-							'title' => __( 'Sender street', 'bliskapaczka' ),
+							'title' => __( 'Sender street', 'bliskapaczka-shipping-method' ),
 							'type' => 'text',
-							'description' => __( 'Sender street', 'bliskapaczka' ),
+							'description' => __( 'Sender street', 'bliskapaczka-shipping-method' ),
 						),
 						$helper::SENDER_BUILDING_NUMBER => array(
-							'title' => __( 'Sender building numbe', 'bliskapaczka' ),
+							'title' => __( 'Sender building numbe', 'bliskapaczka-shipping-method' ),
 							'type' => 'text',
-							'description' => __( 'Sender building numbe', 'bliskapaczka' ),
+							'description' => __( 'Sender building numbe', 'bliskapaczka-shipping-method' ),
 						),
 						$helper::SENDER_FLAT_NUMBER => array(
-							'title' => __( 'Sender flat numbe', 'bliskapaczka' ),
+							'title' => __( 'Sender flat numbe', 'bliskapaczka-shipping-method' ),
 							'type' => 'text',
-							'description' => __( 'Sender flat numbe', 'bliskapaczka' ),
+							'description' => __( 'Sender flat numbe', 'bliskapaczka-shipping-method' ),
 						),
 						$helper::SENDER_POST_CODE => array(
-							'title' => __( 'Sender post code', 'bliskapaczka' ),
+							'title' => __( 'Sender post code', 'bliskapaczka-shipping-method' ),
 							'type' => 'text',
-							'description' => __( 'Sender post code', 'bliskapaczka' ),
+							'description' => __( 'Sender post code', 'bliskapaczka-shipping-method' ),
 						),
 						$helper::SENDER_CITY => array(
-							'title' => __( 'Sender city', 'bliskapaczka' ),
+							'title' => __( 'Sender city', 'bliskapaczka-shipping-method' ),
 							'type' => 'text',
-							'description' => __( 'Sender city', 'bliskapaczka' ),
+							'description' => __( 'Sender city', 'bliskapaczka-shipping-method' ),
 						),
 					);
 
@@ -197,7 +197,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 					$rate = array(
 						'id'       => $this->id,
-						'label'    => 'Bliskapaczka, od',
+						'label'    => __( 'Bliskapaczka, od', 'bliskapaczka-shipping-method' ),
 						'cost'     => $shipping_price,
 						'calc_tax' => 'per_item',
 					);
@@ -242,12 +242,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					'", ' .
 					esc_html( ( 'test' === $helper->getApiMode( $bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'] ) ? 'true' : 'false' ) ) .
 					")'>" .
-				'Select delivery point</a>';
+					__( 'Select delivery point', 'bliskapaczka-shipping-method' ) . '</a>';
 			echo '<input name="bliskapaczka_posCode" type="hidden" id="bliskapaczka_posCode" value="' . esc_html( WC()->session->get( 'bliskapaczka_posCode' ) ) . '" />';
 			echo '<input name="bliskapaczka_posOperator" type="hidden" id="bliskapaczka_posOperator" value="' . esc_html( WC()->session->get( 'bliskapaczka_posOperator' ) ) . '" />';
 
 			echo '<div id="bpWidget_aboutPoint" style="width: 100%; display: none;">';
-			echo '<p>Selected Point: <span id="bpWidget_aboutPoint_posData"></span></p>';
+			echo '<p>' . __( 'Selected Point', 'bliskapaczka-shipping-method' ) . ': <span id="bpWidget_aboutPoint_posData"></span></p>';
 			echo '</div>';
 		}
 	}
@@ -274,11 +274,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	function custom_override_checkout_fields( $fields ) {
 		$fields['bliskapaczka'] = array(
 			'bliskapaczka_posCode' => array(
-				'label' => __( 'POS Code', 'woocommerce' ),
+				'label' => __( 'POS Code', 'bliskapaczka-shipping-method' ),
 				'type' => 'text',
 			),
 			'bliskapaczka_posOperator' => array(
-				'label' => __( 'POS Code', 'woocommerce' ),
+				'label' => __( 'POS Code', 'bliskapaczka-shipping-method' ),
 				'type' => 'text',
 			),
 		);
@@ -354,7 +354,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		}
 
 		// TODO: "Bliskapaczka, od" to const.
-		if ( $order->get_shipping_method() !== 'Bliskapaczka' && $order->get_shipping_method() !== 'Bliskapaczka, od' ) {
+		if ( $order->get_shipping_method() !== 'Bliskapaczka' && $order->get_shipping_method() !== __( 'Bliskapaczka, od', 'bliskapaczka-shipping-method' ) ) {
 			return false;
 		}
 
@@ -387,7 +387,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	function plugin_action_links( $links ) {
 		$action_links = array(
 			'settings' => '<a href="' . admin_url( 'admin.php?page=wc-settings&tab=shipping&section=bliskapaczka' ) .
-				'" title="' . esc_attr( __( 'View Bliskapaczka Settings', 'bliskapaczka' ) ) . '">' . __( 'Settings', 'bliskapaczka' ) . '</a>',
+				'" title="' . esc_attr( __( 'View Bliskapaczka Settings', 'bliskapaczka-shipping-method' ) ) . '">' . __( 'Settings', 'bliskapaczka' ) . '</a>',
 		);
 
 		return array_merge( $action_links, $links );

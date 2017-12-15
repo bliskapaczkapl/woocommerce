@@ -42,3 +42,10 @@ Katalog `vendor` należy przenieść do katalogu `wp-content/plugins/bliskapaczk
 cd wp-content/plugins/bliskapaczka-shipping-method
 php vendor/bin/phpunit --bootstrap wp-content/plugins/bliskapaczka-shipping-method/tests/bootstrap.php wp-content/plugins/bliskapaczka-shipping-method/tests/unit/
 ```
+
+### Tłumaczenia
+Instalacja narzędzi do tłumaczeń, zobacz [I18n_for_WordPress_Developers](https://codex.wordpress.org/I18n_for_WordPress_Developers#Translating_Plugins_and_Themes)
+
+```
+php tools/i18n/makepot.php wp-plugin wp-content/plugins/bliskapaczka-shipping-method/ wp-content/plugins/bliskapaczka-shipping-method/i18n/languages/bliskapaczka-shipping-method.pot
+```
