@@ -1,4 +1,7 @@
 language: php
+
+group: deprecated-2017Q4
+
 php:
   - '5.6'
 
