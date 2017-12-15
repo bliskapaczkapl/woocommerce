@@ -1,7 +1,7 @@
 version: "3"
 services:
   woocommerce:
-    # build: ./
+    build: ./
     image: bliskapaczkapl/woocommerce
     depends_on:
       - db

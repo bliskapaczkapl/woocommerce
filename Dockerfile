@@ -2,6 +2,7 @@ FROM debian:8
 MAINTAINER Mateusz Koszutowski <mkoszutowski@divante.pl>
 
 ENV woocommerce_path /var/www/wordpress
+ENV plugin_path wp-content/plugins/bliskapaczka-shipping-method
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     wget \
@@ -52,6 +53,9 @@ RUN apt-get update \
     && rm /tmp/temp.zip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# WooCommerce Translations
+COPY ${plugin_path}/dev/docker/woocommerce/ ${woocommerce_path}/wp-content/languages/plugins/
 
 # Download WordPress CLI
 RUN curl -L "https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar" > /usr/bin/wp && \
