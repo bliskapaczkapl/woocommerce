@@ -242,12 +242,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					'", ' .
 					esc_html( ( 'test' === $helper->getApiMode( $bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'] ) ? 'true' : 'false' ) ) .
 					")'>" .
-					__( 'Select delivery point', 'bliskapaczka-shipping-method' ) . '</a>';
+					esc_html( __( 'Select delivery point', 'bliskapaczka-shipping-method' ) ) . '</a>';
 			echo '<input name="bliskapaczka_posCode" type="hidden" id="bliskapaczka_posCode" value="' . esc_html( WC()->session->get( 'bliskapaczka_posCode' ) ) . '" />';
 			echo '<input name="bliskapaczka_posOperator" type="hidden" id="bliskapaczka_posOperator" value="' . esc_html( WC()->session->get( 'bliskapaczka_posOperator' ) ) . '" />';
 
 			echo '<div id="bpWidget_aboutPoint" style="width: 100%; display: none;">';
-			echo '<p>' . __( 'Selected Point', 'bliskapaczka-shipping-method' ) . ': <span id="bpWidget_aboutPoint_posData"></span></p>';
+			echo '<p>' . esc_html( __( 'Selected Point', 'bliskapaczka-shipping-method' ) ) . ': <span id="bpWidget_aboutPoint_posData"></span></p>';
 			echo '</div>';
 		}
 	}
