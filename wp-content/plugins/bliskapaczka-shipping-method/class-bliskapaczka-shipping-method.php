@@ -397,10 +397,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * Include JS.
 	 */
 	function add_scripts_and_scripts() {
-		wp_register_script( 'widget-script', 'https://widget.bliskapaczka.pl/v4/main.js' );
+		wp_register_script( 'widget-script', 'https://widget.bliskapaczka.pl/v5/main.js' );
 		wp_enqueue_script( 'widget-script' );
 
-		wp_register_style( 'widget-styles', 'https://widget.bliskapaczka.pl/v4/main.css' );
+		wp_register_style( 'widget-styles', 'https://widget.bliskapaczka.pl/v5/main.css' );
 		wp_enqueue_style( 'widget-styles' );
 
 		wp_register_script( 'plugin-script', plugin_dir_url( __FILE__ ) . 'assets/js/bliskapaczka.js' );
