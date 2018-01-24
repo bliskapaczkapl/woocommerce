@@ -54,6 +54,15 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends unzip wget \
+    && wget https://downloads.wordpress.org/theme/storefront.2.2.7.zip -O /tmp/temp.zip \
+    && cd ${woocommerce_path}/wp-content/themes \
+    && unzip /tmp/temp.zip \
+    && rm /tmp/temp.zip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 # WooCommerce Translations
 COPY ${plugin_path}/dev/docker/woocommerce/ ${woocommerce_path}/wp-content/languages/plugins/
 
