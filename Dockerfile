@@ -1,4 +1,4 @@
-FROM debian:8
+FROM debian:9
 MAINTAINER Mateusz Koszutowski <mkoszutowski@divante.pl>
 
 ENV woocommerce_path /var/www/wordpress
@@ -12,13 +12,13 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     sudo \
     nginx \
     mysql-client \
-    php5 \
-    php5-fpm \
-    php5-cli \
-    php5-mysql \
-    php5-mcrypt \
-    php5-curl \
-    php5-gd \
+    php7.0 \
+    php7.0-fpm \
+    php7.0-cli \
+    php7.0-mysql \
+    php7.0-mcrypt \
+    php7.0-curl \
+    php7.0-gd \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -26,11 +26,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
 RUN  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php composer-setup.php --install-dir=/usr/bin --filename=composer \
     && php -r "unlink('composer-setup.php');"
-
-# Nginx
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY woocommerce.conf /etc/nginx/sites-available/woocommerce.conf
-RUN (cd /etc/nginx/sites-enabled && ln -s ../sites-available/woocommerce.conf woocommerce.conf && rm -rf default)
 
 ENV WORDPRESS_VERSION 4.8.2
 
@@ -43,7 +38,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ENV WOOCOMMERCE_VERSION 3.2.1
+ENV WOOCOMMERCE_VERSION 3.3.3
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends unzip wget \
@@ -71,6 +66,11 @@ RUN find ${woocommerce_path} -type d -exec chmod 770 {} \; && find ${woocommerce
     && chown -R :www-data ${woocommerce_path}
 
 COPY run /opt/run
+
+# Nginx
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY woocommerce.conf /etc/nginx/sites-available/woocommerce.conf
+RUN (cd /etc/nginx/sites-enabled && ln -s ../sites-available/woocommerce.conf woocommerce.conf && rm -rf default)
 
 EXPOSE 80
 

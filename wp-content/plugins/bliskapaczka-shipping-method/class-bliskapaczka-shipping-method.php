@@ -178,7 +178,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				 * @param mixed $package From Hook.
 				 * @return void
 				 */
-				public function calculate_shipping( $package ) {
+				public function calculate_shipping( $package = array() ) {
 					/* @var Bliskapaczka_Shipping_Method_Helper $helper */
 					$helper = new Bliskapaczka_Shipping_Method_Helper();
 					$api_client = $helper->getApiClient(
@@ -292,8 +292,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 */
 	function update_price_for_chosen_carrier( $packages ) {
 		// @codingStandardsIgnoreStart
-		parse_str( $_POST['post_data'], $checkout_data );
+		if ( isset( $_POST['post_data'] ) ) {
+			parse_str( $_POST['post_data'], $checkout_data );
+		}
 		// @codingStandardsIgnoreEnd
+
 		$pos_code = isset( $checkout_data['bliskapaczka_posCode'] ) ? wc_clean( $checkout_data['bliskapaczka_posCode'] ) : '';
 		$pos_operator = isset( $checkout_data['bliskapaczka_posOperator'] ) ? wc_clean( $checkout_data['bliskapaczka_posOperator'] ) : '';
 

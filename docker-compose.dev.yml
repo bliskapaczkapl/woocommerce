@@ -1,0 +1,8 @@
+version: "3"
+services:
+  woocommerce:
+    build: ./
+    volumes:
+      - "./wp-content/languages/plugins/bliskapaczka-shipping-method-pl_PL.mo:/var/www/wordpress/wp-content/languages/plugins/bliskapaczka-shipping-method-pl_PL.mo"
+      - "./wp-content/languages/plugins/bliskapaczka-shipping-method-pl_PL.po:/var/www/wordpress/wp-content/languages/plugins/bliskapaczka-shipping-method-pl_PL.po"
+      - "./wp-content/plugins/bliskapaczka-shipping-method:/var/www/wordpress/wp-content/plugins/bliskapaczka-shipping-method"
