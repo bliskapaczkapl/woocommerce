@@ -29,8 +29,6 @@ jobs:
     - stage: build
       script: 
         - docker build -t bliskapaczkapl/woocommerce .
-      rvm: 2.3
-      env: FOO=foo
       after_success:
       - if [ "$TRAVIS_BRANCH" == "master" ]; then
         docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
