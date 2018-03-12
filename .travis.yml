@@ -23,10 +23,16 @@ script:
   - $VENDOR_DIR/bin/phpcpd wp-content/plugins/bliskapaczka-shipping-method/class-bliskapaczka-shipping-method.php
   - $VENDOR_DIR/bin/phploc wp-content/plugins/bliskapaczka-shipping-method/class-bliskapaczka-shipping-method.php
   - $VENDOR_DIR/bin/phpunit --bootstrap wp-content/plugins/bliskapaczka-shipping-method/tests/bootstrap.php wp-content/plugins/bliskapaczka-shipping-method/tests/unit/
-  - docker build -t bliskapaczkapl/woocommerce .
 
-after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    docker push bliskapaczkapl/woocommerce;
-    fi
+jobs:
+  include:
+    - stage: build
+      script: 
+        - docker build -t bliskapaczkapl/woocommerce .
+      rvm: 2.3
+      env: FOO=foo
+      after_success:
+      - if [ "$TRAVIS_BRANCH" == "master" ]; then
+        docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+        docker push bliskapaczkapl/woocommerce;
+        fi
