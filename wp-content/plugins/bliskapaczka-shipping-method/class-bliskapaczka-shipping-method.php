@@ -300,6 +300,14 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		$pos_code = isset( $checkout_data['bliskapaczka_posCode'] ) ? wc_clean( $checkout_data['bliskapaczka_posCode'] ) : '';
 		$pos_operator = isset( $checkout_data['bliskapaczka_posOperator'] ) ? wc_clean( $checkout_data['bliskapaczka_posOperator'] ) : '';
 
+		if ( ! $pos_code && WC()->session->get( 'bliskapaczka_posCode' ) ) {
+			$pos_code = WC()->session->get( 'bliskapaczka_posCode' );
+		}
+
+		if ( ! $pos_operator && WC()->session->get( 'bliskapaczka_posCode' ) ) {
+			$pos_operator = WC()->session->get( 'bliskapaczka_posOperator' );
+		}
+
 		if ( $pos_code && $pos_operator ) {
 			WC()->session->set( 'bliskapaczka_posCode', $pos_code );
 			WC()->session->set( 'bliskapaczka_posOperator', $pos_operator );
@@ -377,6 +385,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$bliskapaczka->settings['BLISKAPACZKA_TEST_MODE']
 			);
 			$api_client->createOrder( $order_data );
+
+			WC()->session->set( 'bliskapaczka_posCode', '' );
+			WC()->session->set( 'bliskapaczka_posOperator', '' );
 		} catch ( Exception $e ) {
 			throw new Exception( $e->getMessage(), 1 );
 		}
