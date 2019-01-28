@@ -26,10 +26,12 @@ jobs:
   include:
     - stage: build
       script: 
-        - docker build -t bliskapaczkapl/woocommerce .
+        - docker build -t bliskapaczkapl/woocommerce:$COMMIT -t bliskapaczkapl/woocommerce:latest -t bliskapaczkapl/woocommerce:develop .
+        - docker push bliskapaczkapl/woocommerce:$COMMIT
+        - if [ "$TRAVIS_BRANCH" == "master" -a "$TRAVIS_PULL_REQUEST" == "false" ]; then
+          docker push bliskapaczkapl/woocommerce:latest;
+          fi
+        - if [ "$TRAVIS_BRANCH" == "develop" -a "$TRAVIS_PULL_REQUEST" == "false" ]; then
+          docker push bliskapaczkapl/woocommerce:develop;
+          fi
       php: 7.0
-      after_success:
-      - if [ "$TRAVIS_BRANCH" == "master" -a "$TRAVIS_PULL_REQUEST" == "false" ]; then
-        docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-        docker push bliskapaczkapl/woocommerce;
-        fi
