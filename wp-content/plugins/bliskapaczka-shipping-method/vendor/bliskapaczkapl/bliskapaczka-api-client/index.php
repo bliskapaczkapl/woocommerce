@@ -2,8 +2,8 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-$apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
-$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka($apiKey);
+$apiKey = '999eac37-ba4d-4a00-b64c-14749dc835fa';
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Order($apiKey, 'test');
 
 $orderData = [
     "senderFirstName" => "string",
@@ -21,9 +21,9 @@ $orderData = [
     "receiverEmail" => "eva@example.com",
     "operatorName" => "INPOST",
     "destinationCode" => "KRA010",
-    "postingCode" => "KRA011",
-    "codValue" => 0,
-    "insuranceValue" => 0,
+    "postingCode" => "KOS01L",
+    "codValue" => null,
+    "insuranceValue" => null,
     "additionalInformation" => "string",
     "parcel" => [
         "dimensions" => [
@@ -34,7 +34,9 @@ $orderData = [
         ]
     ]
 ];
-var_dump($apiClient->createOrder($orderData));
+var_dump($apiClient->create($orderData));
+
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Pricing($apiKey, 'test');
 
 $pricingData = [
     "parcel" => [
@@ -46,4 +48,84 @@ $pricingData = [
         ]
     ]
 ];
-var_dump($apiClient->getPricing($pricingData));
+var_dump($apiClient->get($pricingData));
+
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Pricing($apiKey, 'test');
+
+$pricingData = [
+    "parcel" => [
+        "dimensions" => [
+            "height" => 20,
+            "length" => 20,
+            "width" => 20,
+            "weight" => 2
+        ]
+    ],
+    "deliveryType" => "P2P"
+];
+var_dump($apiClient->get($pricingData));
+
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Pricing($apiKey, 'test');
+
+$pricingData = [
+    "parcel" => [
+        "dimensions" => [
+            "height" => 20,
+            "length" => 20,
+            "width" => 20,
+            "weight" => 2
+        ]
+    ],
+    "deliveryType" => "P2D"
+];
+var_dump($apiClient->get($pricingData));
+
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Pricing($apiKey, 'test');
+
+$pricingData = [
+    "parcel" => [
+        "dimensions" => [
+            "height" => 20,
+            "length" => 20,
+            "width" => 20,
+            "weight" => 2
+        ]
+    ],
+    'codValue' => 1
+];
+var_dump($apiClient->get($pricingData));
+
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Pricing\Todoor($apiKey, 'test');
+
+$pricingData = [
+    "parcel" => [
+        "dimensions" => [
+            "height" => 20,
+            "length" => 20,
+            "width" => 20,
+            "weight" => 2
+        ]
+    ]
+];
+var_dump($apiClient->get($pricingData));
+
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Pos($apiKey, 'test');
+$apiClient->setOperator('INPOST');
+$apiClient->setPointCode('GRU340');
+
+var_dump($apiClient->get());
+
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Order\Waybill($apiKey, 'test');
+$apiClient->setOrderId('000000636P-000000108');
+
+var_dump($apiClient->get());
+
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Report($apiKey, 'test');
+$apiClient->setOperator('ruch');
+
+file_put_contents('zupa.pdf', $apiClient->get());
+
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Order\Confirm($apiKey, 'test');
+$apiClient->setOperator('POCZTA');
+
+var_dump($apiClient->confirm());

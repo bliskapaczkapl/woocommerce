@@ -134,11 +134,8 @@ class Bliskapaczka_Shipping_Method_Helper
         /* @var Bliskapaczka_Shipping_Method $bliskapaczka */
         $bliskapaczka = new Bliskapaczka_Shipping_Method();
 
-        $apiClient = $this->getApiClient(
-            $bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
-            $bliskapaczka->settings['BLISKAPACZKA_TEST_MODE']
-        );
-        $priceList = $apiClient->getPricing(
+        $apiClient = $this->getApiClientPricing($bliskapaczka);
+        $priceList = $apiClient->get(
             array("parcel" => array('dimensions' => $this->getParcelDimensions($bliskapaczka->settings)))
         );
 
@@ -173,15 +170,46 @@ class Bliskapaczka_Shipping_Method_Helper
     /**
      * Get Bliskapaczka API Client
      *
-     * @param string $apiKey
-     * @param string $mode
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     * @param Bliskapaczka_Shipping_Method $bliskapaczka
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka\Pricing
      */
-    public function getApiClient($apiKey, $mode)
+    public function getApiClientPricing($bliskapaczka)
     {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka(
-        	$apiKey,
-            $this->getApiMode($mode)
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pricing(
+        	$bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
+            $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'])
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @param Bliskapaczka_Shipping_Method $bliskapaczka
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka\Pos
+     */
+    public function getApiClientPos($bliskapaczka)
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pos(
+            $bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
+            $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'])
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @param Bliskapaczka_Shipping_Method $bliskapaczka
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka\Order
+     */
+    public function getApiClientOrder($bliskapaczka)
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order(
+            $bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
+            $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'])
         );
 
         return $apiClient;

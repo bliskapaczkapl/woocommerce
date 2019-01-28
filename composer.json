@@ -1,4 +1,7 @@
 {
+    "config": {
+        "vendor-dir": "wp-content/plugins/bliskapaczka-shipping-method/vendor"
+    },
     "require-dev": {
         "phpunit/phpunit": "5.7",
         "squizlabs/php_codesniffer": "2.*",
@@ -30,6 +33,6 @@
         }
     ],
     "require": {
-        "bliskapaczkapl/bliskapaczka-api-client": "^1.0"
+        "bliskapaczkapl/bliskapaczka-api-client": "^3.0"
     }
 }

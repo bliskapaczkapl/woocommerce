@@ -2,7 +2,8 @@
     "name": "bliskapaczkapl/bliskapaczka-api-client",
     "description": "BliczkaPaczka API Client",
     "require": {
-        "psr/log": "~1.0.0"
+        "psr/log": "~1.1.0",
+        "globalcitizen/php-iban": "^2.6"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",
@@ -10,7 +11,8 @@
         "phpmd/phpmd": "^2.4",
         "sebastian/phpcpd":"^2.0",
         "block8/php-docblock-checker":"^1.1",
-        "phploc/phploc":"^3.0"
+        "phploc/phploc":"^3.0",
+        "sensiolabs/security-checker": "4.*"
     },
     "type": "api client",
     "autoload": {

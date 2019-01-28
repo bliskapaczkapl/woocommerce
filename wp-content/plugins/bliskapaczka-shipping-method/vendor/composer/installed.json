@@ -1,23 +1,98 @@
 [
     {
-        "name": "psr/log",
-        "version": "1.0.2",
-        "version_normalized": "1.0.2.0",
+        "name": "bliskapaczkapl/bliskapaczka-api-client",
+        "version": "3.3.1",
+        "version_normalized": "3.3.1.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/php-fig/log.git",
-            "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
+            "url": "https://github.com/bliskapaczkapl/bliskapaczka-api-client.git",
+            "reference": "3a1bfaf65b1bff36aff193574c1d028ac434afd9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
-            "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+            "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/3a1bfaf65b1bff36aff193574c1d028ac434afd9",
+            "reference": "3a1bfaf65b1bff36aff193574c1d028ac434afd9",
+            "shasum": ""
+        },
+        "require": {
+            "globalcitizen/php-iban": "^2.6",
+            "psr/log": "~1.1.0"
+        },
+        "require-dev": {
+            "block8/php-docblock-checker": "^1.1",
+            "phploc/phploc": "^3.0",
+            "phpmd/phpmd": "^2.4",
+            "phpunit/phpunit": "^5.7",
+            "sebastian/phpcpd": "^2.0",
+            "sensiolabs/security-checker": "4.*",
+            "squizlabs/php_codesniffer": "2.*"
+        },
+        "time": "2019-01-21T15:01:34+00:00",
+        "type": "api client",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "src/helpers.php"
+            ],
+            "psr-4": {
+                "Bliskapaczka\\": "src/Bliskapaczka/"
+            }
+        },
+        "description": "BliczkaPaczka API Client",
+        "support": {
+            "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/3.3.1",
+            "issues": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/issues"
+        }
+    },
+    {
+        "name": "globalcitizen/php-iban",
+        "version": "v2.6.9",
+        "version_normalized": "2.6.9.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/globalcitizen/php-iban.git",
+            "reference": "16b8c416e8a4047b52dca00794f161bfa68afb7a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/globalcitizen/php-iban/zipball/16b8c416e8a4047b52dca00794f161bfa68afb7a",
+            "reference": "16b8c416e8a4047b52dca00794f161bfa68afb7a",
+            "shasum": ""
+        },
+        "time": "2018-08-14T00:04:02+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "oophp-iban.php",
+                "php-iban.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL-3.0"
+        ],
+        "description": "php-iban is a library for parsing and validating IBAN (and IIBAN) bank account information."
+    },
+    {
+        "name": "psr/log",
+        "version": "1.1.0",
+        "version_normalized": "1.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/php-fig/log.git",
+            "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/php-fig/log/zipball/6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
+            "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.0"
         },
-        "time": "2016-10-10 12:19:37",
+        "time": "2018-11-20T15:27:04+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -47,48 +122,5 @@
             "psr",
             "psr-3"
         ]
-    },
-    {
-        "name": "bliskapaczkapl/bliskapaczka-api-client",
-        "version": "1.0.7",
-        "version_normalized": "1.0.7.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/bliskapaczkapl/bliskapaczka-api-client.git",
-            "reference": "85650972916d57e2ebf0846023a6d6eca07bfc55"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/85650972916d57e2ebf0846023a6d6eca07bfc55",
-            "reference": "85650972916d57e2ebf0846023a6d6eca07bfc55",
-            "shasum": ""
-        },
-        "require": {
-            "psr/log": "~1.0.0"
-        },
-        "require-dev": {
-            "block8/php-docblock-checker": "^1.1",
-            "phploc/phploc": "^3.0",
-            "phpmd/phpmd": "^2.4",
-            "phpunit/phpunit": "^5.7",
-            "sebastian/phpcpd": "^2.0",
-            "squizlabs/php_codesniffer": "2.*"
-        },
-        "time": "2017-07-25 12:15:27",
-        "type": "api client",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "src/helpers.php"
-            ],
-            "psr-4": {
-                "Bliskapaczka\\": "src/Bliskapaczka/"
-            }
-        },
-        "description": "BliczkaPaczka API Client",
-        "support": {
-            "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/1.0.7",
-            "issues": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/issues"
-        }
     }
 ]

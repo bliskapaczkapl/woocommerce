@@ -29,6 +29,8 @@ class Bliskapaczka_Shipping_Method_Mapper
             $shipping_item_id = $item_id;
         }
 
+        $data['deliveryType'] = 'P2P';
+
         $data['operatorName'] = wc_get_order_item_meta( $shipping_item_id, '_bliskapaczka_posOperator' );
         $data['destinationCode'] = wc_get_order_item_meta( $shipping_item_id, '_bliskapaczka_posCode' );
 
