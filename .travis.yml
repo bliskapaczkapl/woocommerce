@@ -29,6 +29,7 @@ jobs:
     - stage: build
       script: 
         - docker build -t bliskapaczkapl/woocommerce:$COMMIT -t bliskapaczkapl/woocommerce:latest -t bliskapaczkapl/woocommerce:develop .
+        - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
         - docker push bliskapaczkapl/woocommerce:$COMMIT
         - if [ "$TRAVIS_BRANCH" == "master" -a "$TRAVIS_PULL_REQUEST" == "false" ]; then
           docker push bliskapaczkapl/woocommerce:latest;
