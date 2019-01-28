@@ -1,6 +1,6 @@
 VENDOR_DIR=wp-content/plugins/bliskapaczka-shipping-method/vendor
 
-docker run --rm -u $(id -u):$(id -g) -v $(pwd):/app -v ~/.composer:/tmp/composer -e COMPOSER_HOME=/tmp/composer composer install
+docker run --rm -u $(id -u):$(id -g) -v $(pwd):/app -v ~/.composer:/tmp/composer -e COMPOSER_HOME=/tmp/composer composer/composer:php5 install
 
 $VENDOR_DIR/bin/phpcs --config-set installed_paths ../../wp-coding-standards/wpcs
 $VENDOR_DIR/bin/phpcs -s --colors --standard=WordPress wp-content/plugins/bliskapaczka-shipping-method/class-bliskapaczka-shipping-method.php
