@@ -11,6 +11,7 @@ services:
 
 env:
   - VENDOR_DIR=wp-content/plugins/bliskapaczka-shipping-method/vendor
+  - COMMIT=${TRAVIS_COMMIT::8}
 
 before_script:
   - composer install
