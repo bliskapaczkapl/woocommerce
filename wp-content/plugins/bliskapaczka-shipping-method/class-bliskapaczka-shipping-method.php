@@ -237,17 +237,19 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$api_client->setPointCode( WC()->session->get( 'bliskapaczka_posCode' ) );
 				$api_client->setOperator( WC()->session->get( 'bliskapaczka_posOperator' ) );
 				$pos_info = json_decode( $api_client->get() );
-
-				// @codingStandardsIgnoreStart
-				$destination = '\n' . $pos_info->operator . '\n' .
-					( ( $pos_info->description ) ? $pos_info->description . '\n' : '' ) .
-					$pos_info->street . '\n' .
-					( ( $pos_info->postalCode ) ? $pos_info->postalCode . ' ' : '' ) . $pos_info->city;
-				// @codingStandardsIgnoreEnd
 			}
 
-			echo '<div id="bpWidget_aboutPoint" style="width: 100%; ' . ( ( ! $destination ) ? ' display: none; ' : '' ) . '">';
-			echo '<p>' . esc_html( __( 'Selected Point', 'bliskapaczka-shipping-method' ) ) . ': <span id="bpWidget_aboutPoint_posData">' . esc_html( $destination ) . '</span></p>';
+			echo '<div id="bpWidget_aboutPoint" style="width: 100%; ' . ( ( ! isset( $pos_info ) ) ? ' display: none; ' : '' ) . '">';
+			echo '<p>' . esc_html( __( 'Selected Point', 'bliskapaczka-shipping-method' ) ) . ': <span id="bpWidget_aboutPoint_posData">';
+			if ( isset( $pos_info ) ) {
+				echo '</br>' . esc_html( $pos_info->operator ) . '</br>' .
+					( ( $pos_info->description ) ? esc_html( $pos_info->description ) . '</br>' : '' ) .
+					esc_html( $pos_info->street ) . '</br>' .
+					// @codingStandardsIgnoreStart
+					( ( $pos_info->postalCode ) ? esc_html( $pos_info->postalCode ) . ' ' : '' ) . esc_html( $pos_info->city );
+					// @codingStandardsIgnoreEnd
+			}
+			echo '</span></p>';
 			echo '</div>';
 		}
 	}
