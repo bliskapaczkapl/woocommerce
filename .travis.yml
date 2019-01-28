@@ -14,8 +14,6 @@ env:
 
 before_script:
   - composer install
-  - rm -rf wp-content/plugins/bliskapaczka-shipping-method/vendor
-  - mv vendor wp-content/plugins/bliskapaczka-shipping-method/
 
 script: 
   - $VENDOR_DIR/bin/phpcs --config-set installed_paths ../../wp-coding-standards/wpcs
