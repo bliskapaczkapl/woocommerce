@@ -14,10 +14,8 @@ env:
     - VENDOR_DIR=wp-content/plugins/bliskapaczka-shipping-method/vendor
     - COMMIT=${TRAVIS_COMMIT::8}
 
-before_script:
+script:
   - composer install
-
-script: 
   - $VENDOR_DIR/bin/phpcs --config-set installed_paths ../../wp-coding-standards/wpcs
   - $VENDOR_DIR/bin/phpcs -s --colors --standard=WordPress wp-content/plugins/bliskapaczka-shipping-method/class-bliskapaczka-shipping-method.php
   - $VENDOR_DIR/bin/phpcpd wp-content/plugins/bliskapaczka-shipping-method/class-bliskapaczka-shipping-method.php
