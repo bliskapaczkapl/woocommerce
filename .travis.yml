@@ -35,4 +35,4 @@ jobs:
         - if [ "$TRAVIS_BRANCH" == "develop" -a "$TRAVIS_PULL_REQUEST" == "false" ]; then
           docker push bliskapaczkapl/woocommerce:develop;
           fi
-      php: 7.0
+      php: '7.0'
