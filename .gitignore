@@ -1,4 +1,4 @@
 /vendor
 wp-content/plugins/woocommerce
-tools
-src
+/tools
+/src
