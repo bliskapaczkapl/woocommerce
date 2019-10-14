@@ -83,12 +83,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 							'description' => __( 'Włącz tę metodę wysyłki', 'bliskapaczka-shipping-method' ),
 							'default'     => 'yes',
 						),
-						$helper::TITLE => array(
-							'title' => __( 'Title', 'bliskapaczka-shipping-method' ),
-							'type' => 'text',
-							'description' => __( 'Title to be display on site', 'bliskapaczka-shipping-method' ),
-							'default' => __( 'Bliskapaczka Shipping', 'bliskapaczka-shipping-method' ),
-						),
+                        $helper::TITLE                  => array(
+                            'title'       => __( 'Title', 'bliskapaczka-shipping-method' ),
+                            'type'        => 'text',
+                            'description' => __( 'Title to be display on site', 'bliskapaczka-shipping-method' ),
+                            'default'     => __( 'Bliskapaczka Shipping', 'bliskapaczka-shipping-method' ),
+                        ),
 						$helper::API_KEY                => array(
 							'title'       => __( 'API Key', 'bliskapaczka-shipping-method' ),
 							'type'        => 'text',
