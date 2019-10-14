@@ -130,7 +130,7 @@ msgstr "Bliskapaczka, od"
 
 #: class-bliskapaczka-shipping-method.php:245
 msgid "Select delivery point"
-msgstr "Wybierz punk dostwy"
+msgstr "Wybierz punk dostawy"
 
 #: class-bliskapaczka-shipping-method.php:250
 msgid "Selected Point"
