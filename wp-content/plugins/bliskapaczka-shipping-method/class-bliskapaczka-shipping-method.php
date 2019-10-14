@@ -83,12 +83,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 							'description' => __( 'Włącz tę metodę wysyłki', 'bliskapaczka-shipping-method' ),
 							'default'     => 'yes',
 						),
-                        $helper::TITLE => array(
-                            'title' => __('Title', 'bliskapaczka-shipping-method'),
-                            'type' => 'text',
-                            'description' => __('Title to be display on site', 'bliskapaczka-shipping-method'),
-                            'default' => __('Bliskapaczka Shipping', 'bliskapaczka-shipping-method'),
-                        ),
+						$helper::TITLE => array(
+							'title' => __( 'Title', 'bliskapaczka-shipping-method' ),
+							'type' => 'text',
+							'description' => __( 'Title to be display on site', 'bliskapaczka-shipping-method' ),
+							'default' => __( 'Bliskapaczka Shipping', 'bliskapaczka-shipping-method' ),
+						),
 						$helper::API_KEY                => array(
 							'title'       => __( 'API Key', 'bliskapaczka-shipping-method' ),
 							'type'        => 'text',
@@ -182,21 +182,20 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				 * @param mixed $package From Hook.
 				 * @return void
 				 */
-                public function calculate_shipping($package = array())
-                {
-                    $helper         = new Bliskapaczka_Shipping_Method_Helper();
-                    $bliskapaczka   = new Bliskapaczka_Shipping_Method();
-                    $price_list     = $helper->getPriceList();
-                    $shipping_price = round($helper->getLowestPrice($price_list, true), 2);
-                    $rate = array(
-                        'id'       => $this->id,
-                        'label'    => $bliskapaczka->settings[$helper::TITLE],
-                        'cost'     => $shipping_price,
-                        'calc_tax' => 'per_item',
-                    );
-                    $this->add_rate($rate);
+				public function calculate_shipping( $package = array() ) {
+					$helper         = new Bliskapaczka_Shipping_Method_Helper();
+					$bliskapaczka   = new Bliskapaczka_Shipping_Method();
+					$price_list     = $helper->getPriceList();
+					$shipping_price = round( $helper->getLowestPrice( $price_list, true ), 2 );
+					$rate = array(
+						'id'       => $this->id,
+						'label'    => $bliskapaczka->settings[ $helper::TITLE ],
+						'cost'     => $shipping_price,
+						'calc_tax' => 'per_item',
+					);
+					$this->add_rate( $rate );
 
-                }
+				}
 			}
 		}
 	}
@@ -362,7 +361,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		if ( $order->get_shipping_method() !== 'Bliskapaczka' && $order->get_shipping_method() !== $bliskapaczka->settings[ $helper::TITLE ] ) {
 			return false;
 		}
-        $mapper = new Bliskapaczka_Shipping_Method_Mapper();
+		$mapper = new Bliskapaczka_Shipping_Method_Mapper();
 		$order_data = $mapper->getData( $order, $helper, $bliskapaczka->settings );
 		try {
 			$api_client = $helper->getApiClientOrder( $bliskapaczka );
