@@ -79,7 +79,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 							'description' => __( 'Włącz tę metodę wysyłki', 'bliskapaczka-shipping-method' ),
 							'default'     => 'yes',
 						),
-						'title'                         => array(
+						$helper::TITLE                         => array(
 							'title'       => __( 'Title', 'bliskapaczka-shipping-method' ),
 							'type'        => 'text',
 							'description' => __( 'Title to be display on site', 'bliskapaczka-shipping-method' ),
@@ -180,12 +180,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				 */
 				public function calculate_shipping( $package = array() ) {
 					$helper         = new Bliskapaczka_Shipping_Method_Helper();
+                    $bliskapaczka = new Bliskapaczka_Shipping_Method();
 					$price_list     = $helper->getPriceList();
 					$shipping_price = round( $helper->getLowestPrice( $price_list, true ), 2 );
 
 					$rate = array(
 						'id'       => $this->id,
-						'label'    => __( 'Bliskapaczka, od', 'bliskapaczka-shipping-method' ),
+						'label'    => $bliskapaczka->settings[$helper::TITLE],
 						'cost'     => $shipping_price,
 						'calc_tax' => 'per_item',
 					);
@@ -352,13 +353,14 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			return false;
 		}
 
+        $bliskapaczka = new Bliskapaczka_Shipping_Method();
+        $helper       = new Bliskapaczka_Shipping_Method_Helper();
 		// TODO: "Bliskapaczka, od" to const.
-		if ( $order->get_shipping_method() !== 'Bliskapaczka' && $order->get_shipping_method() !== __( 'Bliskapaczka, od', 'bliskapaczka-shipping-method' ) ) {
-			return false;
-		}
+        if ($order->get_shipping_method() !== 'Bliskapaczka' && $order->get_shipping_method() !== $bliskapaczka->settings[$helper::TITLE]) {
+            return false;
+        }
 
-		$bliskapaczka = new Bliskapaczka_Shipping_Method();
-		$helper       = new Bliskapaczka_Shipping_Method_Helper();
+
 		$mapper       = new Bliskapaczka_Shipping_Method_Mapper();
 
 		$order_data = $mapper->getData( $order, $helper, $bliskapaczka->settings );
