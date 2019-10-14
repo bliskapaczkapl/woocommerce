@@ -182,22 +182,21 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				 * @param mixed $package From Hook.
 				 * @return void
 				 */
-				public function calculate_shipping( $package = array() ) {
-                    $helper = new Bliskapaczka_Shipping_Method_Helper();
-                    $bliskapaczka = new Bliskapaczka_Shipping_Method();
-					$price_list     = $helper->getPriceList();
-					$shipping_price = round( $helper->getLowestPrice( $price_list, true ), 2 );
+                public function calculate_shipping($package = array())
+                {
+                    $helper         = new Bliskapaczka_Shipping_Method_Helper();
+                    $bliskapaczka   = new Bliskapaczka_Shipping_Method();
+                    $price_list     = $helper->getPriceList();
+                    $shipping_price = round($helper->getLowestPrice($price_list, true), 2);
+                    $rate = array(
+                        'id'       => $this->id,
+                        'label'    => $bliskapaczka->settings[$helper::TITLE],
+                        'cost'     => $shipping_price,
+                        'calc_tax' => 'per_item',
+                    );
+                    $this->add_rate($rate);
 
-					$rate = array(
-						'id'       => $this->id,
-						'label'    => $bliskapaczka->settings[ $helper::TITLE ],
-						'cost'     => $shipping_price,
-						'calc_tax' => 'per_item',
-					);
-
-					$this->add_rate( $rate );
-
-				}
+                }
 			}
 		}
 	}
@@ -364,7 +363,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			return false;
 		}
         $mapper = new Bliskapaczka_Shipping_Method_Mapper();
-
 		$order_data = $mapper->getData( $order, $helper, $bliskapaczka->settings );
 
 		try {
