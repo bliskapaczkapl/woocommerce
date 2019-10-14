@@ -31,7 +31,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	function bliskapaczka_shipping_method() {
 		if ( ! class_exists( 'Bliskapaczka_Shipping_Method' ) ) {
 
-		    /**
+			/**
 			 * Bliskapaczka Shipping Method
 			 */
 			class Bliskapaczka_Shipping_Method extends WC_Shipping_Method {
@@ -225,7 +225,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		$bliskapaczka = new Bliskapaczka_Shipping_Method();
 
 		if ( 'bliskapaczka' === $method->id && is_checkout() === true ) {
-            // @codingStandardsIgnoreStart
+			// @codingStandardsIgnoreStart
 			echo " <a href='#bpWidget_wrapper' " .
 				"onclick='Bliskapaczka.showMap(" .
 					esc_html( $helper->getOperatorsForWidget() ) .
@@ -235,7 +235,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					esc_html( ( 'test' === $helper->getApiMode( $bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'] ) ? 'true' : 'false' ) ) .
 					")'>" .
 					esc_html( __( 'Select delivery point', 'bliskapaczka-shipping-method' ) ) . '</a>';
-            // @codingStandardsIgnoreEnd
+			// @codingStandardsIgnoreEnd
 			echo '<input name="bliskapaczka_posCode" type="hidden" id="bliskapaczka_posCode" value="' . esc_html( WC()->session->get( 'bliskapaczka_posCode' ) ) . '" />';
 			echo '<input name="bliskapaczka_posOperator" type="hidden" id="bliskapaczka_posOperator" value="' . esc_html( WC()->session->get( 'bliskapaczka_posOperator' ) ) . '" />';
 
