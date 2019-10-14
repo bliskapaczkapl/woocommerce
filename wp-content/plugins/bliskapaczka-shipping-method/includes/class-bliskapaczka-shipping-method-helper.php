@@ -27,7 +27,6 @@ class Bliskapaczka_Shipping_Method_Helper
     const TITLE = 'BLISKAPACZKA_TITLE';
 
     const GOOGLE_MAP_API_KEY = 'BLISKAPACZKA_GOOGLE_MAP_API_KEY';
-    const SHOP_NAME = 'Woocommerce';
 
     /**
      * Get parcel dimensions in format accptable by Bliskapaczka API
@@ -179,10 +178,7 @@ class Bliskapaczka_Shipping_Method_Helper
     {
         $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pricing(
         	$bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
-            $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE']),
-            null,
-            self::SHOP_NAME,
-            WC()->version
+            $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'])
         );
 
         return $apiClient;
@@ -198,10 +194,7 @@ class Bliskapaczka_Shipping_Method_Helper
     {
         $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pos(
             $bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
-            $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE']),
-            null,
-            self::SHOP_NAME,
-            WC()->version
+            $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'])
         );
 
         return $apiClient;
@@ -217,10 +210,7 @@ class Bliskapaczka_Shipping_Method_Helper
     {
         $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order(
             $bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
-            $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE']),
-            null,
-            self::SHOP_NAME,
-            WC()->version
+            $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'])
         );
 
         return $apiClient;
