@@ -361,7 +361,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		if ( $order->get_shipping_method() !== 'Bliskapaczka' && $order->get_shipping_method() !== $bliskapaczka->settings[ $helper::TITLE ] ) {
 			return false;
 		}
-		$mapper = new Bliskapaczka_Shipping_Method_Mapper();
+		$mapper     = new Bliskapaczka_Shipping_Method_Mapper();
 		$order_data = $mapper->getData( $order, $helper, $bliskapaczka->settings );
 		try {
 			$api_client = $helper->getApiClientOrder( $bliskapaczka );
