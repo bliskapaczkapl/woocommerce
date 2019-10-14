@@ -24,6 +24,7 @@ class Bliskapaczka_Shipping_Method_Helper
 
     const API_KEY = 'BLISKAPACZKA_API_KEY';
     const TEST_MODE = 'BLISKAPACZKA_TEST_MODE';
+    const TITLE = 'BLISKAPACZKA_TITLE';
 
     const GOOGLE_MAP_API_KEY = 'BLISKAPACZKA_GOOGLE_MAP_API_KEY';
 
