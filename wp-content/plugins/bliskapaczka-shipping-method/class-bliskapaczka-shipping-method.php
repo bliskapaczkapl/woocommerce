@@ -187,7 +187,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					$bliskapaczka   = new Bliskapaczka_Shipping_Method();
 					$price_list     = $helper->getPriceList();
 					$shipping_price = round( $helper->getLowestPrice( $price_list, true ), 2 );
-					$rate = array(
+					$rate =           array(
 						'id'       => $this->id,
 						'label'    => $bliskapaczka->settings[ $helper::TITLE ],
 						'cost'     => $shipping_price,
