@@ -94,12 +94,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 							'type'        => 'text',
 							'description' => __( 'API Key', 'bliskapaczka-shipping-method' ),
 						),
-                        $helper::COD_ONLY               => array(
-                            'title'       => __( 'COD only enabled', 'bliskapaczka-shipping-method' ),
-                            'type'        => 'checkbox',
-                            'description' => __( 'COD only enabled', 'bliskapaczka-shipping-method' ),
-                            'default'     => 'no',
-                        ),
+						$helper::COD_ONLY               => array(
+							'title'       => __( 'COD only enabled', 'bliskapaczka-shipping-method' ),
+							'type'        => 'checkbox',
+							'description' => __( 'COD only enabled', 'bliskapaczka-shipping-method' ),
+							'default'     => 'no',
+						),
 						$helper::TEST_MODE              => array(
 							'title'       => __( 'Test mode enabled', 'bliskapaczka-shipping-method' ),
 							'type'        => 'checkbox',
@@ -176,11 +176,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 							'type'        => 'text',
 							'description' => __( 'Sender city', 'bliskapaczka-shipping-method' ),
 						),
-                        $helper::BANK_ACCOUNT_NUMBER    => array(
-                            'title'       => __( 'Bank account number', 'bliskapaczka-shipping-method' ),
-                            'type'        => 'text',
-                            'description' => __( 'Bank account number', 'bliskapaczka-shipping-method' ),
-                        ),
+						$helper::BANK_ACCOUNT_NUMBER    => array(
+							'title'       => __( 'Bank account number', 'bliskapaczka-shipping-method' ),
+							'type'        => 'text',
+							'description' => __( 'Bank account number', 'bliskapaczka-shipping-method' ),
+						),
 					);
 
 				}
@@ -333,11 +333,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			WC()->session->set( 'bliskapaczka_posCode', $pos_code );
 			WC()->session->set( 'bliskapaczka_posOperator', $pos_operator );
 
-			$helper         = new Bliskapaczka_Shipping_Method_Helper();
-			$price_list     = $helper->getPriceList();
-			$codStatus      = $helper->getCODStatus();
-			$shipping_price = round( $helper->getPriceForCarrier( $price_list, $pos_operator, true, $codStatus ), 2 );
- 			$packages[0]['rates']['bliskapaczka']->label = 'Bliskapaczka';
+			$helper                                      = new Bliskapaczka_Shipping_Method_Helper();
+			$price_list                                  = $helper->getPriceList();
+			$cod_status                                  = $helper->getCODStatus();
+			$shipping_price                              = round( $helper->getPriceForCarrier( $price_list, $pos_operator, true, $cod_status ), 2 );
+			$packages[0]['rates']['bliskapaczka']->label = 'Bliskapaczka';
 			$packages[0]['rates']['bliskapaczka']->cost  = $shipping_price;
 		}
 
