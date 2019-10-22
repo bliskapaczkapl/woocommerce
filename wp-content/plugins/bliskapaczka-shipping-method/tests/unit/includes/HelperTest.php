@@ -291,11 +291,15 @@ class HelperTest extends TestCase
                     }
                 }
             }]';
-
+           $cods = array(
+               'POCZTA' => 5,
+               'INPOST' => 0,
+               'RUCH' => 1
+           );
         $helper = new Bliskapaczka_Shipping_Method_Helper();
         $this->assertEquals(
-            '[{"operator":"INPOST","price":10.27},{"operator":"RUCH","price":5.99}]',
-            $helper->getOperatorsForWidget(json_decode($priceList))
+            '[{"operator":"INPOST","price":10.27,"cod":0},{"operator":"RUCH","price":5.99,"cod":1}]',
+            $helper->getOperatorsForWidget(json_decode($priceList), $cods)
         );
     }
 

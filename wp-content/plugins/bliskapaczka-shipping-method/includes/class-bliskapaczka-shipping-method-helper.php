@@ -172,16 +172,20 @@ class Bliskapaczka_Shipping_Method_Helper
      *
      * @param array $priceList
      *
+     * @param array $cods
+     *
      * @return array
      * @throws \Bliskapaczka\ApiClient\Exception
      */
-    public function getOperatorsForWidget($priceList = null)
+    public function getOperatorsForWidget($priceList = null, $cods = null)
     {
         if (!$priceList) {
             $priceList = $this->getPriceList();
         }
         $operators = array();
-        $cods = $this->makeCODStructure($this->getConfig()->configModel);
+        if ($cods === null) {
+            $cods = $this->makeCODStructure($this->getConfig()->configModel);
+        }
         foreach ($priceList as $operator) {
             if ($operator->availabilityStatus != false) {
                 $operators[] = array(

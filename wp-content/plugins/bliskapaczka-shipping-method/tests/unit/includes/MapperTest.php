@@ -38,6 +38,7 @@ class MapperTest extends TestCase
         $this->senderFlatNumber = '1';
         $this->senderPostCode = '76-200';
         $this->senderCity = 'Wrocław';
+        $this->codPayoutBankAccountNumber = '';
 
         $this->settings = [
             'BLISKAPACZKA_SENDER_EMAIL' => $this->senderEmail,
@@ -49,6 +50,7 @@ class MapperTest extends TestCase
             'BLISKAPACZKA_SENDER_FLAT_NUMBER' => $this->senderFlatNumber,
             'BLISKAPACZKA_SENDER_POST_CODE' => $this->senderPostCode,
             'BLISKAPACZKA_SENDER_CITY' => $this->senderCity,
+            'BLISKAPACZKA_BANK_ACCOUNT_NUMBER' => $this->codPayoutBankAccountNumber,
         ];
 
         $this->orderMock = $this->getMockBuilder(\WC_Order::class)
@@ -95,6 +97,7 @@ class MapperTest extends TestCase
                                          array(
                                              'getParcelDimensions',
                                              'telephoneNumberCeaning',
+                                             'getCODStatus',
                                          )
                                      )
                                      ->getMock();
@@ -110,6 +113,7 @@ class MapperTest extends TestCase
         $this->helperMock->method('telephoneNumberCeaning')
             ->with($this->equalTo('504 445 665'))
             ->will($this->returnValue('504445665'));
+        $this->helperMock->method('getCODStatus')->will($this->returnValue(false));
     }
 
     public function get_address($type) {
