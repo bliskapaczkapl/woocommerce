@@ -38,6 +38,10 @@ class Bliskapaczka_Shipping_Method_Mapper
             'dimensions' => $this->getParcelDimensions($helper, $settings)
         ];
 
+        if ($helper->getCODStatus()) {
+            $cods = $helper->makeCODStructure($helper->getConfig()->configModel);
+            $data['codValue'] = $cods[$data['operatorName']];
+        }
         $data = $this->_prepareSenderData($data, $helper, $settings);
 
         return $data;
@@ -104,6 +108,9 @@ class Bliskapaczka_Shipping_Method_Mapper
             $data['senderCity'] = $settings[$helper::SENDER_CITY];
         }
 
+        if ($settings[$helper::BANK_ACCOUNT_NUMBER]) {
+            $data['codPayoutBankAccountNumber'] = $settings[$helper::BANK_ACCOUNT_NUMBER];
+        }
         return $data;
     }
 

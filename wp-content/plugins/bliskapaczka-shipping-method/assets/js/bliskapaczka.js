@@ -2,7 +2,7 @@ function Bliskapaczka()
 {
 }
 
-Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode) {
+Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly = false) {
     aboutPoint = document.getElementById('bpWidget_aboutPoint');
     aboutPoint.style.display = 'none';
 
@@ -10,12 +10,13 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode) {
     bpWidget.style.display = 'block';
 
     Bliskapaczka.updateSelectedCarrier();
-
+    operators = Bliskapaczka.updateOperators(operators, codOnly);
     BPWidget.init(
         bpWidget,
         {
             googleMapApiKey: googleMapApiKey,
             callback: function (data) {
+                console.log(data)
                 console.log('BPWidget callback:', data.code, data.operator)
 
                 posCodeForm = document.getElementById('bliskapaczka_posCode')
@@ -28,7 +29,9 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode) {
             },
             operators: operators,
             posType: 'DELIVERY',
-            testMode: testMode
+            testMode: testMode,
+            codOnly: codOnly,
+            showCod: !codOnly
         }
     );
 }
@@ -93,7 +96,14 @@ Bliskapaczka.getTableRow = function () {
 
     return item;
 }
-
+Bliskapaczka.updateOperators = function(operators, codOnly){
+    return operators.map(function (o) {
+        if (codOnly) {
+            o.price = o.price + o.cod;
+        }
+        return o;
+    });
+}
 // Bliskapaczka.selectPoint = function () {
 //     item = Bliskapaczka.getTableRow();
 

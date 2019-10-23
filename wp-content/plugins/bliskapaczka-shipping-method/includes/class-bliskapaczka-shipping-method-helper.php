@@ -28,6 +28,10 @@ class Bliskapaczka_Shipping_Method_Helper
 
     const GOOGLE_MAP_API_KEY = 'BLISKAPACZKA_GOOGLE_MAP_API_KEY';
 
+    const COD_ONLY = 'BLISKAPACZKA_COD_ONLY';
+
+    const BANK_ACCOUNT_NUMBER = 'BLISKAPACZKA_BANK_ACCOUNT_NUMBER';
+
     /**
      * Get parcel dimensions in format accptable by Bliskapaczka API
      *
@@ -106,9 +110,12 @@ class Bliskapaczka_Shipping_Method_Helper
      * @param array $priceList
      * @param string $carrierName
      * @param bool $taxInc
+     * @param bool $cod
+     *
      * @return float
+     * @throws \Bliskapaczka\ApiClient\Exception
      */
-    public function getPriceForCarrier($priceList, $carrierName, $taxInc = true)
+    public function getPriceForCarrier($priceList, $carrierName, $taxInc = true, $cod = false)
     {
         $price = null;
 
@@ -120,6 +127,10 @@ class Bliskapaczka_Shipping_Method_Helper
                     $price = $carrier->price->net;
                 }
             }
+        }
+        if ($cod) {
+            $cods = $this->makeCODStructure($this->getConfig()->configModel);
+            $price = $price + $cods[$carrierName];
         }
 
         return $price;
@@ -144,23 +155,43 @@ class Bliskapaczka_Shipping_Method_Helper
     }
 
     /**
+     * @return array|mixed|object
+     * @throws \Bliskapaczka\ApiClient\Exception
+     */
+    public function getConfig()
+    {
+        /* @var Bliskapaczka_Shipping_Method $bliskapaczka */
+        $bliskapaczka = new Bliskapaczka_Shipping_Method();
+        $apiClient = $this->getApiClientConfig($bliskapaczka);
+        $config = $apiClient->get();
+        return json_decode($config);
+    }
+
+    /**
      * Get widget configuration
      *
      * @param array $priceList
+     *
+     * @param array $cods
+     *
      * @return array
+     * @throws \Bliskapaczka\ApiClient\Exception
      */
-    public function getOperatorsForWidget($priceList = null)
+    public function getOperatorsForWidget($priceList = null, $cods = null)
     {
         if (!$priceList) {
             $priceList = $this->getPriceList();
         }
         $operators = array();
-
+        if ($cods === null) {
+            $cods = $this->makeCODStructure($this->getConfig()->configModel);
+        }
         foreach ($priceList as $operator) {
             if ($operator->availabilityStatus != false) {
                 $operators[] = array(
                     "operator" => $operator->operatorName,
-                    "price" => $operator->price->gross
+                    "price" => $operator->price->gross,
+                    "cod" => $cods[$operator->operatorName]
                 );
             }
         }
@@ -168,6 +199,34 @@ class Bliskapaczka_Shipping_Method_Helper
         return json_encode($operators);
     }
 
+    /**
+     * @param array $configs
+     *
+     * @return array
+     */
+    public function makeCODStructure(array $configs)
+    {
+        $result = array();
+        foreach ($configs as $config) {
+            if (!empty($config->cod)) {
+                $result[$config->operator] = $config->cod;
+            } else {
+                $result[$config->operator] = 0;
+            }
+
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCODStatus()
+    {
+        $bliskapaczka = new Bliskapaczka_Shipping_Method();
+        return $this->getCodMode($bliskapaczka->settings['BLISKAPACZKA_COD_ONLY']);
+    }
     /**
      * Get Bliskapaczka API Client
      *
@@ -217,6 +276,22 @@ class Bliskapaczka_Shipping_Method_Helper
     }
 
     /**
+     * Get Bliskapaczka Api Client
+     * @param Bliskapaczka_Shipping_Method $bliskapaczka
+     *
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka\Config
+     * @throws \Bliskapaczka\ApiClient\Exception
+     */
+    public function getApiClientConfig($bliskapaczka)
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Config(
+            $bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
+            $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'])
+        );
+
+        return $apiClient;
+    }
+    /**
      * Remove all non numeric chars from phone number
      *
      * @param string $phoneNumber
@@ -254,5 +329,14 @@ class Bliskapaczka_Shipping_Method_Helper
         }
 
         return $mode;
+    }
+
+    public function getCodMode($configValue = '')
+    {
+        if ($configValue === 'yes') {
+            return 'true';
+        }
+
+        return 'false';
     }
 }
