@@ -19,6 +19,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     php7.0-mcrypt \
     php7.0-curl \
     php7.0-gd \
+    php7.0-xml \
+    php7.0-mbstring \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -28,7 +30,7 @@ RUN  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "unlink('composer-setup.php');"
 
 # ENV WORDPRESS_VERSION 4.8.2
-ENV WORDPRESS_VERSION 4.9.8
+ENV WORDPRESS_VERSION 5.2.4
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends unzip wget \
@@ -40,7 +42,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # ENV WOOCOMMERCE_VERSION 3.3.3
-ENV WOOCOMMERCE_VERSION 3.5.1
+ENV WOOCOMMERCE_VERSION 3.7.1
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends unzip wget \
