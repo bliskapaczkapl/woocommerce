@@ -164,6 +164,9 @@ class Bliskapaczka_Shipping_Method_Helper
         $bliskapaczka = new Bliskapaczka_Shipping_Method();
         $apiClient = $this->getApiClientConfig($bliskapaczka);
         $config = $apiClient->get();
+        if (json_decode($config) === null) {
+            return array();
+        }
         return json_decode($config);
     }
 
