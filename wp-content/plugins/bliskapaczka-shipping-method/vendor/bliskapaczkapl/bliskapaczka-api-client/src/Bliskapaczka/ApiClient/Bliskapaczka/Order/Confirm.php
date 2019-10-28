@@ -52,7 +52,7 @@ class Confirm extends AbstractBliskapaczka implements BliskapaczkaInterface
      */
     public function confirm()
     {
-        $response = $this->doCall($this->getUrl(), json_encode(''), array(), 'GET');
+        $response = $this->doCall($this->getUrl(), json_encode(''), array(), 'POST');
 
         return $response;
     }

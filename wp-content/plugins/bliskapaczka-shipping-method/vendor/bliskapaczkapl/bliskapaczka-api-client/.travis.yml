@@ -23,3 +23,6 @@ script:
   - vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/unit/
   - vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/intergation/
   - vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/pact/
+  - if [ "$TRAVIS_TAG" ]; then
+    curl -XPOST -H'content-type:application/json' "https://packagist.org/api/update-package?username=Sendit S.A.&apiToken=$PACKAGIST_API_TOKEN" -d'{"repository":{"url":"https://packagist.org/packages/bliskapaczkapl/bliskapaczka-api-client"}}';
+    fi

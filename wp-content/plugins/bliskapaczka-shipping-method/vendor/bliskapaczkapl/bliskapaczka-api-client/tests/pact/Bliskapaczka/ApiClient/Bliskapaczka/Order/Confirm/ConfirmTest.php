@@ -28,7 +28,7 @@ class ConfirmTest extends TestCase
 
         $response = json_decode($apiClient->confirm());
 
-        $this->assertTrue(empty($response->status));
+        $this->assertTrue(is_a($response, 'stdClass'));
     }
 
     /**
@@ -70,16 +70,18 @@ class ConfirmTest extends TestCase
         $options[CURLOPT_POST] = true;
         $options[CURLOPT_POSTFIELDS] = '{
   "description": "Confirm order",
-  "provider_state": "API should return order data",
+  "provider_state": "API should return empty response",
   "request": {
     "method": "post",
-    "path": "/v2/order/confirm?operatorName=' . $this->operator . '"
+    "path": "/v2/orders/confirm",
+    "query": "operatorName=' . $this->operator . '"
   },
   "response": {
     "status": 200,
     "headers": {
       "Content-Type": "application/json"
-    }
+    },
+    "body": {}
   }
 }';
 

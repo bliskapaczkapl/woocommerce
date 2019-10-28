@@ -24,6 +24,17 @@ class BliskapaczkaTest extends TestCase
         $this->assertEquals('https://api.sandbox-bliskapaczka.pl', $url);
     }
 
+    /**
+     * @expectedException Bliskapaczka\ApiClient\Exception
+     * @expectedExceptionMessage Invalid api key
+     */
+    public function testEmptyApiKey()
+    {
+        $apiKey = '';
+        $apiUrl = 'http://localhost:1234';
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pricing($apiKey);
+    }
+
     public function testSetApiUrl()
     {
         $apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';

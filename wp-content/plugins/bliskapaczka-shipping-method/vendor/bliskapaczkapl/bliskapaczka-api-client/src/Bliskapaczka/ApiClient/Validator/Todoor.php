@@ -98,5 +98,7 @@ class Todoor extends AbstractValidator implements ValidatorInterface
 
         # Basic validation for all propoerties
         $this->validationByProperty();
+
+        return true;
     }
 }
