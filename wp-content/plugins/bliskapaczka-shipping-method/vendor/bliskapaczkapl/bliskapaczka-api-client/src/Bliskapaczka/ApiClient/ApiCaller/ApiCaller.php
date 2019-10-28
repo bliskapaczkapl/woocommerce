@@ -41,21 +41,27 @@ class ApiCaller
 
         curl_setopt_array($curl, $options);
 
+        $this->logger->debug(json_encode($options));
+
         $error = curl_error($curl);
         if ($error) {
+            $this->logger->error($error);
             throw new Exception($error, 1);
         }
 
         $response = curl_exec($curl);
+        $this->logger->debug($response);
 
         $responseDecoded = json_decode($response);
 
         if (isset($responseDecoded->error)) {
+            $this->logger->error($error);
             throw new Exception($responseDecoded->error, 1);
         }
 
         if (isset($responseDecoded->errors)) {
             foreach ($responseDecoded->errors as $error) {
+                $this->logger->error($error);
                 throw new Exception($error->message . ' ' . $error->field, 1);
             }
         }

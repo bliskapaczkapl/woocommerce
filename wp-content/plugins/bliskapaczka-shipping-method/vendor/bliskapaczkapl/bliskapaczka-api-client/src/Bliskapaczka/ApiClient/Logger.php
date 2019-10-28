@@ -9,7 +9,6 @@ use Psr\Log\LoggerInterface;
  *
  * @package Bliskapaczka\ApiClient
  */
-
 class Logger
 {
     /**
@@ -33,6 +32,17 @@ class Logger
     {
         if ($this->logger) {
             $this->logger->debug($message, $context);
+        }
+    }
+
+    /**
+     * @param string $message
+     * @param array  $context
+     */
+    public function error($message, array $context = array())
+    {
+        if ($this->logger) {
+            $this->logger->error($message, $context);
         }
     }
 }
