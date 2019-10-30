@@ -87,7 +87,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 							'title'       => __( 'Title', 'bliskapaczka-shipping-method' ),
 							'type'        => 'text',
 							'description' => __( 'Title to be display on site', 'bliskapaczka-shipping-method' ),
-							'default'     => __( 'Bliskapaczka Shipping', 'bliskapaczka-shipping-method' ),
+							'default'     => __( 'Dostawa do punktu', 'bliskapaczka-shipping-method' ),
 						),
 						$helper::API_KEY                => array(
 							'title'       => __( 'API Key', 'bliskapaczka-shipping-method' ),
@@ -247,7 +247,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
                     ',' .
                     esc_html( $helper->getCodMode($bliskapaczka->settings['BLISKAPACZKA_COD_ONLY'])) .
 					")'>" .
-					esc_html( __( 'Select delivery point', 'bliskapaczka-shipping-method' ) ) . '</a>';
+					esc_html( 'Wybierz punkt dostawy' ) . '</a>';
 			// @codingStandardsIgnoreEnd
 			echo '<input name="bliskapaczka_posCode" type="hidden" id="bliskapaczka_posCode" value="' . esc_html( WC()->session->get( 'bliskapaczka_posCode' ) ) . '" />';
 			echo '<input name="bliskapaczka_posOperator" type="hidden" id="bliskapaczka_posOperator" value="' . esc_html( WC()->session->get( 'bliskapaczka_posOperator' ) ) . '" />';
