@@ -154,3 +154,24 @@ Bliskapaczka.updateOperators = function(operators, codOnly){
 //         return Bliskapaczka.selectPoint();
 //     });
 // });
+document.addEventListener("DOMContentLoaded", function () {
+    jQuery('form.checkout').on('change', 'input[name="payment_method"]', function(){
+        var method = jQuery(this).attr('value');
+            var elemnts = jQuery('.bliskapaczka_courier_item_price_value');
+            elemnts.each(function (index, element) {
+                var price = jQuery(element).attr('data-price')
+                var codPrice = jQuery(element).attr('data-cod-price')
+                if (method === 'cod') {
+                    jQuery(element).text(parseFloat(price) + parseFloat(codPrice));
+                } else {
+                    jQuery(element).text(parseFloat(price));
+                }
+
+            });
+    });
+    jQuery('form.checkout').on('click', 'label[class="bliskapaczka_courier_item_wrapper"]',function(){
+        jQuery('#bliskapaczka_posOperator').val(jQuery(this).attr('data-operator'));
+        jQuery('.bliskapaczka_courier_item_wrapper').removeClass('checked');
+        jQuery(this).addClass('checked');
+    });
+});

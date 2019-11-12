@@ -32,6 +32,9 @@ class Bliskapaczka_Shipping_Method_Helper
 
     const BANK_ACCOUNT_NUMBER = 'BLISKAPACZKA_BANK_ACCOUNT_NUMBER';
 
+    const TITLE_COURIER = 'BLISKAPACZKA_COURIER_TITLE';
+
+
     /**
      * Get parcel dimensions in format accptable by Bliskapaczka API
      *
@@ -154,6 +157,31 @@ class Bliskapaczka_Shipping_Method_Helper
         return json_decode($priceList);
     }
 
+    public function getPriceListForCourier()
+    {
+        /* @var Bliskapaczka_Shipping_Method $bliskapaczka */
+        $bliskapaczka = new Bliskapaczka_Shipping_Method();
+
+        $apiClient = $this->getApiClientPricingTodoor($bliskapaczka);
+        $priceList = $apiClient->get(
+            array("parcel" => array('dimensions' => $this->getParcelDimensions($bliskapaczka->settings)))
+        );
+        $cods = $this->makeCODStructure($this->getConfig()->configModel);
+        $operators = array();
+        $priceList = json_decode($priceList);
+        foreach ($priceList as $operator) {
+            if ($operator->availabilityStatus != false) {
+                $price = $operator->price->gross;
+
+                $operators[] = array(
+                    "operator" => $operator->operatorName,
+                    "price" => $price,
+                    "cod" => $cods[$operator->operatorName]
+                );
+            }
+        }
+        return $operators;
+    }
     /**
      * @return array|mixed|object
      * @throws \Bliskapaczka\ApiClient\Exception
@@ -202,6 +230,18 @@ class Bliskapaczka_Shipping_Method_Helper
         return json_encode($operators);
     }
 
+    public function getCODValueForOperator($operatorName)
+    {
+        $operators = $this->getPriceListForCourier();
+        $codValue = 0;
+        foreach ($operators as $operator) {
+            if ($operator['operator'] === $operatorName) {
+                $codValue = $operator['cod'];
+                break;
+            }
+        }
+        return $codValue;
+    }
     /**
      * @param array $configs
      *
@@ -288,6 +328,21 @@ class Bliskapaczka_Shipping_Method_Helper
     public function getApiClientConfig($bliskapaczka)
     {
         $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Config(
+            $bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
+            $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'])
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientPricingTodoor($bliskapaczka)
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pricing\Todoor(
             $bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
             $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'])
         );
