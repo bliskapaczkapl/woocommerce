@@ -199,9 +199,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					$price_list     = $helper->getPriceList();
 					$shipping_price = round( $helper->getLowestPrice( $price_list, true ), 2 );
                     // @codingStandardsIgnoreStart
+                    $label = $bliskapaczka->settings[ $helper::TITLE ];
+                    if (empty($label)) {
+                        $label = __( 'Dostawa do punktu', 'bliskapaczka-shipping-method' );
+                    }
 					$rate = array(
 						'id'       => $this->id,
-						'label'    => $bliskapaczka->settings[ $helper::TITLE ],
+						'label'    => $label,
 						'cost'     => $shipping_price,
 						'calc_tax' => 'per_item',
 					);
@@ -213,7 +217,96 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		}
 	}
 
+	/**
+	 * Bliskapaczka Courier Shipping Method
+	 */
+	function bliskapaczka_courier_shipping_method() {
+		if ( ! class_exists( 'Bliskapaczka_Courier_Shipping_Method' ) ) {
+            // @codingStandardsIgnoreStart
+			class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Shipping_Method {
+                // @codingStandardsIgnoreEnd
+				/**
+				 * Bliskapaczka_Courier_Shipping_Method constructor.
+				 */
+				public function __construct() {
+					$this->id                 = 'bliskapaczka-courier';
+					$this->method_title       = __( 'Bliskapaczka Courier Shipping', 'bliskapaczka-shipping-method' );
+					$this->method_description = __( 'Custom Coureir Shipping Method for Bliskapaczka', 'bliskapaczka-shipping-method' );
+
+					$this->availability = 'including';
+					$this->countries    = array(
+						'PL',
+					);
+
+					$this->init();
+
+					$this->enabled = isset( $this->settings['enabled'] ) ? $this->settings['enabled'] : 'yes';
+					$this->title   = isset( $this->settings['title'] ) ? $this->settings['title'] : __( 'Bliskapaczka Shipping', 'bliskapaczka-shipping-method' );
+				}
+
+				/**
+				 * Init function
+				 */
+				function init() {
+					$this->init_form_fields();
+					$this->init_settings();
+
+					add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
+				}
+
+				/**
+				 * Add field to admin panel
+				 */
+				function init_form_fields() {
+					$helper            = new Bliskapaczka_Shipping_Method_Helper();
+					$this->form_fields = array(
+
+						$helper::TITLE_COURIER => array(
+							'title'       => __( 'Title', 'bliskapaczka-shipping-method' ),
+							'type'        => 'text',
+							'description' => __( 'Title to be display on site', 'bliskapaczka-shipping-method' ),
+							'default'     => __( 'Dostawa do drzwi', 'bliskapaczka-shipping-method' ),
+						),
+
+					);
+
+				}
+
+				/**
+				 * This function is used to calculate the shipping cost. Within this function we can check for weights,
+				 * dimensions and other parameters.
+				 *
+				 * @access public
+				 * @param mixed $package From Hook.
+				 * @return void
+				 */
+				public function calculate_shipping( $package ) {
+
+                    // @codingStandardsIgnoreStart
+                    $helper         = new Bliskapaczka_Shipping_Method_Helper();
+                    $bliskapaczka   = new Bliskapaczka_Courier_Shipping_Method();
+                    $price_list = $helper->getPriceListForCourier();
+                    $shipping_price = round( $helper->getLowestPrice( $price_list, true ), 2 );
+
+                    $label = $bliskapaczka->settings[$helper::TITLE_COURIER];
+                    if (empty($label)) {
+                        $label = __( 'Dostawa do drzwi', 'bliskapaczka-shipping-method' );
+                    }
+                    $rate = array(
+                        'id'       => $this->id,
+                        'label'    => $bliskapaczka->settings[$helper::TITLE_COURIER],
+                        'cost'     => $shipping_price,
+                        'calc_tax' => 'per_item',
+                    );
+                    // @codingStandardsIgnoreEnd
+					$this->add_rate( $rate );
+
+				}
+			}
+		}
+	}
 	add_action( 'woocommerce_shipping_init', 'bliskapaczka_shipping_method' );
+	add_action( 'woocommerce_shipping_init', 'bliskapaczka_courier_shipping_method' );
 
 	/**
 	 * Add Bliskapaczka shipping method to available methods.
@@ -225,6 +318,45 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		return $methods;
 	}
 
+	/**
+	 * Add Bliskapaczka courier shipping method to available methods.
+	 *
+	 * @param array $methods List of shipping methods.
+	 */
+	function add_bliskapaczka_courier_shipping_method( $methods ) {
+		$methods[] = 'Bliskapaczka_Courier_Shipping_Method';
+		return $methods;
+	}
+
+	add_filter( 'woocommerce_shipping_methods', 'add_bliskapaczka_courier_shipping_method' );
+
+	/**
+	 * Add link for select parcel point displayed on checkout page.
+	 *
+	 * @param Bliskapaczka_Shipping_Courier_Method $method Bliskapaczka Courier Shipping method.
+	 */
+	function show_table( $method ) {
+		if ( 'bliskapaczka-courier' === $method->id ) {
+			$helper     = new Bliskapaczka_Shipping_Method_Helper();
+			$price_list = $helper->getPriceListForCourier();
+			echo '<div class="bliskapaczka_courier_wrapper"></div>';
+			foreach ( $price_list as $item ) {
+				$operator_name = $item['operator'];
+				$price         = $item['price'];
+				$cod_price     = $item['cod'];
+				echo '<label class="bliskapaczka_courier_item_wrapper" for="bliskapaczka_courier_posOperator" data-operator="' . esc_html( $operator_name ) . '">';
+				echo '<input type="radio" name="bliskapaczka_courier_posOperator" value="' . esc_html( $operator_name ) . '">';
+				echo '<div class="bliskapaczka_courier_item">';
+				echo '<div class="bliskapaczka_courier_item_logo"><img src="https://bliskapaczka.pl/static/images/' . esc_html( $operator_name ) . '.png" alt="' . esc_html( $operator_name ) . '"></div>';
+				echo '<div class="bliskapaczka_courier_item_price">';
+				echo '<span class="bliskapaczka_courier_item_price_value" data-price="' . esc_html( $price ) . '" data-cod-price="' . esc_html( $cod_price ) . '">' . esc_html( $price ) . '</span><span>zł</span>';
+				echo '</div>';
+				echo '</div>';
+				echo '</label>';
+			}
+		}
+	}
+	add_action( 'woocommerce_after_shipping_rate', 'show_table' );
 	/**
 	 * Add link for select parcel point displayed on checkout page.
 	 *
@@ -370,13 +502,25 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			return false;
 		}
 
-		$bliskapaczka = new Bliskapaczka_Shipping_Method();
-		$helper       = new Bliskapaczka_Shipping_Method_Helper();
+		$bliskapaczka       = new Bliskapaczka_Shipping_Method();
+		$helper             = new Bliskapaczka_Shipping_Method_Helper();
+		$shipping_method    = array_shift( $order->get_shipping_methods() );
+		$shipping_method_id = $shipping_method['method_id'];
+		$mapper             = new Bliskapaczka_Shipping_Method_Mapper();
+		if ( 'bliskapaczka-courier' === $shipping_method_id ) {
+			$order_data = $mapper->getDataForCourier( $order, $helper, $bliskapaczka->settings );
+			try {
+				$api_client = $helper->getApiClientOrder( $bliskapaczka );
+				$api_client->create( $order_data );
+			} catch ( Exception $e ) {
+				throw new Exception( $e->getMessage(), 1 );
+			}
+		}
 		// TODO: "Bliskapaczka, od" to const.
-		if ( $order->get_shipping_method() !== 'Bliskapaczka' && $order->get_shipping_method() !== $bliskapaczka->settings[ $helper::TITLE ] ) {
+		if ( 'bliskapaczka' !== $shipping_method_id ) {
 			return false;
 		}
-		$mapper     = new Bliskapaczka_Shipping_Method_Mapper();
+
 		$order_data = $mapper->getData( $order, $helper, $bliskapaczka->settings );
 		try {
 			$api_client = $helper->getApiClientOrder( $bliskapaczka );
@@ -412,6 +556,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 		wp_register_style( 'widget-styles', 'https://widget.bliskapaczka.pl/v5/main.css', array(), 'v5', false );
 		wp_enqueue_style( 'widget-styles' );
+		wp_register_style( 'widget-styles-bliskapaczka', plugin_dir_url( __FILE__ ) . 'assets/css/bliskapaczka.css', array(), 'v5', false );
+		wp_enqueue_style( 'widget-styles-bliskapaczka' );
 
 		wp_register_script( 'plugin-script', plugin_dir_url( __FILE__ ) . 'assets/js/bliskapaczka.js', array(), 'v5', false );
 		wp_enqueue_script( 'plugin-script' );

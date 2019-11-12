@@ -38,15 +38,99 @@ class Bliskapaczka_Shipping_Method_Mapper
             'dimensions' => $this->getParcelDimensions($helper, $settings)
         ];
 
-        if ($helper->getCODStatus()) {
-            $cods = $helper->makeCODStructure($helper->getConfig()->configModel);
-            $data['codValue'] = $cods[$data['operatorName']];
-        }
         $data = $this->_prepareSenderData($data, $helper, $settings);
 
         return $data;
     }
 
+    /**
+     * @param WC_Order $order
+     * @param Bliskapaczka_Shipping_Method_Helper $helper
+     * @param $settings
+     *
+     * @return array
+     */
+    public function getDataForCourier(WC_Order $order, Bliskapaczka_Shipping_Method_Helper $helper, $settings)
+    {
+        $data = $this->getData($order, $helper, $settings);
+        foreach ( $order->get_items( array( 'shipping' ) ) as $item_id => $item ) {
+            $shipping_item_id = $item_id;
+        }
+        $data['operatorName'] = wc_get_order_item_meta( $shipping_item_id, '_bliskapaczka_posOperator' );
+        $data['deliveryType'] = 'D2D';
+        if ($data['operatorName'] === 'POCZTA') {
+            $data['deliveryType'] = 'P2P';
+        }
+        $data['parcel'] = [
+            'dimensions' => $this->getParcelDimensions($helper, $settings)
+        ];
+        unset($data['destinationCode']);
+        $data = $this->_prepareSenderData($data, $helper, $settings);
+        $data = $this->_prepareDestinationData($data, $order);
+        $data = $this->_prepareCODIfNeeded($data, $order, $helper);
+        return $data;
+    }
+
+    /**
+     * @param $data
+     * @param WC_Order $order
+     *
+     * @return mixed
+     */
+    protected function _prepareDestinationData($data, WC_Order $order)
+    {
+        $shippingAddress = $order->get_address('shipping');
+        $data['receiverStreet'] = $shippingAddress['address_1'];
+        $data['receiverBuildingNumber'] = $this->getBuildingNumber($shippingAddress['address_2']);
+        $data['receiverFlatNumber'] = $this->getFlatNumber($shippingAddress['address_2']);
+        $data['receiverPostCode'] = $shippingAddress['postcode'];
+        $data['receiverCity'] = $shippingAddress['city'];
+        return $data;
+    }
+
+    /**
+     * @param $address
+     *
+     * @return string
+     */
+    protected function getBuildingNumber($address)
+    {
+        $numbers = explode('/', $address);
+        if (isset($numbers[0])) {
+            return $numbers[0];
+        }
+        return '';
+    }
+
+    /**
+     * @param $address
+     *
+     * @return string
+     */
+    protected function getFlatNumber($address)
+    {
+        $numbers = explode('/', $address);
+        if (isset($numbers[1])) {
+            return $numbers[1];
+        }
+        return '';
+    }
+
+    /**
+     * @param $data
+     * @param WC_Order $order
+     * @param $helper
+     *
+     * @return mixed
+     */
+    protected function _prepareCODIfNeeded($data, WC_Order $order, $helper)
+    {
+        if ($order->get_payment_method() === 'cod') {
+            $codValue = $helper->getCODValueForOperator($data['operatorName']);
+            $data['codValue'] = $codValue;
+        }
+        return $data;
+    }
     /**
      * Get parcel dimensions in format accptable by Bliskapaczka API
      *
