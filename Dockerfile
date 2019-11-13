@@ -67,8 +67,9 @@ COPY woocommerce_wp-config.php ${woocommerce_path}/wp-config.php
 # Copy latest version of Bliskapaczka module
 COPY wp-content ${woocommerce_path}/wp-content
 
+RUN mkdir -p ${woocommerce_path}/wp-content/uploads
 RUN find ${woocommerce_path} -type d -exec chmod 770 {} \; && find ${woocommerce_path} -type f -exec chmod 660 {} \; \
-    && chown -R :www-data ${woocommerce_path}
+    && chmod -R 777 ${woocommerce_path}/wp-content/uploads  && chown -R :www-data ${woocommerce_path}
 
 COPY run /opt/run
 
