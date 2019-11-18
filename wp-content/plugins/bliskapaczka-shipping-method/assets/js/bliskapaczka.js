@@ -161,13 +161,17 @@ document.addEventListener("DOMContentLoaded", function () {
             elemnts.each(function (index, element) {
                 var price = jQuery(element).attr('data-price')
                 var codPrice = jQuery(element).attr('data-cod-price')
+                var codPriceValue = parseFloat(codPrice);
+                var priceValue = parseFloat(price);
+                var showPrice = priceValue;
                 if (method === 'cod') {
-                    jQuery(element).text(parseFloat(price) + parseFloat(codPrice));
-                } else {
-                    jQuery(element).text(parseFloat(price));
+                    showPrice = priceValue + codPriceValue;
                 }
-
+                jQuery(element).text(showPrice);
             });
+
+        var elementsInMap = jQuery('.bp-filter bp-filter-show-price');
+        console.log(elementsInMap)
     });
     jQuery('form.checkout').on('click', 'label[class="bliskapaczka_courier_item_wrapper"]',function(){
         jQuery('#bliskapaczka_posOperator').val(jQuery(this).attr('data-operator'));
