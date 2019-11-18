@@ -17,6 +17,11 @@ class Bliskapaczka_Shipping_Method_Core
             $filePath = $libDir . str_replace('\\', '/', $class) . '.php';
         }
 
+        if (preg_match('#^(IBAN)\b#', $class)) {
+            $libDir = BLISKAPACZKA_ABSPATH . 'vendor/globalcitizen/php-iban/';
+            $filePath = $libDir . 'oophp-iban.php';
+        }
+
         if (preg_match('#^(Bliskapaczka_Shipping_Method_)#', $class)) {
             $filePath = BLISKAPACZKA_ABSPATH . 'includes/' . self::prepareClassFileName($class);
         }
