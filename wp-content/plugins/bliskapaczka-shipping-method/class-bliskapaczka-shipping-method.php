@@ -280,7 +280,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				 * @param mixed $package From Hook.
 				 * @return void
 				 */
-				public function calculate_shipping( $package ) {
+				public function calculate_shipping( $package  = array()) {
 
                     // @codingStandardsIgnoreStart
                     $helper         = new Bliskapaczka_Shipping_Method_Helper();
