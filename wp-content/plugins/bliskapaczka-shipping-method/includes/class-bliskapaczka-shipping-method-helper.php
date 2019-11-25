@@ -248,7 +248,7 @@ class Bliskapaczka_Shipping_Method_Helper
      *
      * @return array
      */
-    public function makeCODStructure(array $configs)
+    public function makeCODStructure($configs)
     {
         $result = array();
         foreach ($configs as $config) {
