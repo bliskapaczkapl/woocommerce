@@ -557,14 +557,14 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * Include JS.
 	 */
 	function add_scripts_and_scripts() {
-        $helper         = new Bliskapaczka_Shipping_Method_Helper();
-        $price_list     = $helper->getOperatorsForWidget();
-        $bliskapaczka = new Bliskapaczka_Shipping_Method();
-        $googleApiKey = $helper->getGoogleMapApiKey( $bliskapaczka->settings );
-        $testMode = ( 'test' === $helper->getApiMode( $bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'] ) ? 'true' : 'false' );
-        $script  = 'var operators = '. $price_list .'; ';
-        $script .= 'var GoogleApiKey = '. json_encode($googleApiKey) . ';';
-        $script .= 'var testMode = '. json_encode($testMode) . ';';
+		$helper             = new Bliskapaczka_Shipping_Method_Helper();
+		$price_list         = $helper->getOperatorsForWidget();
+		$bliskapaczka       = new Bliskapaczka_Shipping_Method();
+		$google_map_api_key = $helper->getGoogleMapApiKey( $bliskapaczka->settings );
+		$test_mode          = ( 'test' === $helper->getApiMode( $bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'] ) ? 'true' : 'false' );
+		$script             = 'var operators = ' . $price_list . '; ';
+		$script            .= 'var GoogleApiKey = ' . wp_json_encode( $google_map_api_key ) . ';';
+		$script            .= 'var testMode = ' . wp_json_encode( $test_mode ) . ';';
 
 		wp_register_script( 'widget-script', 'https://widget.bliskapaczka.pl/v5/main.js', array(), 'v5', false );
 		wp_enqueue_script( 'widget-script' );
@@ -576,7 +576,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 		wp_register_script( 'plugin-script', plugin_dir_url( __FILE__ ) . 'assets/js/bliskapaczka.js', array(), 'v5', false );
 		wp_enqueue_script( 'plugin-script' );
-        wp_add_inline_script('plugin-script', $script, 'before');
+		wp_add_inline_script( 'plugin-script', $script, 'before' );
 	}
 
 
