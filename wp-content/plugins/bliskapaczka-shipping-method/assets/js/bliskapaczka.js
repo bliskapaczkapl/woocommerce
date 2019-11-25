@@ -27,6 +27,30 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
 
                 Bliskapaczka.pointSelected(data, operators);
             },
+            readyCallback: function() {
+                jQuery('#BPWidgetFilters').on('click', 'input[type="checkbox"]', function () {
+                    var newOperators = [];
+                    if (jQuery(this).prop('checked') === true) {
+                        operators.forEach(function (element, index) {
+                            newOperators[index] ={
+                                'price': element.price + element.cod,
+                                'operator': element.operator
+                            };
+                        });
+                    } else {
+                        operators.forEach(function (element, index) {
+                            newOperators[index] ={
+                                'price': element.price,
+                                'operator': element.operator
+                            };
+                        });
+                    }
+                    newOperators.forEach(function (element) {
+                        var el = jQuery('input[name="'+ element.operator.toLowerCase() +'"]');
+                        el.parent().find('.bp-filter-price').find('span').text(element.price + 'zł');
+                    })
+                });
+            },
             operators: operators,
             posType: 'DELIVERY',
             testMode: testMode,
@@ -57,6 +81,8 @@ Bliskapaczka.pointSelected = function (data, operators) {
 
 Bliskapaczka.updatePrice = function (posOperator, operators) {
     item = Bliskapaczka.getTableRow();
+    var shippingMethod = jQuery('input[class="shipping_method"]:checked');
+    console.log(shippingMethod)
     if (item) {
         priceDiv = item.find('.delivery_option_price').first();
 
@@ -170,12 +196,35 @@ document.addEventListener("DOMContentLoaded", function () {
                 jQuery(element).text(showPrice);
             });
 
-        var elementsInMap = jQuery('.bp-filter bp-filter-show-price');
-        console.log(elementsInMap)
+            var newOperators = [];
+            if (method === 'cod') {
+
+                operators.forEach(function (element, index) {
+                    newOperators[index] ={
+                        'price': element.price + element.cod,
+                        'operator': element.operator
+                    };
+                });
+
+            } else {
+                operators.forEach(function (element, index) {
+                    newOperators[index] ={
+                        'price': element.price,
+                        'operator': element.operator
+                    };
+                });
+            }
+            var shippingMethod = jQuery('input[class="shipping_method"]:checked');
+            if (shippingMethod.attr('value') === 'bliskapaczka') {
+                Bliskapaczka.showMap(newOperators, GoogleApiKey, testMode);
+            }
+
+
     });
     jQuery('form.checkout').on('click', 'label[class="bliskapaczka_courier_item_wrapper"]',function(){
         jQuery('#bliskapaczka_posOperator').val(jQuery(this).attr('data-operator'));
         jQuery('.bliskapaczka_courier_item_wrapper').removeClass('checked');
         jQuery(this).addClass('checked');
     });
+
 });

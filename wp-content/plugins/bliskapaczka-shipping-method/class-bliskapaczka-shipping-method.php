@@ -342,9 +342,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$price_list     = $helper->getPriceListForCourier();
 			echo '<div class="bliskapaczka_courier_wrapper"></div>';
 			foreach ( $price_list as $item ) {
-				$operator_name = $item['operator'];
-				$price         = $item['price'];
-				$cod_price     = $item['cod'];
+				$operator_name = $item->operator;
+				$price         = $item->price->gross;
+				$cod_price     = $item->cod;
 				if ( 'cod' === $payment_method ) {
 					$price_show = $price + $cod_price;
 				} else {
@@ -557,6 +557,15 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * Include JS.
 	 */
 	function add_scripts_and_scripts() {
+        $helper         = new Bliskapaczka_Shipping_Method_Helper();
+        $price_list     = $helper->getOperatorsForWidget();
+        $bliskapaczka = new Bliskapaczka_Shipping_Method();
+        $googleApiKey = $helper->getGoogleMapApiKey( $bliskapaczka->settings );
+        $testMode = ( 'test' === $helper->getApiMode( $bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'] ) ? 'true' : 'false' );
+        $script  = 'var operators = '. $price_list .'; ';
+        $script .= 'var GoogleApiKey = '. json_encode($googleApiKey) . ';';
+        $script .= 'var testMode = '. json_encode($testMode) . ';';
+
 		wp_register_script( 'widget-script', 'https://widget.bliskapaczka.pl/v5/main.js', array(), 'v5', false );
 		wp_enqueue_script( 'widget-script' );
 
@@ -567,6 +576,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 		wp_register_script( 'plugin-script', plugin_dir_url( __FILE__ ) . 'assets/js/bliskapaczka.js', array(), 'v5', false );
 		wp_enqueue_script( 'plugin-script' );
+        wp_add_inline_script('plugin-script', $script, 'before');
 	}
 
 

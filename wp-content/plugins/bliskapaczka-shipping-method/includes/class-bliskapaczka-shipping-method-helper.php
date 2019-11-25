@@ -171,16 +171,16 @@ class Bliskapaczka_Shipping_Method_Helper
         $priceList = json_decode($priceList);
         foreach ($priceList as $operator) {
             if ($operator->availabilityStatus != false) {
-                $price = $operator->price->gross;
 
                 $operators[] = array(
                     "operator" => $operator->operatorName,
-                    "price" => $price,
-                    "cod" => $cods[$operator->operatorName]
+                    "price" => $operator->price,
+                    "cod" => $cods[$operator->operatorName],
+                    "availabilityStatus" => $operator->availabilityStatus
                 );
             }
         }
-        return $operators;
+        return json_decode(json_encode($operators));
     }
     /**
      * @return array|mixed|object
@@ -222,7 +222,8 @@ class Bliskapaczka_Shipping_Method_Helper
                 $operators[] = array(
                     "operator" => $operator->operatorName,
                     "price" => $operator->price->gross,
-                    "cod" => $cods[$operator->operatorName]
+                    "cod" => $cods[$operator->operatorName],
+                    "availabilityStatus" => $operator->availabilityStatus
                 );
             }
         }
