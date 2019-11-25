@@ -39,6 +39,13 @@ class Bliskapaczka_Shipping_Method_Mapper
         ];
 
         $data = $this->_prepareSenderData($data, $helper, $settings);
+        $operators  = json_decode($helper->getOperatorsForWidget());
+        foreach ($operators as $operator) {
+            if ($operator->operator === $data['operatorName']) {
+                $data['codValue'] = $operator->cod;
+                break;
+            }
+        }
 
         return $data;
     }
@@ -123,7 +130,7 @@ class Bliskapaczka_Shipping_Method_Mapper
      *
      * @return mixed
      */
-    protected function _prepareCODIfNeeded($data, WC_Order $order, $helper)
+    protected function _prepareCODIfNeeded($data, WC_Order $order, Bliskapaczka_Shipping_Method_Helper $helper)
     {
         if ($order->get_payment_method() === 'cod') {
             $codValue = $helper->getCODValueForOperator($data['operatorName']);
