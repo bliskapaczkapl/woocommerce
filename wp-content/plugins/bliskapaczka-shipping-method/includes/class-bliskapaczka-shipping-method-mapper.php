@@ -37,15 +37,7 @@ class Bliskapaczka_Shipping_Method_Mapper
         $data['parcel'] = [
             'dimensions' => $this->getParcelDimensions($helper, $settings)
         ];
-
         $data = $this->_prepareSenderData($data, $helper, $settings);
-        $operators  = json_decode($helper->getOperatorsForWidget());
-        foreach ($operators as $operator) {
-            if ($operator->operator === $data['operatorName']) {
-                $data['codValue'] = $operator->cod;
-                break;
-            }
-        }
 
         return $data;
     }
@@ -74,7 +66,6 @@ class Bliskapaczka_Shipping_Method_Mapper
         unset($data['destinationCode']);
         $data = $this->_prepareSenderData($data, $helper, $settings);
         $data = $this->_prepareDestinationData($data, $order);
-        $data = $this->_prepareCODIfNeeded($data, $order, $helper);
         return $data;
     }
 
@@ -125,16 +116,32 @@ class Bliskapaczka_Shipping_Method_Mapper
 
     /**
      * @param $data
-     * @param WC_Order $order
      * @param $helper
      *
      * @return mixed
      */
-    protected function _prepareCODIfNeeded($data, WC_Order $order, Bliskapaczka_Shipping_Method_Helper $helper)
+    public function prepareCODForCourier($data, Bliskapaczka_Shipping_Method_Helper $helper)
     {
-        if ($order->get_payment_method() === 'cod') {
-            $codValue = $helper->getCODValueForOperator($data['operatorName']);
-            $data['codValue'] = $codValue;
+        $codValue = $helper->getCODValueForOperator($data['operatorName']);
+        $data['codValue'] = $codValue;
+        return $data;
+    }
+
+    /**
+     * @param $data
+     * @param Bliskapaczka_Shipping_Method_Helper $helper
+     *
+     * @return mixed
+     * @throws \Bliskapaczka\ApiClient\Exception
+     */
+    public function prepareCodForMap($data, Bliskapaczka_Shipping_Method_Helper $helper)
+    {
+        $operators  = json_decode($helper->getOperatorsForWidget());
+        foreach ($operators as $operator) {
+            if ($operator->operator === $data['operatorName']) {
+                $data['codValue'] = $operator->cod;
+                break;
+            }
         }
         return $data;
     }

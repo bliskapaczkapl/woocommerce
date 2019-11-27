@@ -1,5 +1,4 @@
 <?php
-
 function wc_get_order_item_meta($id, $name) {
     $data = '';
 
