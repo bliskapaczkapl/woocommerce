@@ -52,13 +52,6 @@ class MapperTest extends TestCase
             'BLISKAPACZKA_BANK_ACCOUNT_NUMBER' => $this->codPayoutBankAccountNumber,
         ];
 
-        $this->getMockBuilder(\Bliskapaczka_Map_Shipping_Method::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->getMockBuilder(\Bliskapaczka_Courier_Shipping_Method::class)
-             ->disableOriginalConstructor()
-             ->getMock();
         $this->orderMock = $this->getMockBuilder(\WC_Order::class)
                                      ->disableOriginalConstructor()
                                       ->disableOriginalClone()
