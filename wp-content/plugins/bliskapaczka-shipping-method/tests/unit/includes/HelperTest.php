@@ -4,6 +4,17 @@ use PHPUnit\Framework\TestCase;
 
 class HelperTest extends TestCase
 {
+    protected function setUp()
+    {
+        $this->getMockBuilder(\Bliskapaczka_Map_Shipping_Method::class)
+             ->disableOriginalConstructor()
+             ->getMock();
+
+        $this->getMockBuilder(\Bliskapaczka_Courier_Shipping_Method::class)
+             ->disableOriginalConstructor()
+             ->getMock();
+    }
+
     public function testClassHasMethods()
     {
         $this->assertTrue(method_exists('Bliskapaczka_Shipping_Method_Helper', 'getParcelDimensions'));
@@ -297,8 +308,9 @@ class HelperTest extends TestCase
                'RUCH' => 1
            );
         $helper = new Bliskapaczka_Shipping_Method_Helper();
+
         $this->assertEquals(
-            '[{"operator":"INPOST","price":10.27,"cod":0},{"operator":"RUCH","price":5.99,"cod":1}]',
+            '[{"operator":"INPOST","price":10.27,"cod":0,"availabilityStatus":true},{"operator":"RUCH","price":5.99,"cod":1,"availabilityStatus":true}]',
             $helper->getOperatorsForWidget(json_decode($priceList), $cods)
         );
     }

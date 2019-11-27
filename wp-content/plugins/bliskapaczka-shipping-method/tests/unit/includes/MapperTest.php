@@ -1,5 +1,4 @@
 <?php
-
 function wc_get_order_item_meta($id, $name) {
     $data = '';
 
@@ -53,6 +52,13 @@ class MapperTest extends TestCase
             'BLISKAPACZKA_BANK_ACCOUNT_NUMBER' => $this->codPayoutBankAccountNumber,
         ];
 
+        $this->getMockBuilder(\Bliskapaczka_Map_Shipping_Method::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->getMockBuilder(\Bliskapaczka_Courier_Shipping_Method::class)
+             ->disableOriginalConstructor()
+             ->getMock();
         $this->orderMock = $this->getMockBuilder(\WC_Order::class)
                                      ->disableOriginalConstructor()
                                       ->disableOriginalClone()
@@ -138,6 +144,7 @@ class MapperTest extends TestCase
     public function testTypeOfReturnedData()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data['codValue'] = 1;
         $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertTrue(is_array($data));
@@ -146,6 +153,7 @@ class MapperTest extends TestCase
     public function testMapperForReceiverFirstName()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data['codValue'] = 1;
         $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals($this->receiverFirstName, $data['receiverFirstName']);
@@ -154,6 +162,7 @@ class MapperTest extends TestCase
     public function testMapperForReceiverLastName()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data['codValue'] = 1;
         $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals($this->receiverLastName, $data['receiverLastName']);
@@ -162,6 +171,7 @@ class MapperTest extends TestCase
     public function testMapperForReceiverPhoneNumber()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data['codValue'] = 1;
         $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals('504445665', $data['receiverPhoneNumber']);
@@ -170,6 +180,7 @@ class MapperTest extends TestCase
     public function testMapperForReceiverEmail()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data['codValue'] = 1;
         $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals($this->receiverEmail, $data['receiverEmail']);
@@ -178,6 +189,7 @@ class MapperTest extends TestCase
     public function testMapperForOperatorName()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data['codValue'] = 1;
         $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals($this->operatorName, $data['operatorName']);
@@ -186,6 +198,7 @@ class MapperTest extends TestCase
     public function testMapperForDestinationCode()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data['codValue'] = 1;
         $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals($this->destinationCode, $data['destinationCode']);
@@ -194,6 +207,7 @@ class MapperTest extends TestCase
     public function testMapperForParcel()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data['codValue'] = 1;
         $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertTrue(is_array($data['parcel']));
@@ -202,6 +216,7 @@ class MapperTest extends TestCase
     public function testMapperForSenderFirstName()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data['codValue'] = 1;
         $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals($this->senderFirstName, $data['senderFirstName']);
@@ -210,6 +225,7 @@ class MapperTest extends TestCase
     public function testMapperForSenderLastName()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data['codValue'] = 1;
         $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals($this->senderLastName, $data['senderLastName']);
@@ -218,6 +234,7 @@ class MapperTest extends TestCase
     public function testMapperForSenderPhoneNumber()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data['codValue'] = 1;
         $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals('504445665', $data['senderPhoneNumber']);
@@ -226,6 +243,7 @@ class MapperTest extends TestCase
     public function testMapperForSenderEmail()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data['codValue'] = 1;
         $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals($this->senderEmail, $data['senderEmail']);
@@ -234,6 +252,7 @@ class MapperTest extends TestCase
     public function testMapperForSenderStreet()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data['codValue'] = 1;
         $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals($this->senderStreet, $data['senderStreet']);
@@ -242,6 +261,7 @@ class MapperTest extends TestCase
     public function testMapperForSenderBuildingNumber()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data['codValue'] = 1;
         $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals($this->senderBuildingNumber, $data['senderBuildingNumber']);
@@ -250,6 +270,7 @@ class MapperTest extends TestCase
     public function testMapperForSenderFlatNumber()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data['codValue'] = 1;
         $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals($this->senderFlatNumber, $data['senderFlatNumber']);
@@ -258,6 +279,7 @@ class MapperTest extends TestCase
     public function testMapperForSenderPostCode()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data['codValue'] = 1;
         $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals($this->senderPostCode, $data['senderPostCode']);
@@ -266,6 +288,7 @@ class MapperTest extends TestCase
     public function testMapperForSenderCity()
     {
         $mapper = new \Bliskapaczka_Shipping_Method_Mapper();
+        $data['codValue'] = 1;
         $data = $mapper->getData($this->orderMock, $this->helperMock, $this->settings);
 
         $this->assertEquals($this->senderCity, $data['senderCity']);

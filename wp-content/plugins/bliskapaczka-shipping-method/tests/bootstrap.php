@@ -34,9 +34,10 @@ function autoloader($class)
     if (preg_match('#^(WC_(?!.*Abstract))#', $class)) {
     	$class = str_replace('_', '-', $class);
         $class = strtolower($class);
-        $class = 'class-' . $class . '.php';
+        $class =  $class . '.php';
 
-        $filePath = $GLOBALS['ROOT_DIR'] . '../woocommerce/includes/' . $class;
+        $filePath = $GLOBALS['ROOT_DIR'] . '../woocommerce/includes/abstracts/abstract-' . $class;
+
         // @codingStandardsIgnoreStart
         require_once($filePath);
         // @codingStandardsIgnoreEnd
@@ -53,6 +54,22 @@ function autoloader($class)
         require_once($filePath);
         // @codingStandardsIgnoreEnd
     }
+
+    if ($class == 'Bliskapaczka_Map_Shipping_Method') {
+        $filePath = BLISKAPACZKA_ABSPATH . 'includes/class-bliskapaczka-map-shipping-method.php';
+        // @codingStandardsIgnoreStart
+        require_once($filePath);
+        // @codingStandardsIgnoreEnd
+    }
+    if ($class == 'Bliskapaczka_Courier_Shipping_Method') {
+        $filePath = BLISKAPACZKA_ABSPATH . 'includes/class-bliskapaczka-courier-shipping-method.php';
+        // @codingStandardsIgnoreStart
+        require_once($filePath);
+        // @codingStandardsIgnoreEnd
+    }
+
+    require_once '/var/www/wordpress/wp-content/plugins/woocommerce/includes/class-wc-order.php';
+
 }
 
 spl_autoload_register('autoloader');

@@ -147,7 +147,7 @@ class Bliskapaczka_Shipping_Method_Helper
     public function getPriceList()
     {
         /* @var Bliskapaczka_Shipping_Method $bliskapaczka */
-        $bliskapaczka = new Bliskapaczka_Shipping_Method();
+        $bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
 
         $apiClient = $this->getApiClientPricing($bliskapaczka);
         $priceList = $apiClient->get(
@@ -160,7 +160,7 @@ class Bliskapaczka_Shipping_Method_Helper
     public function getPriceListForCourier()
     {
         /* @var Bliskapaczka_Shipping_Method $bliskapaczka */
-        $bliskapaczka = new Bliskapaczka_Shipping_Method();
+        $bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
 
         $apiClient = $this->getApiClientPricingTodoor($bliskapaczka);
         $priceList = $apiClient->get(
@@ -189,7 +189,7 @@ class Bliskapaczka_Shipping_Method_Helper
     public function getConfig()
     {
         /* @var Bliskapaczka_Shipping_Method $bliskapaczka */
-        $bliskapaczka = new Bliskapaczka_Shipping_Method();
+        $bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
         $apiClient = $this->getApiClientConfig($bliskapaczka);
         $config = $apiClient->get();
         if (json_decode($config) === null) {
@@ -210,7 +210,7 @@ class Bliskapaczka_Shipping_Method_Helper
      */
     public function getOperatorsForWidget($priceList = null, $cods = null)
     {
-        if (!$priceList) {
+        if (is_null($priceList)) {
             $priceList = $this->getPriceList();
         }
         $operators = array();
@@ -268,7 +268,7 @@ class Bliskapaczka_Shipping_Method_Helper
      */
     public function getCODStatus()
     {
-        $bliskapaczka = new Bliskapaczka_Shipping_Method();
+        $bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
         return $this->getCodMode($bliskapaczka->settings['BLISKAPACZKA_COD_ONLY']);
     }
     /**

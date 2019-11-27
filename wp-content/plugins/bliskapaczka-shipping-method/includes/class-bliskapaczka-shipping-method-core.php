@@ -25,7 +25,12 @@ class Bliskapaczka_Shipping_Method_Core
         if (preg_match('#^(Bliskapaczka_Shipping_Method_)#', $class)) {
             $filePath = BLISKAPACZKA_ABSPATH . 'includes/' . self::prepareClassFileName($class);
         }
-
+        if ($class == 'Bliskapaczka_Map_Shipping_Method') {
+            $filePath = BLISKAPACZKA_ABSPATH . 'includes/class-bliskapaczka-map-shipping-method.php';
+        }
+        if ($class == 'Bliskapaczka_Courier_Shipping_Method') {
+            $filePath = BLISKAPACZKA_ABSPATH . 'includes/class-bliskapaczka-courier-shipping-method.php';
+        }
         if (isset($filePath) && is_file($filePath)) {
             require_once($filePath);
         }
