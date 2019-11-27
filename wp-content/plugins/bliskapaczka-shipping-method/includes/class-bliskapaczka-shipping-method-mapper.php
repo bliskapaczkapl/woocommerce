@@ -116,33 +116,15 @@ class Bliskapaczka_Shipping_Method_Mapper
 
     /**
      * @param $data
-     * @param $helper
-     *
-     * @return mixed
-     */
-    public function prepareCODForCourier($data, Bliskapaczka_Shipping_Method_Helper $helper)
-    {
-        $codValue = $helper->getCODValueForOperator($data['operatorName']);
-        $data['codValue'] = $codValue;
-        return $data;
-    }
-
-    /**
-     * @param $data
      * @param Bliskapaczka_Shipping_Method_Helper $helper
      *
      * @return mixed
      * @throws \Bliskapaczka\ApiClient\Exception
      */
-    public function prepareCodForMap($data, Bliskapaczka_Shipping_Method_Helper $helper)
+    public function prepareCod($data, WC_Order $order)
     {
-        $operators  = json_decode($helper->getOperatorsForWidget());
-        foreach ($operators as $operator) {
-            if ($operator->operator === $data['operatorName']) {
-                $data['codValue'] = $operator->cod;
-                break;
-            }
-        }
+        $data['codValue'] = $order->get_total();
+
         return $data;
     }
     /**
