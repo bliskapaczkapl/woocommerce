@@ -68,7 +68,10 @@ function autoloader($class)
         // @codingStandardsIgnoreEnd
     }
 
-    require_once '/var/www/wordpress/wp-content/plugins/woocommerce/includes/class-wc-order.php';
+    $filePath = '/var/www/wordpress/wp-content/plugins/woocommerce/includes/class-wc-order.php';
+    if (isset($filePath) && is_file($filePath)) {
+        require_once($filePath);
+    }
 
 }
 
