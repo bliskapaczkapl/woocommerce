@@ -107,10 +107,15 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		$bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
 
 		if ( 'bliskapaczka' === $method->id && is_checkout() === true ) {
+            $payment_method = WC()->session->get( 'chosen_payment_method' );
+            $operators = $helper->getOperatorsForWidget();
+            if ($payment_method === 'cod') {
+                $operators = $helper->recalculatePrice($operators);
+            }
 			// @codingStandardsIgnoreStart
 			echo " <a href='#bpWidget_wrapper' " .
 				"onclick='Bliskapaczka.showMap(" .
-					esc_html( $helper->getOperatorsForWidget() ) .
+					esc_html( $operators ) .
 					', "' .
 					esc_html( $helper->getGoogleMapApiKey( $bliskapaczka->settings ) ) .
 					'", ' .
