@@ -231,6 +231,20 @@ class Bliskapaczka_Shipping_Method_Helper
         return json_encode($operators);
     }
 
+    public function recalculatePrice($operators)
+    {
+        $operators = json_decode($operators);
+        $new_operators = array();
+        foreach ($operators as $operator) {
+            $new_operators[] = array(
+                "operator" => $operator->operator,
+                "price" => $operator->price + $operator->cod,
+                "cod" => $operator->cod,
+                "availabilityStatus" => $operator->availabilityStatus
+            );
+        }
+        return json_encode($new_operators);
+    }
     public function getCODValueForOperator($operatorName)
     {
         $operators = $this->getPriceListForCourier();
