@@ -58,7 +58,7 @@ class Bliskapaczka_Shipping_Method_Mapper
         $data['operatorName'] = wc_get_order_item_meta( $shipping_item_id, '_bliskapaczka_posOperator' );
         $data['deliveryType'] = 'D2D';
         if ($data['operatorName'] === 'POCZTA') {
-            $data['deliveryType'] = 'P2P';
+            $data['deliveryType'] = 'P2D';
         }
         $data['parcel'] = [
             'dimensions' => $this->getParcelDimensions($helper, $settings)
