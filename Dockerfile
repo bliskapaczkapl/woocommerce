@@ -30,7 +30,7 @@ RUN  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "unlink('composer-setup.php');"
 
 # ENV WORDPRESS_VERSION 4.8.2
-ENV WORDPRESS_VERSION 5.2.4
+ENV WORDPRESS_VERSION 5.3
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends unzip wget \
@@ -42,7 +42,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # ENV WOOCOMMERCE_VERSION 3.3.3
-ENV WOOCOMMERCE_VERSION 3.7.1
+ENV WOOCOMMERCE_VERSION 3.8.0
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends unzip wget \
