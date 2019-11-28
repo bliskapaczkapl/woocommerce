@@ -217,6 +217,9 @@ class Bliskapaczka_Shipping_Method_Helper
         if ($cods === null) {
             $cods = $this->makeCODStructure($this->getConfig()->configModel);
         }
+        if (!is_array($priceList)) {
+            return json_encode($operators);
+        }
         foreach ($priceList as $operator) {
             if ($operator->availabilityStatus != false) {
                 $operators[] = array(
@@ -249,6 +252,9 @@ class Bliskapaczka_Shipping_Method_Helper
     {
         $operators = $this->getPriceListForCourier();
         $codValue = 0;
+        if (!is_array($operators)) {
+            return $codValue;
+        }
         foreach ($operators as $operator) {
             if ($operator['operator'] === $operatorName) {
                 $codValue = $operator['cod'];
