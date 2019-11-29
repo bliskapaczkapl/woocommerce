@@ -10,7 +10,6 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
     bpWidget.style.display = 'block';
 
     Bliskapaczka.updateSelectedCarrier();
-    operators = Bliskapaczka.updateOperators(operators, codOnly);
     BPWidget.init(
         bpWidget,
         {
@@ -31,24 +30,8 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
                 jQuery('#BPWidgetFilters').on('click', 'input[type="checkbox"]', function () {
                     var newOperators = [];
                     if (jQuery(this).prop('checked') === true) {
-                        operators.forEach(function (element, index) {
-                            newOperators[index] ={
-                                'price': element.price + element.cod,
-                                'operator': element.operator
-                            };
-                        });
-                    } else {
-                        operators.forEach(function (element, index) {
-                            newOperators[index] ={
-                                'price': element.price,
-                                'operator': element.operator
-                            };
-                        });
+                        jQuery('input[value="cod"]').click();
                     }
-                    newOperators.forEach(function (element) {
-                        var el = jQuery('input[name="'+ element.operator.toLowerCase() +'"]');
-                        el.parent().find('.bp-filter-price').find('span').text(element.price + 'zł');
-                    })
                 });
             },
             operators: operators,
@@ -122,14 +105,7 @@ Bliskapaczka.getTableRow = function () {
 
     return item;
 }
-Bliskapaczka.updateOperators = function(operators, codOnly){
-    return operators.map(function (o) {
-        if (codOnly) {
-            o.price = o.price + o.cod;
-        }
-        return o;
-    });
-}
+
 // Bliskapaczka.selectPoint = function () {
 //     item = Bliskapaczka.getTableRow();
 
@@ -197,26 +173,34 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             var newOperators = [];
+            var localPrice = 0;
             if (method === 'cod') {
 
-                operators.forEach(function (element, index) {
-                    newOperators[index] ={
-                        'price': element.price + element.cod,
+                operators.forEach(function (element) {
+                    localPrice = element.price + element.cod;
+                    var o  ={
+                        'price': localPrice,
                         'operator': element.operator
                     };
+                    newOperators.push(o);
                 });
-
             } else {
                 operators.forEach(function (element, index) {
+                    localPrice = element.price
                     newOperators[index] ={
-                        'price': element.price,
+                        'price': localPrice,
                         'operator': element.operator
                     };
                 });
             }
             var shippingMethod = jQuery('input[class="shipping_method"]:checked');
             if (shippingMethod.attr('value') === 'bliskapaczka') {
-                Bliskapaczka.showMap(newOperators, GoogleApiKey, testMode);
+                if (method === 'cod') {
+                    Bliskapaczka.showMap(newOperators, GoogleApiKey, testMode, true);
+                } else {
+                    Bliskapaczka.showMap(newOperators, GoogleApiKey, testMode);
+                }
+
             }
 
 
