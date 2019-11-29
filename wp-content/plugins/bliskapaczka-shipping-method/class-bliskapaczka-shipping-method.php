@@ -109,8 +109,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		if ( 'bliskapaczka' === $method->id && is_checkout() === true ) {
 			$payment_method = WC()->session->get( 'chosen_payment_method' );
 			$operators      = $helper->getOperatorsForWidget();
+			$codOnly = 'false';
 			if ( 'cod' === $payment_method ) {
 				$operators = $helper->recalculatePrice( $operators );
+				$codOnly = 'true';
 			}
 			// @codingStandardsIgnoreStart
 			echo " <a href='#bpWidget_wrapper' " .
@@ -121,7 +123,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					'", ' .
 					esc_html( ( 'test' === $helper->getApiMode( $bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'] ) ? 'true' : 'false' ) ) .
                     ',' .
-                    esc_html( $helper->getCodMode($bliskapaczka->settings['BLISKAPACZKA_COD_ONLY'])) .
+                    esc_html( $codOnly) .
 					")'>" .
 					esc_html( 'Wybierz punkt dostawy' ) . '</a>';
 			// @codingStandardsIgnoreEnd
