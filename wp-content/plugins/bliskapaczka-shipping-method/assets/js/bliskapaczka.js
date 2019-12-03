@@ -158,6 +158,7 @@ Bliskapaczka.getTableRow = function () {
 // });
 document.addEventListener("DOMContentLoaded", function () {
     jQuery('form.checkout').on('change', 'input[name="payment_method"]', function(){
+        jQuery(document.body).trigger("update_checkout");
         var method = jQuery(this).attr('value');
             var elemnts = jQuery('.bliskapaczka_courier_item_price_value');
             elemnts.each(function (index, element) {
@@ -208,6 +209,7 @@ document.addEventListener("DOMContentLoaded", function () {
     jQuery('form.checkout').on('click', 'label[class="bliskapaczka_courier_item_wrapper"]',function(){
         jQuery('#bliskapaczka_posOperator').val(jQuery(this).attr('data-operator'));
         jQuery('.bliskapaczka_courier_item_wrapper').removeClass('checked');
+        jQuery(document.body).trigger("update_checkout");
         jQuery(this).addClass('checked');
     });
 
