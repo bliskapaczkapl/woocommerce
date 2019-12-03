@@ -159,6 +159,7 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
      * @return void
      */
     public function calculate_shipping( $package = array() ) {
+
         $helper         = new Bliskapaczka_Shipping_Method_Helper();
         $bliskapaczka   = new Bliskapaczka_Map_Shipping_Method();
         $price_list     = $helper->getPriceList();
@@ -171,11 +172,33 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
         $rate = array(
             'id'       => $this->id,
             'label'    => $label,
-            'cost'     => $shipping_price,
+            'cost'     => 0,
             'calc_tax' => 'per_item',
         );
         // @codingStandardsIgnoreEnd
         $this->add_rate( $rate );
 
+    }
+
+    /**
+     * @param string $operator_name
+     * @param string $operator_code
+     * @param boolean $is_cod
+     */
+    public function recalculate_shipping_cost($operator_name = '', $operator_code = '', $is_cod = false) {
+
+        $helper             = new Bliskapaczka_Shipping_Method_Helper();
+        $price_list         = $helper->getOperatorsForWidget();
+        $price_list = json_decode($price_list);
+        $price = 0;
+        foreach ($price_list as $item) {
+            if ($item->operator === $operator_name) {
+                $price = $item->price;
+                if ($is_cod === true) {
+                    $price = $price + $item->cod;
+                }
+            }
+        }
+        return $price;
     }
 }

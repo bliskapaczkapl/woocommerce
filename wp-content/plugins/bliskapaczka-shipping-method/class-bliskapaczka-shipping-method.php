@@ -73,6 +73,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$payment_method = WC()->session->get( 'chosen_payment_method' );
 			$helper         = new Bliskapaczka_Shipping_Method_Helper();
 			$price_list     = $helper->getPriceListForCourier();
+			$courier        = WC()->session->get( 'bliskapaczka_posOperator' );
 			echo '<div class="bliskapaczka_courier_wrapper"></div>';
 			foreach ( $price_list as $item ) {
 				$operator_name = $item->operator;
@@ -83,7 +84,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				} else {
 					$price_show = $price;
 				}
-				echo '<label class="bliskapaczka_courier_item_wrapper" for="bliskapaczka_courier_posOperator" data-operator="' . esc_html( $operator_name ) . '">';
+				$class = 'bliskapaczka_courier_item_wrapper';
+				if ( $operator_name === $courier ) {
+					$class = 'bliskapaczka_courier_item_wrapper checked';
+				}
+				echo '<label class="' . esc_html( $class ) . '" for="bliskapaczka_courier_posOperator" data-operator="' . esc_html( $operator_name ) . '">';
 				echo '<input type="radio" name="bliskapaczka_courier_posOperator" value="' . esc_html( $operator_name ) . '">';
 				echo '<div class="bliskapaczka_courier_item">';
 				echo '<div class="bliskapaczka_courier_item_logo"><img src="https://bliskapaczka.pl/static/images/' . esc_html( $operator_name ) . '.png" alt="' . esc_html( $operator_name ) . '"></div>';
@@ -109,10 +114,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		if ( 'bliskapaczka' === $method->id && is_checkout() === true ) {
 			$payment_method = WC()->session->get( 'chosen_payment_method' );
 			$operators      = $helper->getOperatorsForWidget();
-			$codOnly = 'false';
+			$cod_only       = 'false';
 			if ( 'cod' === $payment_method ) {
 				$operators = $helper->recalculatePrice( $operators );
-				$codOnly = 'true';
+				$cod_only  = 'true';
 			}
 			// @codingStandardsIgnoreStart
 			echo " <a href='#bpWidget_wrapper' " .
@@ -123,7 +128,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					'", ' .
 					esc_html( ( 'test' === $helper->getApiMode( $bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'] ) ? 'true' : 'false' ) ) .
                     ',' .
-                    esc_html( $codOnly) .
+                    esc_html( $cod_only) .
 					")'>" .
 					esc_html( 'Wybierz punkt dostawy' ) . '</a>';
 			// @codingStandardsIgnoreEnd
@@ -191,6 +196,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * @param mixed $packages Some data.
 	 */
 	function update_price_for_chosen_carrier( $packages ) {
+
 		// @codingStandardsIgnoreStart
 		if ( isset( $_POST['post_data'] ) ) {
 			parse_str( $_POST['post_data'], $checkout_data );
@@ -207,16 +213,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$pos_operator = WC()->session->get( 'bliskapaczka_posOperator' );
 		}
 
-		if ( $pos_code && $pos_operator ) {
+		if ( $pos_code ) {
 			WC()->session->set( 'bliskapaczka_posCode', $pos_code );
+		}
+		if ( $pos_operator ) {
 			WC()->session->set( 'bliskapaczka_posOperator', $pos_operator );
-
-			$helper                                      = new Bliskapaczka_Shipping_Method_Helper();
-			$price_list                                  = $helper->getPriceList();
-			$cod_status                                  = $helper->getCODStatus();
-			$shipping_price                              = round( $helper->getPriceForCarrier( $price_list, $pos_operator, true, $cod_status ), 2 );
-			$packages[0]['rates']['bliskapaczka']->label = 'Bliskapaczka';
-			$packages[0]['rates']['bliskapaczka']->cost  = $shipping_price;
 		}
 
 		return $packages;
@@ -340,4 +341,70 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	add_action( 'woocommerce_checkout_update_order_meta', 'create_order_via_api' );
 
 	add_filter( 'woocommerce_checkout_fields', 'custom_override_checkout_fields' );
+
+
+	add_action( 'woocommerce_calculate_totals', 'set_shipping_cost', 10 );
+
+	/**
+	 * Set correct price
+	 *
+	 * @param mixed $cart Cart from Woocommerce.
+	 */
+	function set_shipping_cost( $cart ) {
+		$price          = get_price();
+		$shipping_total = $cart->get_shipping_total();
+		$cart->set_shipping_total( $shipping_total + $price );
+	}
+
+		add_filter( 'woocommerce_calculated_total', 'custom_calculated_total', 10, 2 );
+
+	/**
+	 * Recalculate total price
+	 *
+	 * @param float $total Total price.
+	 * @param mixed $cart Object from Woocommerce.
+	 *
+	 * @return int
+	 */
+	function custom_calculated_total( $total, $cart ) {
+
+		return $total + get_price();
+	}
+
+	/**
+	 * Return price
+	 *
+	 * @return int
+	 */
+	function get_price() {
+		$price                 = 0;
+		$chosen_methods        = WC()->session->get( 'chosen_shipping_methods' );
+		$chosen_method         = $chosen_methods[0];
+		$chosen_payment_method = WC()->session->get( 'chosen_payment_method' );
+        // @codingStandardsIgnoreStart
+		parse_str( $_POST['post_data'], $post_data );
+		$pos_operator = $post_data['bliskapaczka_posOperator'];
+		$pos_code     = $post_data['bliskapaczka_posCode'];
+        // @codingStandardsIgnoreEnd
+		if ( 'bliskapaczka-courier' === $chosen_method ) {
+			$method = new Bliskapaczka_Courier_Shipping_Method();
+		}
+		if ( 'bliskapaczka' === $chosen_method ) {
+			$method = new Bliskapaczka_Map_Shipping_Method();
+		}
+
+		if ( ! isset( $pos_operator ) ) {
+			$pos_operator = WC()->session->get( 'bliskapaczka_posoperator' );
+		}
+		if ( ( 'bliskapaczka-courier' === $chosen_method ) || ( 'bliskapaczka' === $chosen_method ) ) {
+			if ( 'cod' === $chosen_payment_method ) {
+				$is_cod = true;
+			} else {
+				$is_cod = false;
+			}
+			$price = $method->recalculate_shipping_cost( $pos_operator, $pos_code, $is_cod );
+
+		}
+		return $price;
+	}
 }
