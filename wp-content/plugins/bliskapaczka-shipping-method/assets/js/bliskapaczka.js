@@ -38,7 +38,7 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
             posType: 'DELIVERY',
             testMode: testMode,
             codOnly: codOnly,
-            showCod: !codOnly
+            showCod: false
         }
     );
 }
@@ -106,56 +106,6 @@ Bliskapaczka.getTableRow = function () {
     return item;
 }
 
-// Bliskapaczka.selectPoint = function () {
-//     item = Bliskapaczka.getTableRow();
-
-//     if (item) {
-//         input = item.find('input.delivery_option_radio').first();
-//         if (!input.is(':checked')) {
-//             return true;
-//         }
-//     } else {
-//         return true;
-//     }
-
-//     posCode = jQuery('#bliskapaczka_posCode').val()
-//     posOperator = jQuery('#bliskapaczka_posOperator').val()
-//     if (typeof msg_bliskapaczka_select_point != 'undefined' && (!posCode || !posOperator)) {
-//         if (!!$.prototype.fancybox) {
-//             $.fancybox.open(
-//                 [
-//                 {
-//                     type: 'inline',
-//                     autoScale: true,
-//                     minHeight: 30,
-//                     content: '<p class="fancybox-error">' + msg_bliskapaczka_select_point + '</p>'
-//                 }],
-//                 {
-//                     padding: 0
-//                 }
-//             );
-//         } else {
-//             alert(msg_bliskapaczka_select_point);
-//         }
-//     } else {
-//         return true;
-//     }
-//     return false;
-// }
-
-// $(document).ready(function () {
-//     if (!!$.prototype.fancybox) {
-//         $("a.iframe").fancybox({
-//             'type': 'iframe',
-//             'width': 600,
-//             'height': 600
-//         });
-//     }
-
-//     $(document).on('submit', 'form[name=carrier_area]', function () {
-//         return Bliskapaczka.selectPoint();
-//     });
-// });
 document.addEventListener("DOMContentLoaded", function () {
     jQuery('form.checkout').on('change', 'input[name="payment_method"]', function(){
         jQuery(document.body).trigger("update_checkout");
