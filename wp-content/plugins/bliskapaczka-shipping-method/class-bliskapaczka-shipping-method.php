@@ -113,12 +113,15 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 		if ( 'bliskapaczka' === $method->id && is_checkout() === true ) {
 			$payment_method = WC()->session->get( 'chosen_payment_method' );
-			$operators      = $helper->getOperatorsForWidget();
+			$operators      = json_decode( $helper->getOperatorsForWidget() );
+			$fedex          = json_decode( $helper->getFedexConfigurationForWidget() );
+			$operators      = wp_json_encode( array_merge( $operators, $fedex ) );
 			$cod_only       = 'false';
 			if ( 'cod' === $payment_method ) {
 				$operators = $helper->recalculatePrice( $operators );
 				$cod_only  = 'true';
 			}
+
 			// @codingStandardsIgnoreStart
 			echo " <a href='#bpWidget_wrapper' " .
 				"onclick='Bliskapaczka.showMap(" .
@@ -166,7 +169,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		echo '<div style="">';
 		echo '<div id="bpWidget_wrapper">';
 		echo "<a name='bpWidget_wrapper'><a/>";
-		echo '<div id="bpWidget" style="height: 600px; width: 800px; display: none;"></div>';
+		echo '<div id="bpWidget" style="height: 600px; display: none;"></div>';
 		echo '</div>';
 		echo '</div>';
 	}
@@ -306,7 +309,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 */
 	function add_scripts_and_scripts() {
 		$helper             = new Bliskapaczka_Shipping_Method_Helper();
-		$price_list         = $helper->getOperatorsForWidget();
+		$operators          = json_decode( $helper->getOperatorsForWidget() );
+		$fedex              = json_decode( $helper->getFedexConfigurationForWidget() );
+		$price_list         = wp_json_encode( array_merge( $operators, $fedex ) );
 		$bliskapaczka       = new Bliskapaczka_Map_Shipping_Method();
 		$google_map_api_key = $helper->getGoogleMapApiKey( $bliskapaczka->settings );
 		$test_mode          = ( 'test' === $helper->getApiMode( $bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'] ) ? 'true' : 'false' );
