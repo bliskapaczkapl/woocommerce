@@ -199,6 +199,25 @@ class Bliskapaczka_Shipping_Method_Helper
     }
 
     /**
+     * Return FEDEX config.
+     * @return false|mixed|string|void
+     * @throws \Bliskapaczka\ApiClient\Exception
+     */
+    public function getFedexConfigurationForWidget()
+    {
+        $config = $this->getConfig();
+        $result = array();
+        foreach ($config->configModel as $item) {
+            if ($item->operator === 'FEDEX' && isset($item->prices->D2P)) {
+                $result[0]['operator'] = $item->operator;
+                $result[0]['price'] = $item->prices->D2P[0]->price;
+                $result[0]['cod'] = $item->cod;
+                $result[0]['availabilityStatus'] = true;
+            }
+        }
+        return json_encode($result);
+    }
+    /**
      * Get widget configuration
      *
      * @param array $priceList

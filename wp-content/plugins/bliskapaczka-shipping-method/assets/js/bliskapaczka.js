@@ -3,6 +3,7 @@ function Bliskapaczka()
 }
 
 Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly = false) {
+    console.log(operators);
     aboutPoint = document.getElementById('bpWidget_aboutPoint');
     aboutPoint.style.display = 'none';
 
