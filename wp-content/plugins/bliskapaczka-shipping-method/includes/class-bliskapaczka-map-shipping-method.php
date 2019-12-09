@@ -59,12 +59,6 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
                 'type'        => 'text',
                 'description' => __( 'API Key', 'bliskapaczka-shipping-method' ),
             ),
-            $helper::COD_ONLY               => array(
-                'title'       => __( 'COD only enabled', 'bliskapaczka-shipping-method' ),
-                'type'        => 'checkbox',
-                'description' => __( 'COD only enabled', 'bliskapaczka-shipping-method' ),
-                'default'     => 'no',
-            ),
             $helper::TEST_MODE              => array(
                 'title'       => __( 'Test mode enabled', 'bliskapaczka-shipping-method' ),
                 'type'        => 'checkbox',
