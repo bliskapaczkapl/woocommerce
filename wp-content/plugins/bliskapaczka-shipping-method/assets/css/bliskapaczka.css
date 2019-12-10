@@ -1,6 +1,6 @@
 .bliskapaczka_courier_item_wrapper {
     height: 100%;
-    width: 135px;
+    width: 200px;
     border-radius: 8px;
     border: 1px solid #d6d8da;
     display: inline-block;
@@ -17,12 +17,11 @@
 .bliskapaczka_courier_item_logo {
     padding: 7px 0 7px 9px;
     height: 36px;
-    max-width: 83px;
+    max-width: 100px;
     display: inline-block;
 }
 
 .bliskapaczka_courier_item_logo img {
-    display: block;
     height: 24px;
     margin: 0 auto;
 }
