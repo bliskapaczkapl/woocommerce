@@ -91,7 +91,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				echo '<label class="' . esc_html( $class ) . '" for="bliskapaczka_courier_posOperator" data-operator="' . esc_html( $operator_name ) . '">';
 				echo '<input type="radio" name="bliskapaczka_courier_posOperator" value="' . esc_html( $operator_name ) . '">';
 				echo '<div class="bliskapaczka_courier_item">';
-				echo '<div class="bliskapaczka_courier_item_logo"><img src="https://bliskapaczka.pl/static/images/' . esc_html( $operator_name ) . '.png" alt="' . esc_html( $operator_name ) . '" style="height: 50px; width: auto"></div>';
+				echo '<div class="bliskapaczka_courier_item_logo"><img src="https://bliskapaczka.pl/static/images/' . esc_html( $operator_name ) . '.png" alt="' . esc_html( $operator_name ) . '" style="height: 25px; width: auto"></div>';
 				echo '<div class="bliskapaczka_courier_item_price">';
 				echo '<span class="bliskapaczka_courier_item_price_value" data-price="' . esc_html( $price ) . '" data-cod-price="' . esc_html( $cod_price ) . '">' . esc_html( $price_show ) . '</span><span>zł</span>';
 				echo '</div>';

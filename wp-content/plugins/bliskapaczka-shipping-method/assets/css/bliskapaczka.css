@@ -20,13 +20,17 @@
 
 .bliskapaczka_courier_item_logo {
     width: max-content;
+    margin-top: 8px;
+    margin-left: 8px;
+    margin-right: 12px;
 }
 
 .bliskapaczka_courier_item_price {
     font-size: 14px;
-    padding: 11px 9px;
     float: right;
     font-weight: bold;
+    margin-right: 8px;
+    padding-top: 8px;
 }
 .bliskapaczka_courier_item {
     display: flex;
