@@ -74,7 +74,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$helper         = new Bliskapaczka_Shipping_Method_Helper();
 			$price_list     = $helper->getPriceListForCourier();
 			$courier        = WC()->session->get( 'bliskapaczka_posOperator' );
-			echo '<div class="bliskapaczka_courier_wrapper"></div>';
+			echo '<div class="bliskapaczka_courier_wrapper">';
 			foreach ( $price_list as $item ) {
 				$operator_name = $item->operator;
 				$price         = $item->price->gross;
@@ -91,7 +91,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				echo '<label class="' . esc_html( $class ) . '" for="bliskapaczka_courier_posOperator" data-operator="' . esc_html( $operator_name ) . '">';
 				echo '<input type="radio" name="bliskapaczka_courier_posOperator" value="' . esc_html( $operator_name ) . '">';
 				echo '<div class="bliskapaczka_courier_item">';
-				echo '<div class="bliskapaczka_courier_item_logo"><img src="https://bliskapaczka.pl/static/images/' . esc_html( $operator_name ) . '.png" alt="' . esc_html( $operator_name ) . '" style="max-width: -webkit-fill-available; height: -webkit-fill-available;"></div>';
+				echo '<div class="bliskapaczka_courier_item_logo"><img src="https://bliskapaczka.pl/static/images/' . esc_html( $operator_name ) . '.png" alt="' . esc_html( $operator_name ) . '" style="height: 50px; width: auto"></div>';
 				echo '<div class="bliskapaczka_courier_item_price">';
 				echo '<span class="bliskapaczka_courier_item_price_value" data-price="' . esc_html( $price ) . '" data-cod-price="' . esc_html( $cod_price ) . '">' . esc_html( $price_show ) . '</span><span>zł</span>';
 				echo '</div>';

@@ -1,9 +1,13 @@
+.bliskapaczka_courier_wrapper {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .bliskapaczka_courier_item_wrapper {
-    height: 100%;
-    width: 200px;
+    display: flex;
     border-radius: 8px;
     border: 1px solid #d6d8da;
-    display: inline-block;
+    margin-left: 10px;
 }
 
 .bliskapaczka_courier_item_wrapper.checked{
@@ -15,22 +19,15 @@
 }
 
 .bliskapaczka_courier_item_logo {
-    padding: 7px 0 7px 9px;
-    height: 36px;
-    max-width: 100px;
-    display: inline-block;
-}
-
-.bliskapaczka_courier_item_logo img {
-    height: 24px;
-    margin: 0 auto;
+    width: max-content;
 }
 
 .bliskapaczka_courier_item_price {
     font-size: 14px;
     padding: 11px 9px;
-    height: 38px;
-    display: inline-block;
     float: right;
     font-weight: bold;
+}
+.bliskapaczka_courier_item {
+    display: flex;
 }
