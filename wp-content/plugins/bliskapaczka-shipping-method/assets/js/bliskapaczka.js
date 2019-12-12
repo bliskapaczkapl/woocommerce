@@ -27,14 +27,6 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
 
                 Bliskapaczka.pointSelected(data, operators);
             },
-            readyCallback: function() {
-                jQuery('#BPWidgetFilters').on('click', 'input[type="checkbox"]', function () {
-                    var newOperators = [];
-                    if (jQuery(this).prop('checked') === true) {
-                        jQuery('input[value="cod"]').click();
-                    }
-                });
-            },
             operators: operators,
             posType: 'DELIVERY',
             testMode: testMode,
