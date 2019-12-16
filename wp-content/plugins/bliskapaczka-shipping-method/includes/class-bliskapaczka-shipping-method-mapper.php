@@ -35,6 +35,7 @@ class Bliskapaczka_Shipping_Method_Mapper
         $data['destinationCode'] = wc_get_order_item_meta( $shipping_item_id, '_bliskapaczka_posCode' );
         if ($data['operatorName'] === 'FEDEX') {
             $data['deliveryType'] = 'D2P';
+            $data = $this->_prepareDestinationData($data, $order);
         }
         $data['parcel'] = [
             'dimensions' => $this->getParcelDimensions($helper, $settings)
