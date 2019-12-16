@@ -178,6 +178,9 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
      * @param string $operator_name
      * @param string $operator_code
      * @param boolean $is_cod
+     *
+     * @return int
+     * @throws \Bliskapaczka\ApiClient\Exception
      */
     public function recalculate_shipping_cost($operator_name = '', $operator_code = '', $is_cod = false) {
 
@@ -185,6 +188,8 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
         $price_list         = $helper->getOperatorsForWidget();
         $price_list = json_decode($price_list);
         $price = 0;
+        $fedex = json_decode( $helper->getFedexConfigurationForWidget() );
+        $price_list = array_merge($price_list, $fedex);
         foreach ($price_list as $item) {
             if ($item->operator === $operator_name) {
                 $price = $item->price;
