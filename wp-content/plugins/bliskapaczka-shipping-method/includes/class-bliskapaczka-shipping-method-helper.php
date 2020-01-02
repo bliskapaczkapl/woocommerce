@@ -169,6 +169,10 @@ class Bliskapaczka_Shipping_Method_Helper
         $cods = $this->makeCODStructure($this->getConfig()->configModel);
         $operators = array();
         $priceList = json_decode($priceList);
+
+        if (!is_array($priceList)) {
+            return json_decode(json_encode($operators));
+        }
         foreach ($priceList as $operator) {
             if ($operator->availabilityStatus != false) {
 
@@ -207,6 +211,9 @@ class Bliskapaczka_Shipping_Method_Helper
     {
         $config = $this->getConfig();
         $result = array();
+        if (!is_object($config)) {
+            return json_encode($result);
+        }
         foreach ($config->configModel as $item) {
             if ($item->operator === 'FEDEX' && isset($item->prices->D2P)) {
                 $result[0]['operator'] = $item->operator;
@@ -290,6 +297,9 @@ class Bliskapaczka_Shipping_Method_Helper
     public function makeCODStructure($configs)
     {
         $result = array();
+        if (!is_array($configs)) {
+            return $result;
+        }
         foreach ($configs as $config) {
             if (!empty($config->cod)) {
                 $result[$config->operator] = $config->cod;
