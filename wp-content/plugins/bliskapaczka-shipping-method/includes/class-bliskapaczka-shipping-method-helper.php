@@ -162,9 +162,10 @@ class Bliskapaczka_Shipping_Method_Helper
         /* @var Bliskapaczka_Shipping_Method $bliskapaczka */
         $bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
 
-        $apiClient = $this->getApiClientPricingTodoor($bliskapaczka);
+        $apiClient = $this->getApiClientPricing($bliskapaczka);
         $priceList = $apiClient->get(
-            array("parcel" => array('dimensions' => $this->getParcelDimensions($bliskapaczka->settings)))
+            array("parcel" => array('dimensions' => $this->getParcelDimensions($bliskapaczka->settings)),
+                "deliveryType" => 'D2D')
         );
         $cods = $this->makeCODStructure($this->getConfig()->configModel);
         $operators = array();
