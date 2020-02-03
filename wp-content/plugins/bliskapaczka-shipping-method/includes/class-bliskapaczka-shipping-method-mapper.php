@@ -6,6 +6,7 @@
 class Bliskapaczka_Shipping_Method_Mapper
 {
 
+    const OPERATORS_WITH_INSURANCE = ['FEDEX', 'DPD'];
 	/**
      * Prepare mapped data for Bliskapaczka API
      *
@@ -128,6 +129,22 @@ class Bliskapaczka_Shipping_Method_Mapper
     {
         $data['codValue'] = $order->get_total();
 
+        return $data;
+    }
+
+
+    /**
+     * Add incurance if needed
+     * @param $order
+     * @param $data
+     *
+     * @return array
+     */
+    public function prepareInsuranceDataIfNeeded($data, WC_Order $order)
+    {
+        if (in_array($order->pos_operator, self::OPERATORS_WITH_INSURANCE)) {
+            $data['parcel']['insuranceValue'] = $order->get_total();
+        }
         return $data;
     }
     /**
