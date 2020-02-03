@@ -261,7 +261,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$order_data = $mapper->getDataForCourier( $order, $helper, $bliskapaczka->settings );
 			if ( $order->get_payment_method() === 'cod' ) {
 				$order_data = $mapper->prepareCOD( $order_data, $order );
-				$order_data = $mapper->prepareInsuranceDataIfNeeded($order_data, $order);
+				$order_data = $mapper->prepareInsuranceDataIfNeeded( $order_data, $order );
 			}
 			try {
 				$api_client = $helper->getApiClientOrder( $bliskapaczka );
@@ -280,7 +280,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		try {
 			if ( $order->get_payment_method() === 'cod' ) {
 				$order_data = $mapper->prepareCOD( $order_data, $order );
-                $order_data = $mapper->prepareInsuranceDataIfNeeded($order_data, $order);
+				$order_data = $mapper->prepareInsuranceDataIfNeeded( $order_data, $order );
 			}
 			$api_client = $helper->getApiClientOrder( $bliskapaczka );
 			$api_client->create( $order_data );
