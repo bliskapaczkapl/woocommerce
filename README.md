@@ -20,6 +20,12 @@ W celu poprawnej instalacji modułu wymagane są:
 
 Tryb testowy, czli komunikacja z testową wersją znajdującą się pod adresem [sandbox-bliskapaczka.pl](https://sandbox-bliskapaczka.pl/) można uruchomić zaznaczająć w ustwieniach modułu opcję `Test mode enabled`.
 
+#### Dodatkowe opłaty
+
+Wybór przewoźnika DPD lub FedEx dla zleceń D2D z usługą pobrania może wiązać się z dodatkową opłatą podczas wyceny w serwisie bliskapaczka.pl ze względu na obowiązkowe ubezpieczenie, którego wymaga przewoźnika.
+Kwota pobrania wolna od dodatkowych opłat uwzględniona jest w cenniku na naszej stronie internetowej bliskapaczka.pl/cennik
+
+
 ## Docker demo
 
 `docker-compose up`
