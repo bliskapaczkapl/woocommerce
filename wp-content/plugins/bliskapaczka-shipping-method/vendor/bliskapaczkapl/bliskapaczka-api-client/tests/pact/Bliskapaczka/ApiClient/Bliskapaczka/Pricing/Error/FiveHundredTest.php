@@ -28,7 +28,7 @@ class FiveHundredTest extends TestCase
     }
 
     /**
-     * @expectedException Bliskapaczka\ApiClient\Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage Internal Server Error
      */
     public function testGetPricing()
