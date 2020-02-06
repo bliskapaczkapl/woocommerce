@@ -3,7 +3,6 @@
 namespace Bliskapaczka\ApiClient\ApiCaller;
 
 use Bliskapaczka\ApiClient\Logger;
-use Bliskapaczka\ApiClient\Exception;
 
 /**
  * Class ApiCaller
@@ -46,7 +45,7 @@ class ApiCaller
         $error = curl_error($curl);
         if ($error) {
             $this->logger->error($error);
-            throw new Exception($error, 1);
+            throw new \Exception($error, 1);
         }
 
         $response = curl_exec($curl);
@@ -56,13 +55,13 @@ class ApiCaller
 
         if (isset($responseDecoded->error)) {
             $this->logger->error($error);
-            throw new Exception($responseDecoded->error, 1);
+            throw new \Exception($responseDecoded->error, 1);
         }
 
         if (isset($responseDecoded->errors)) {
             foreach ($responseDecoded->errors as $error) {
                 $this->logger->error($error);
-                throw new Exception($error->message . ' ' . $error->field, 1);
+                throw new \Exception($error->message . ' ' . $error->field, 1);
             }
         }
 

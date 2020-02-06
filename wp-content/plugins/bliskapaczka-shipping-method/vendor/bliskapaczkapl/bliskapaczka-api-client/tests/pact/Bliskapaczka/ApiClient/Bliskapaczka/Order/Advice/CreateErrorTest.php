@@ -50,7 +50,7 @@ class CreateErrorTest extends TestCase
     }
 
     /**
-     * @expectedException Bliskapaczka\ApiClient\Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage Invalid senderPhoneNumber
      */
     public function testCreateOrderErrorFromAPIClient()
@@ -62,7 +62,7 @@ class CreateErrorTest extends TestCase
     }
 
     /**
-     * @expectedException Bliskapaczka\ApiClient\Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage Field should not be blank senderPhoneNumber
      */
     public function testCreateOrderErrorFromAPI()
