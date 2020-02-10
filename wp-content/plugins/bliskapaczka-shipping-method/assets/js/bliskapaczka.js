@@ -10,6 +10,10 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
     bpWidget = document.getElementById('bpWidget');
     bpWidget.style.display = 'block';
 
+    console.log(jQuery('input[value="bliskapaczka"]').trigger('click'));
+    if (jQuery('#bliskapaczka_posCode').attr('value') === "") {
+        jQuery('#bliskapaczka_posOperator').attr('value', "")
+    }
     Bliskapaczka.updateSelectedCarrier();
     BPWidget.init(
         bpWidget,
@@ -99,6 +103,15 @@ Bliskapaczka.getTableRow = function () {
     return item;
 }
 
+Bliskapaczka.checkFirstCourier = function() {
+    if (jQuery('.bliskapaczka_courier_item_wrapper.checked').length === 0) {
+        if (jQuery('.bliskapaczka_courier_item_wrapper').length !== 0) {
+            jQuery(jQuery('.bliskapaczka_courier_item_wrapper')[0]).addClass('checked');
+            jQuery('#bliskapaczka_posOperator').val(jQuery(jQuery('.bliskapaczka_courier_item_wrapper')[0])
+              .attr('data-operator'));
+        }
+    }
+}
 document.addEventListener("DOMContentLoaded", function () {
     jQuery('form.checkout').on('change', 'input[name="payment_method"]', function(){
         jQuery(document.body).trigger("update_checkout");
@@ -155,5 +168,8 @@ document.addEventListener("DOMContentLoaded", function () {
         jQuery(document.body).trigger("update_checkout");
         jQuery(this).addClass('checked');
     });
-
+    jQuery('form.checkout').on('click', 'input[value="bliskapaczka-courier"]', function () {
+        Bliskapaczka.checkFirstCourier();
+    })
+    Bliskapaczka.checkFirstCourier();
 });
