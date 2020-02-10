@@ -47,7 +47,14 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * @param array $methods List of shipping methods.
 	 */
 	function add_bliskapaczka_shipping_method( $methods ) {
-		$methods[] = 'Bliskapaczka_Map_Shipping_Method';
+        $helper = new Bliskapaczka_Shipping_Method_Helper();
+        $operators      = json_decode( $helper->getOperatorsForWidget() );
+        $fedex          = json_decode( $helper->getFedexConfigurationForWidget() );
+        $operators      = array_merge( $operators, $fedex );
+        if (count($operators) !== 0) {
+            $methods[] = 'Bliskapaczka_Map_Shipping_Method';
+        }
+
 		return $methods;
 	}
 
@@ -57,7 +64,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * @param array $methods List of shipping methods.
 	 */
 	function add_bliskapaczka_courier_shipping_method( $methods ) {
-		$methods[] = 'Bliskapaczka_Courier_Shipping_Method';
+        $helper         = new Bliskapaczka_Shipping_Method_Helper();
+        $price_list     = $helper->getPriceListForCourier();
+        if (count($price_list) !== 0) {
+            $methods[] = 'Bliskapaczka_Courier_Shipping_Method';
+        }
+
 		return $methods;
 	}
 
@@ -75,6 +87,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$price_list     = $helper->getPriceListForCourier();
 			$courier        = WC()->session->get( 'bliskapaczka_posOperator' );
 			echo '<div class="bliskapaczka_courier_wrapper">';
+
 			foreach ( $price_list as $item ) {
 				$operator_name = $item->operator;
 				$price         = $item->price->gross;
