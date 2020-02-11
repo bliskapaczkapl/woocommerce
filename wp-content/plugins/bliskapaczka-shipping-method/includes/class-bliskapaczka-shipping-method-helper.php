@@ -34,6 +34,8 @@ class Bliskapaczka_Shipping_Method_Helper
 
     const TITLE_COURIER = 'BLISKAPACZKA_COURIER_TITLE';
 
+    const ENABLE_COURIER = 'BLISKAPACZKA_COURIER_ENABLE';
+
 
     /**
      * Get parcel dimensions in format accptable by Bliskapaczka API
@@ -314,14 +316,6 @@ class Bliskapaczka_Shipping_Method_Helper
     }
 
     /**
-     * @return string
-     */
-    public function getCODStatus()
-    {
-        $bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
-        return $this->getCodMode($bliskapaczka->settings['BLISKAPACZKA_COD_ONLY']);
-    }
-    /**
      * Get Bliskapaczka API Client
      *
      * @param Bliskapaczka_Shipping_Method $bliskapaczka
@@ -438,14 +432,5 @@ class Bliskapaczka_Shipping_Method_Helper
         }
 
         return $mode;
-    }
-
-    public function getCodMode($configValue = '')
-    {
-        if ($configValue === 'yes') {
-            return 'true';
-        }
-
-        return 'false';
     }
 }

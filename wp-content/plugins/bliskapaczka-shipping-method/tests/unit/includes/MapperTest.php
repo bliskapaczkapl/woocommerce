@@ -96,7 +96,6 @@ class MapperTest extends TestCase
                                          array(
                                              'getParcelDimensions',
                                              'telephoneNumberCeaning',
-                                             'getCODStatus',
                                          )
                                      )
                                      ->getMock();
@@ -112,7 +111,6 @@ class MapperTest extends TestCase
         $this->helperMock->method('telephoneNumberCeaning')
             ->with($this->equalTo('504 445 665'))
             ->will($this->returnValue('504445665'));
-        $this->helperMock->method('getCODStatus')->will($this->returnValue(false));
     }
 
     public function get_address($type) {

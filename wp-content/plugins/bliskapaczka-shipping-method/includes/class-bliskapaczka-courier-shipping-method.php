@@ -35,7 +35,12 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Map_Shipping_Met
     function init_form_fields() {
         $helper            = new Bliskapaczka_Shipping_Method_Helper();
         $this->form_fields = array(
-
+            'courier_enabled' => array(
+                'title'       => __( 'Enable', 'bliskapaczka-shipping-method' ),
+                'type'        => 'checkbox',
+                'description' => __( 'Włącz tę metodę wysyłki', 'bliskapaczka-shipping-method' ),
+                'default'     => 'yes',
+            ),
             $helper::TITLE_COURIER => array(
                 'title'       => __( 'Title', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
