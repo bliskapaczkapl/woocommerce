@@ -55,9 +55,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		if ( empty( $bliskapaczka->settings['BLISKAPACZKA_API_KEY'] ) ) {
 			return $methods;
 		}
-        if ( 'no' === $bliskapaczka->settings['enabled'] ) {
-            return $methods;
-        }
+		if ( 'no' === $bliskapaczka->settings['enabled'] ) {
+			return $methods;
+		}
 		$helper    = new Bliskapaczka_Shipping_Method_Helper();
 		$operators = json_decode( $helper->getOperatorsForWidget() );
 		$fedex     = json_decode( $helper->getFedexConfigurationForWidget() );
@@ -84,13 +84,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		if ( empty( $bliskapaczka->settings['BLISKAPACZKA_API_KEY'] ) ) {
 			return $methods;
 		}
-        $bliskapaczka = new Bliskapaczka_Courier_Shipping_Method();
-        if ( 'no' === $bliskapaczka->settings['courier_enabled'] ) {
-            return $methods;
-        }
+		$bliskapaczka = new Bliskapaczka_Courier_Shipping_Method();
+		if ( 'no' === $bliskapaczka->settings['courier_enabled'] ) {
+			return $methods;
+		}
 
-		$helper       = new Bliskapaczka_Shipping_Method_Helper();
-		$price_list   = $helper->getPriceListForCourier();
+		$helper     = new Bliskapaczka_Shipping_Method_Helper();
+		$price_list = $helper->getPriceListForCourier();
 
 		if ( count( $price_list ) !== 0 ) {
 			$methods[] = 'Bliskapaczka_Courier_Shipping_Method';
