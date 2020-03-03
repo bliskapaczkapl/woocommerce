@@ -65,8 +65,6 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Map_Shipping_Met
         // @codingStandardsIgnoreStart
         $helper         = new Bliskapaczka_Shipping_Method_Helper();
         $bliskapaczka   = new Bliskapaczka_Courier_Shipping_Method();
-        $price_list = $helper->getPriceListForCourier();
-        $shipping_price = round( $helper->getLowestPrice( $price_list, true ), 2 );
 
         $label = $bliskapaczka->settings[$helper::TITLE_COURIER];
         if (empty($label)) {
@@ -90,18 +88,21 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Map_Shipping_Met
      *
      * @return int
      */
-    public function recalculate_shipping_cost($operator_name = '', $operator_code = '', $is_cod = false) {
+    public function recalculate_shipping_cost(
+        $cart_total = 0.0,
+        $operator_name = '',
+        $operator_code = '',
+        $is_cod = false
+    ) {
         $helper         = new Bliskapaczka_Shipping_Method_Helper();
-        $price_list = $helper->getPriceListForCourier();
+        $price_list = json_decode($helper->getPriceListForCourier($cart_total, null, $is_cod));
         $price = 0;
         foreach ($price_list as $item) {
             if ($item->operator === $operator_name) {
                 $price = $item->price->gross;
-                if ($is_cod === true) {
-                    $price = $price + $item->cod;
-                }
             }
         }
+
         return $price;
     }
 }

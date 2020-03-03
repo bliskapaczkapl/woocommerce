@@ -133,10 +133,6 @@ class Bliskapaczka_Shipping_Method_Helper
                 }
             }
         }
-        if ($cod) {
-            $cods = $this->makeCODStructure($this->getConfig()->configModel);
-            $price = $price + $cods[$carrierName];
-        }
 
         return $price;
     }
@@ -144,118 +140,50 @@ class Bliskapaczka_Shipping_Method_Helper
     /**
      * Get operators and prices from Bliskapaczka API
      *
+     * @param array|null $data
+     *
      * @return string
      */
-    public function getPriceList()
+    public function getPriceList(array $data = null)
     {
         /* @var Bliskapaczka_Shipping_Method $bliskapaczka */
         $bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
-
+        if (is_null($data)) {
+            $data = array(
+              "parcel" => array(
+                  'dimensions' => $this->getParcelDimensions($bliskapaczka->settings)
+              )
+            );
+        }
         $apiClient = $this->getApiClientPricing($bliskapaczka);
-        $priceList = $apiClient->get(
-            array("parcel" => array('dimensions' => $this->getParcelDimensions($bliskapaczka->settings)))
-        );
+        $priceList = $apiClient->get($data);
 
         return json_decode($priceList);
     }
 
-    public function getPriceListForCourier()
-    {
-        /* @var Bliskapaczka_Shipping_Method $bliskapaczka */
-        $bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
-
-        $apiClient = $this->getApiClientPricing($bliskapaczka);
-        $priceList = $apiClient->get(
-            array("parcel" => array('dimensions' => $this->getParcelDimensions($bliskapaczka->settings)),
-                "deliveryType" => 'D2D')
-        );
-        $cods = $this->makeCODStructure($this->getConfig()->configModel);
-        $operators = array();
-        $priceList = json_decode($priceList);
-
-        if (!is_array($priceList)) {
-            return json_decode(json_encode($operators));
-        }
-        foreach ($priceList as $operator) {
-            if ($operator->availabilityStatus != false) {
-
-                $operators[] = array(
-                    "operator" => $operator->operatorName,
-                    "price" => $operator->price,
-                    "cod" => $cods[$operator->operatorName],
-                    "availabilityStatus" => $operator->availabilityStatus
-                );
-            }
-        }
-        return json_decode(json_encode($operators));
-    }
-    /**
-     * @return array|mixed|object
-     * @throws \Bliskapaczka\ApiClient\Exception
-     */
-    public function getConfig()
-    {
-        /* @var Bliskapaczka_Shipping_Method $bliskapaczka */
-        $bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
-        $apiClient = $this->getApiClientConfig($bliskapaczka);
-        $config = $apiClient->get();
-        if (json_decode($config) === null) {
-            return array();
-        }
-        return json_decode($config);
-    }
-
-    /**
-     * Return FEDEX config.
-     * @return false|mixed|string|void
-     * @throws \Bliskapaczka\ApiClient\Exception
-     */
-    public function getFedexConfigurationForWidget()
-    {
-        $config = $this->getConfig();
-        $result = array();
-        if (!is_object($config)) {
-            return json_encode($result);
-        }
-        foreach ($config->configModel as $item) {
-            if ($item->operator === 'FEDEX' && isset($item->prices->D2P)) {
-                $result[0]['operator'] = $item->operator;
-                $result[0]['price'] = $item->prices->D2P[0]->price;
-                $result[0]['cod'] = $item->cod;
-                $result[0]['availabilityStatus'] = true;
-            }
-        }
-        return json_encode($result);
-    }
-    /**
-     * Get widget configuration
-     *
-     * @param array $priceList
-     *
-     * @param array $cods
-     *
-     * @return array
-     * @throws \Bliskapaczka\ApiClient\Exception
-     */
-    public function getOperatorsForWidget($priceList = null, $cods = null)
+    public function getPriceListForCourier($cart_total, $priceList = null, $is_cod = false)
     {
         if (is_null($priceList)) {
-            $priceList = $this->getPriceList();
+            /* @var Bliskapaczka_Shipping_Method $bliskapaczka */
+            $bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
+            $data = array(
+                "parcel" => array(
+                    'dimensions' => $this->getParcelDimensions($bliskapaczka->settings)
+                )
+            );
+            if ($is_cod === true) {
+                $data['codValue'] = $cart_total;
+            }
+            $data['deliveryType'] = 'D2D';
+            $priceList = $this->getPriceList($data);
+
         }
         $operators = array();
-        if ($cods === null) {
-            $cods = $this->makeCODStructure($this->getConfig()->configModel);
-        }
-        if (!is_array($priceList)) {
-            return json_encode($operators);
-        }
-        foreach ($priceList as $operator) {
-            if ($operator->availabilityStatus != false) {
+        foreach ($priceList as $item) {
+            if ($item->availabilityStatus === true) {
                 $operators[] = array(
-                    "operator" => $operator->operatorName,
-                    "price" => $operator->price->gross,
-                    "cod" => $cods[$operator->operatorName],
-                    "availabilityStatus" => $operator->availabilityStatus
+                    "operator" => $item->operatorName,
+                    "price" => $item->price
                 );
             }
         }
@@ -263,56 +191,45 @@ class Bliskapaczka_Shipping_Method_Helper
         return json_encode($operators);
     }
 
-    public function recalculatePrice($operators)
-    {
-        $operators = json_decode($operators);
-        $new_operators = array();
-        foreach ($operators as $operator) {
-            $new_operators[] = array(
-                "operator" => $operator->operator,
-                "price" => $operator->price + $operator->cod,
-                "cod" => $operator->cod,
-                "availabilityStatus" => $operator->availabilityStatus
-            );
-        }
-        return json_encode($new_operators);
-    }
-    public function getCODValueForOperator($operatorName)
-    {
-        $operators = $this->getPriceListForCourier();
-        $codValue = 0;
-        if (!is_array($operators)) {
-            return $codValue;
-        }
-        foreach ($operators as $operator) {
-            if ($operator['operator'] === $operatorName) {
-                $codValue = $operator['cod'];
-                break;
-            }
-        }
-        return $codValue;
-    }
     /**
-     * @param array $configs
+     * Get widget configuration
+     *
+     * @param float $cart_total
+     * @param array $priceList
+     *
+     * @param bool $is_cod
      *
      * @return array
      */
-    public function makeCODStructure($configs)
+    public function getOperatorsForWidget($cart_total, $priceList = null, $is_cod = false)
     {
-        $result = array();
-        if (!is_array($configs)) {
-            return $result;
-        }
-        foreach ($configs as $config) {
-            if (!empty($config->cod)) {
-                $result[$config->operator] = $config->cod;
-            } else {
-                $result[$config->operator] = 0;
+        if (is_null($priceList)) {
+            /* @var Bliskapaczka_Shipping_Method $bliskapaczka */
+            $bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
+            $data = array(
+                "parcel" => array(
+                    'dimensions' => $this->getParcelDimensions($bliskapaczka->settings)
+                )
+            );
+            if ($is_cod === true) {
+                $data['codValue'] = $cart_total;
             }
-
+            $priceList = $this->getPriceList($data);
+            $data['deliveryType'] = 'D2P';
+            $priceListForD2P = $this->getPriceList($data);
+            $priceList = array_merge($priceList, $priceListForD2P);
+        }
+        $operators = array();
+        foreach ($priceList as $item) {
+            if ($item->availabilityStatus === true) {
+                $operators[] = array(
+                    "operator" => $item->operatorName,
+                    "price" => $item->price
+                );
+            }
         }
 
-        return $result;
+        return json_encode($operators);
     }
 
     /**
