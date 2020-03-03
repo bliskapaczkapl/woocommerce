@@ -310,8 +310,8 @@ class HelperTest extends TestCase
         $helper = new Bliskapaczka_Shipping_Method_Helper();
 
         $this->assertEquals(
-            '[{"operator":"INPOST","price":10.27,"cod":0,"availabilityStatus":true},{"operator":"RUCH","price":5.99,"cod":1,"availabilityStatus":true}]',
-            $helper->getOperatorsForWidget(json_decode($priceList), $cods)
+            '[{"operator":"INPOST","price":10.27},{"operator":"RUCH","price":5.99}]',
+            $helper->getOperatorsForWidget(0.0, json_decode($priceList), $cods)
         );
     }
 
