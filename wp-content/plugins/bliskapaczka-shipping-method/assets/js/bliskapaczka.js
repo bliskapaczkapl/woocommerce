@@ -3,14 +3,12 @@ function Bliskapaczka()
 }
 
 Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly = false) {
-    console.log(operators);
     aboutPoint = document.getElementById('bpWidget_aboutPoint');
     aboutPoint.style.display = 'none';
 
     bpWidget = document.getElementById('bpWidget');
     bpWidget.style.display = 'block';
 
-    console.log(jQuery('input[value="bliskapaczka"]').trigger('click'));
     if (jQuery('#bliskapaczka_posCode').attr('value') === "") {
         jQuery('#bliskapaczka_posOperator').attr('value', "")
     }
@@ -115,53 +113,16 @@ Bliskapaczka.checkFirstCourier = function() {
 document.addEventListener("DOMContentLoaded", function () {
     jQuery('form.checkout').on('change', 'input[name="payment_method"]', function(){
         jQuery(document.body).trigger("update_checkout");
-        var method = jQuery(this).attr('value');
-            var elemnts = jQuery('.bliskapaczka_courier_item_price_value');
-            elemnts.each(function (index, element) {
-                var price = jQuery(element).attr('data-price')
-                var codPrice = jQuery(element).attr('data-cod-price')
-                var codPriceValue = parseFloat(codPrice);
-                var priceValue = parseFloat(price);
-                var showPrice = priceValue;
-                if (method === 'cod') {
-                    showPrice = priceValue + codPriceValue;
-                }
-                jQuery(element).text(showPrice);
-            });
-
-            var newOperators = [];
-            var localPrice = 0;
-            if (method === 'cod') {
-
-                operators.forEach(function (element) {
-                    localPrice = element.price + element.cod;
-                    var o  ={
-                        'price': localPrice,
-                        'operator': element.operator
-                    };
-                    newOperators.push(o);
-                });
-            } else {
-                operators.forEach(function (element, index) {
-                    localPrice = element.price
-                    newOperators[index] ={
-                        'price': localPrice,
-                        'operator': element.operator
-                    };
-                });
-            }
-            var shippingMethod = jQuery('input[class="shipping_method"]:checked');
-            if (shippingMethod.attr('value') === 'bliskapaczka') {
-                if (method === 'cod') {
-                    Bliskapaczka.showMap(newOperators, GoogleApiKey, testMode, true);
-                } else {
-                    Bliskapaczka.showMap(newOperators, GoogleApiKey, testMode);
-                }
-
-            }
-
 
     });
+    jQuery('body').on('updated_checkout', function(){
+        if (jQuery('input[value="bliskapaczka"]').is(':checked')) {
+            var a = jQuery('a[href="#bpWidget_wrapper"]');
+            var arguments = a.attr('onclick');
+            eval(arguments);
+        }
+    });
+
     jQuery('form.checkout').on('click', 'label[class="bliskapaczka_courier_item_wrapper"]',function(){
         jQuery('#bliskapaczka_posOperator').val(jQuery(this).attr('data-operator'));
         jQuery('.bliskapaczka_courier_item_wrapper').removeClass('checked');

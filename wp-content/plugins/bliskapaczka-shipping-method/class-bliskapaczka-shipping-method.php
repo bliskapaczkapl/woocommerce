@@ -59,9 +59,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			return $methods;
 		}
 		$helper    = new Bliskapaczka_Shipping_Method_Helper();
-		$operators = json_decode( $helper->getOperatorsForWidget() );
-		$fedex     = json_decode( $helper->getFedexConfigurationForWidget() );
-		$operators = array_merge( $operators, $fedex );
+		$operators = json_decode( $helper->getOperatorsForWidget( 0.0 ) );
 
 		if ( count( $operators ) !== 0 ) {
 			$methods[] = 'Bliskapaczka_Map_Shipping_Method';
@@ -90,7 +88,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		}
 
 		$helper     = new Bliskapaczka_Shipping_Method_Helper();
-		$price_list = $helper->getPriceListForCourier();
+		$price_list = $helper->getPriceListForCourier( 0.0 );
 
 		if ( count( $price_list ) !== 0 ) {
 			$methods[] = 'Bliskapaczka_Courier_Shipping_Method';
@@ -109,21 +107,22 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	function show_table( $method ) {
 		if ( 'bliskapaczka-courier' === $method->id ) {
 			$payment_method = WC()->session->get( 'chosen_payment_method' );
-			$helper         = new Bliskapaczka_Shipping_Method_Helper();
-			$price_list     = $helper->getPriceListForCourier();
-			$courier        = WC()->session->get( 'bliskapaczka_posOperator' );
+			$cod_only       = false;
+			if ( 'cod' === $payment_method ) {
+				$cod_only = true;
+			}
+			$helper     = new Bliskapaczka_Shipping_Method_Helper();
+			$price_list = $helper->getPriceListForCourier(
+				WC()->cart->get_cart_contents_total(),
+				null,
+				$cod_only
+			);
+			$courier    = WC()->session->get( 'bliskapaczka_posOperator' );
 			echo '<div class="bliskapaczka_courier_wrapper">';
-
-			foreach ( $price_list as $item ) {
+			foreach ( json_decode( $price_list ) as $item ) {
 				$operator_name = $item->operator;
-				$price         = $item->price->gross;
-				$cod_price     = $item->cod;
-				if ( 'cod' === $payment_method ) {
-					$price_show = $price + $cod_price;
-				} else {
-					$price_show = $price;
-				}
-				$class = 'bliskapaczka_courier_item_wrapper';
+				$price_show    = $item->price->gross;
+				$class         = 'bliskapaczka_courier_item_wrapper';
 				if ( $operator_name === $courier ) {
 					$class = 'bliskapaczka_courier_item_wrapper checked';
 				}
@@ -132,7 +131,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				echo '<div class="bliskapaczka_courier_item">';
 				echo '<div class="bliskapaczka_courier_item_logo"><img src="https://bliskapaczka.pl/static/images/' . esc_html( $operator_name ) . '.png" alt="' . esc_html( $operator_name ) . '" style="height: 25px; width: auto"></div>';
 				echo '<div class="bliskapaczka_courier_item_price">';
-				echo '<span class="bliskapaczka_courier_item_price_value" data-price="' . esc_html( $price ) . '" data-cod-price="' . esc_html( $cod_price ) . '">' . esc_html( $price_show ) . '</span><span>zł</span>';
+				echo '<span class="bliskapaczka_courier_item_price_value">' . esc_html( $price_show ) . '</span><span>zł</span>';
 				echo '</div>';
 				echo '</div>';
 				echo '</label>';
@@ -152,25 +151,35 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 		if ( 'bliskapaczka' === $method->id && is_checkout() === true ) {
 			$payment_method = WC()->session->get( 'chosen_payment_method' );
-			$operators      = json_decode( $helper->getOperatorsForWidget() );
-			$fedex          = json_decode( $helper->getFedexConfigurationForWidget() );
-			$operators      = wp_json_encode( array_merge( $operators, $fedex ) );
-			$cod_only       = 'false';
+			$cod_only       = false;
 			if ( 'cod' === $payment_method ) {
-				$operators = $helper->recalculatePrice( $operators );
-				$cod_only  = 'true';
+				$cod_only = true;
 			}
+			$operators = $helper->getOperatorsForWidget(
+				WC()->cart->get_cart_contents_total(),
+				null,
+				$cod_only
+			);
 
+			$operators = array_map(
+				function ( $item ) {
+					return array(
+						'operator' => $item->operator,
+						'price'    => $item->price->gross,
+					);
+				},
+				json_decode( $operators )
+			);
 			// @codingStandardsIgnoreStart
 			echo " <a href='#bpWidget_wrapper' " .
 				"onclick='Bliskapaczka.showMap(" .
-					esc_html( $operators ) .
+					esc_html( json_encode($operators) ) .
 					', "' .
 					esc_html( $helper->getGoogleMapApiKey( $bliskapaczka->settings ) ) .
 					'", ' .
 					esc_html( ( 'test' === $helper->getApiMode( $bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'] ) ? 'true' : 'false' ) ) .
                     ',' .
-                    esc_html( $cod_only) .
+                    esc_html( json_encode($cod_only)) .
 					")'>" .
 					esc_html( 'Wybierz punkt dostawy' ) . '</a>';
 			// @codingStandardsIgnoreEnd
@@ -272,6 +281,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * @throws Exception If can't send data to bliskapaczka.
 	 */
 	function create_order_via_api( $order_id ) {
+		$logger = new WC_Logger();
 		if ( 0 < $order_id ) {
 			$order = wc_get_order( $order_id );
 		}
@@ -298,11 +308,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		$mapper             = new Bliskapaczka_Shipping_Method_Mapper();
 		if ( 'bliskapaczka-courier' === $shipping_method_id ) {
 			$order_data = $mapper->getDataForCourier( $order, $helper, $bliskapaczka->settings );
+
 			if ( $order->get_payment_method() === 'cod' ) {
 				$order_data = $mapper->prepareCOD( $order_data, $order );
 				$order_data = $mapper->prepareInsuranceDataIfNeeded( $order_data, $order );
 			}
 			try {
+				$logger->info( wp_json_encode( $order_data ) );
 				$api_client = $helper->getApiClientOrder( $bliskapaczka );
 				$api_client->create( $order_data );
 			} catch ( Exception $e ) {
@@ -321,6 +333,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$order_data = $mapper->prepareCOD( $order_data, $order );
 				$order_data = $mapper->prepareInsuranceDataIfNeeded( $order_data, $order );
 			}
+			$logger->info( wp_json_encode( $order_data ) );
 			$api_client = $helper->getApiClientOrder( $bliskapaczka );
 			$api_client->create( $order_data );
 
@@ -349,16 +362,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * Include JS.
 	 */
 	function add_scripts_and_scripts() {
-		$helper             = new Bliskapaczka_Shipping_Method_Helper();
-		$operators          = json_decode( $helper->getOperatorsForWidget() );
-		$fedex              = json_decode( $helper->getFedexConfigurationForWidget() );
-		$price_list         = wp_json_encode( array_merge( $operators, $fedex ) );
-		$bliskapaczka       = new Bliskapaczka_Map_Shipping_Method();
-		$google_map_api_key = $helper->getGoogleMapApiKey( $bliskapaczka->settings );
-		$test_mode          = ( 'test' === $helper->getApiMode( $bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'] ) ? 'true' : 'false' );
-		$script             = 'var operators = ' . $price_list . '; ';
-		$script            .= 'var GoogleApiKey = ' . wp_json_encode( $google_map_api_key ) . ';';
-		$script            .= 'var testMode = ' . wp_json_encode( $test_mode ) . ';';
 
 		wp_register_script( 'widget-script', 'https://widget.bliskapaczka.pl/v5/main.js', array(), 'v5', false );
 		wp_enqueue_script( 'widget-script' );
@@ -370,7 +373,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 		wp_register_script( 'plugin-script', plugin_dir_url( __FILE__ ) . 'assets/js/bliskapaczka.js', array(), 'v5', false );
 		wp_enqueue_script( 'plugin-script' );
-		wp_add_inline_script( 'plugin-script', $script, 'before' );
 	}
 
 
@@ -448,7 +450,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			} else {
 				$is_cod = false;
 			}
-			$price = $method->recalculate_shipping_cost( $pos_operator, $pos_code, $is_cod );
+			$price = $method->recalculate_shipping_cost(
+				WC()->cart->get_cart_contents_total(),
+				$pos_operator,
+				$pos_code,
+				$is_cod
+			);
 
 		}
 		return $price;
