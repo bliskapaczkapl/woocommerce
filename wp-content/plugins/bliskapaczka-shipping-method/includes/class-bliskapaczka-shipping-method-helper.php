@@ -146,6 +146,7 @@ class Bliskapaczka_Shipping_Method_Helper
      */
     public function getPriceList(array $data = null)
     {
+        $logger = new \WC_Logger();
         /* @var Bliskapaczka_Shipping_Method $bliskapaczka */
         $bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
         if (is_null($data)) {
@@ -155,8 +156,12 @@ class Bliskapaczka_Shipping_Method_Helper
               )
             );
         }
+        $logger->info('getPriceList');
+        $logger->info('1: '.microtime());
         $apiClient = $this->getApiClientPricing($bliskapaczka);
+        $logger->info('2: '.microtime());
         $priceList = $apiClient->get($data);
+        $logger->info('3: '.microtime());
 
         return json_decode($priceList);
     }
