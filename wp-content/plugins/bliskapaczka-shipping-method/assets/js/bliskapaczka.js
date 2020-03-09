@@ -3,15 +3,13 @@ function Bliskapaczka()
 }
 
 Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly = false) {
-    aboutPoint = document.getElementById('bpWidget_aboutPoint');
-    aboutPoint.style.display = 'none';
-
     bpWidget = document.getElementById('bpWidget');
     bpWidget.style.display = 'block';
 
     if (jQuery('#bliskapaczka_posCode').attr('value') === "") {
         jQuery('#bliskapaczka_posOperator').attr('value', "")
     }
+    jQuery('input[value="bliskapaczka"]').trigger('click');
     Bliskapaczka.updateSelectedCarrier();
     BPWidget.init(
         bpWidget,
@@ -40,20 +38,6 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
 
 Bliskapaczka.pointSelected = function (data, operators) {
     Bliskapaczka.updatePrice(data.operator, operators);
-
-    bpWidget = document.getElementById('bpWidget');
-    bpWidget.style.display = 'none';
-
-    aboutPoint = document.getElementById('bpWidget_aboutPoint');
-    aboutPoint.style.display = 'block';
-
-    posDataBlock = document.getElementById('bpWidget_aboutPoint_posData');
-
-    posDataBlock.innerHTML =  data.operator + '</br>'
-        + ((data.description) ? data.description + '</br>': '')
-        + data.street + '</br>'
-        + ((data.postalCode) ? data.postalCode + ' ': '') + data.city
-
     jQuery( document.body ).trigger( 'update_checkout' );
 }
 
@@ -123,14 +107,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    jQuery('form.checkout').on('click', 'label[class="bliskapaczka_courier_item_wrapper"]',function(){
-        jQuery('#bliskapaczka_posOperator').val(jQuery(this).attr('data-operator'));
+    jQuery('body').on('click', '.bliskapaczka_courier_item_wrapper', function () {
         jQuery('.bliskapaczka_courier_item_wrapper').removeClass('checked');
-        jQuery(document.body).trigger("update_checkout");
         jQuery(this).addClass('checked');
-    });
-    jQuery('form.checkout').on('click', 'input[value="bliskapaczka-courier"]', function () {
-        Bliskapaczka.checkFirstCourier();
+        jQuery('#bliskapaczka_posOperator').val(jQuery(this)
+          .attr('data-operator'));
+        jQuery('input[value="bliskapaczka-courier"]').trigger('click');
+        jQuery(document.body).trigger("update_checkout");
     })
-    Bliskapaczka.checkFirstCourier();
 });
