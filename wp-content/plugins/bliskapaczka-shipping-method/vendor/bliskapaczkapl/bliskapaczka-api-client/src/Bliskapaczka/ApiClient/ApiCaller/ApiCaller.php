@@ -54,6 +54,9 @@ class ApiCaller
         $responseDecoded = json_decode($response);
 
         if (isset($responseDecoded->error)) {
+            $logger = new \WC_Logger();
+            $logger->info('aaatest');
+            $logger->info($response);
             $this->logger->error($error);
             throw new \Exception($responseDecoded->error, 1);
         }

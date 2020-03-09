@@ -106,8 +106,14 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 */
 	function show_table( $method ) {
 		if ( 'bliskapaczka-courier' === $method->id ) {
-			$payment_method = WC()->session->get( 'chosen_payment_method' );
-			$cod_only       = false;
+
+			$payment_method         = WC()->session->get( 'chosen_payment_method' );
+			$chosen_shipping_method = WC()->session->get( 'chosen_shipping_methods' )[0];
+			$reset_selection        = false;
+			if ( 'bliskapaczka' === $chosen_shipping_method ) {
+				$reset_selection = true;
+			}
+			$cod_only = false;
 			if ( 'cod' === $payment_method ) {
 				$cod_only = true;
 			}
@@ -117,13 +123,23 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				null,
 				$cod_only
 			);
+			$is_courier = false;
 			$courier    = WC()->session->get( 'bliskapaczka_posOperator' );
+			foreach ( json_decode( $price_list )as $courier ) {
+				if ( $courier === $courier->operator ) {
+					$is_courier = true;
+					break;
+				}
+			}
 			echo '<div class="bliskapaczka_courier_wrapper">';
-			foreach ( json_decode( $price_list ) as $item ) {
+			foreach ( json_decode( $price_list ) as $i => $item ) {
 				$operator_name = $item->operator;
 				$price_show    = $item->price->gross;
 				$class         = 'bliskapaczka_courier_item_wrapper';
-				if ( $operator_name === $courier ) {
+				if ( $operator_name === $courier && false === $reset_selection ) {
+					$class = 'bliskapaczka_courier_item_wrapper checked';
+				}
+				if ( false === $reset_selection && false === $is_courier && 0 === $i ) {
 					$class = 'bliskapaczka_courier_item_wrapper checked';
 				}
 				echo '<label class="' . esc_html( $class ) . '" for="bliskapaczka_courier_posOperator" data-operator="' . esc_html( $operator_name ) . '">';
@@ -150,8 +166,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		$bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
 
 		if ( 'bliskapaczka' === $method->id && is_checkout() === true ) {
-			$payment_method = WC()->session->get( 'chosen_payment_method' );
-			$cod_only       = false;
+
+			$chosen_shipping_method = WC()->session->get( 'chosen_shipping_methods' )[0];
+			$payment_method         = WC()->session->get( 'chosen_payment_method' );
+			$cod_only               = false;
 			if ( 'cod' === $payment_method ) {
 				$cod_only = true;
 			}
@@ -187,24 +205,27 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			echo '<input name="bliskapaczka_posOperator" type="hidden" id="bliskapaczka_posOperator" value="' . esc_html( WC()->session->get( 'bliskapaczka_posOperator' ) ) . '" />';
 
 			if ( WC()->session->get( 'bliskapaczka_posCode' ) && WC()->session->get( 'bliskapaczka_posOperator' ) ) {
+
 				$api_client = $helper->getApiClientPos( $bliskapaczka );
 				$api_client->setPointCode( WC()->session->get( 'bliskapaczka_posCode' ) );
 				$api_client->setOperator( WC()->session->get( 'bliskapaczka_posOperator' ) );
 				$pos_info = json_decode( $api_client->get() );
 			}
+			if ( 'bliskapaczka' === $chosen_shipping_method ) {
+				echo '<div id="bpWidget_aboutPoint" style="width: 100%; ' . ( ( ! isset( $pos_info ) ) ? ' display: none; ' : '' ) . '">';
+				echo '<p>' . esc_html( __( 'Selected Point', 'bliskapaczka-shipping-method' ) ) . ': <span id="bpWidget_aboutPoint_posData">';
+				if ( isset( $pos_info ) ) {
+                    // @codingStandardsIgnoreStart
+					echo '</br>' . esc_html( $pos_info->operator ) . '</br>' .
+						 ( ( $pos_info->description ) ? esc_html( $pos_info->description ) . '</br>' : '' ) .
+						 esc_html( $pos_info->street ) . '</br>' .
 
-			echo '<div id="bpWidget_aboutPoint" style="width: 100%; ' . ( ( ! isset( $pos_info ) ) ? ' display: none; ' : '' ) . '">';
-			echo '<p>' . esc_html( __( 'Selected Point', 'bliskapaczka-shipping-method' ) ) . ': <span id="bpWidget_aboutPoint_posData">';
-			if ( isset( $pos_info ) ) {
-				echo '</br>' . esc_html( $pos_info->operator ) . '</br>' .
-					( ( $pos_info->description ) ? esc_html( $pos_info->description ) . '</br>' : '' ) .
-					esc_html( $pos_info->street ) . '</br>' .
-					// @codingStandardsIgnoreStart
-					( ( $pos_info->postalCode ) ? esc_html( $pos_info->postalCode ) . ' ' : '' ) . esc_html( $pos_info->city );
-					// @codingStandardsIgnoreEnd
+                         ( ( $pos_info->postalCode ) ? esc_html( $pos_info->postalCode ) . ' ' : '' ) . esc_html( $pos_info->city );
+                    // @codingStandardsIgnoreEnd
+				}
+				echo '</span></p>';
+				echo '</div>';
 			}
-			echo '</span></p>';
-			echo '</div>';
 		}
 	}
 
