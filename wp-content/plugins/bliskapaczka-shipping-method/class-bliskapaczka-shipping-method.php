@@ -123,7 +123,14 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				null,
 				$cod_only
 			);
-			$courier    = WC()->session->get( 'bliskapaczka_posOperator' );
+			$isCourier = false;
+            $courier    = WC()->session->get( 'bliskapaczka_posOperator' );
+			foreach (json_decode( $price_list )as $courier) {
+			    if ($courier === $courier->operator) {
+			        $isCourier =  true;
+			        break;
+                }
+            }
 			echo '<div class="bliskapaczka_courier_wrapper">';
 			foreach ( json_decode( $price_list ) as $i=>$item ) {
 				$operator_name = $item->operator;
@@ -132,7 +139,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				if ( $operator_name === $courier && $resetSelection === false) {
 					$class = 'bliskapaczka_courier_item_wrapper checked';
 				}
-
+                if ($resetSelection === false && $isCourier === false && $i === 0) {
+                    $class = 'bliskapaczka_courier_item_wrapper checked';
+                }
 				echo '<label class="' . esc_html( $class ) . '" for="bliskapaczka_courier_posOperator" data-operator="' . esc_html( $operator_name ) . '">';
 				echo '<input type="radio" name="bliskapaczka_courier_posOperator" value="' . esc_html( $operator_name ) . '">';
 				echo '<div class="bliskapaczka_courier_item">';
