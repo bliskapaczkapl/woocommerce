@@ -5,7 +5,25 @@ function Bliskapaczka()
 Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly = false) {
     bpWidget = document.getElementById('bpWidget');
     bpWidget.style.display = 'block';
+    var modal = document.getElementById("myModal");
 
+    var btn = document.getElementById("myBtn");
+
+    var span = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
     if (jQuery('#bliskapaczka_posCode').attr('value') === "") {
         jQuery('#bliskapaczka_posOperator').attr('value', "")
     }
@@ -38,6 +56,8 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
 
 Bliskapaczka.pointSelected = function (data, operators) {
     Bliskapaczka.updatePrice(data.operator, operators);
+    var modal = document.getElementById("myModal");
+    modal.style.display = "none";
     jQuery( document.body ).trigger( 'update_checkout' );
 }
 
