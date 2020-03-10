@@ -196,8 +196,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					esc_html( $helper->getGoogleMapApiKey( $bliskapaczka->settings ) ) .
 					'", ' .
 					esc_html( ( 'test' === $helper->getApiMode( $bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'] ) ? 'true' : 'false' ) ) .
-                    ',' .
-                    esc_html( json_encode($cod_only)) .
+					',' .
+					esc_html( json_encode($cod_only)) .
 					")'>" .
 					esc_html( 'Wybierz punkt dostawy' ) . '</a>';
 			// @codingStandardsIgnoreEnd
@@ -215,13 +215,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				echo '<div id="bpWidget_aboutPoint" style="width: 100%; ' . ( ( ! isset( $pos_info ) ) ? ' display: none; ' : '' ) . '">';
 				echo '<p>' . esc_html( __( 'Selected Point', 'bliskapaczka-shipping-method' ) ) . ': <span id="bpWidget_aboutPoint_posData">';
 				if ( isset( $pos_info ) ) {
-                    // @codingStandardsIgnoreStart
+					// @codingStandardsIgnoreStart
 					echo '</br>' . esc_html( $pos_info->operator ) . '</br>' .
 						 ( ( $pos_info->description ) ? esc_html( $pos_info->description ) . '</br>' : '' ) .
 						 esc_html( $pos_info->street ) . '</br>' .
 
-                         ( ( $pos_info->postalCode ) ? esc_html( $pos_info->postalCode ) . ' ' : '' ) . esc_html( $pos_info->city );
-                    // @codingStandardsIgnoreEnd
+						 ( ( $pos_info->postalCode ) ? esc_html( $pos_info->postalCode ) . ' ' : '' ) . esc_html( $pos_info->city );
+					// @codingStandardsIgnoreEnd
 				}
 				echo '</span></p>';
 				echo '</div>';
@@ -235,19 +235,19 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * @param mixed $checkout Some data.
 	 */
 	function add_widget_div( $checkout ) {
-        echo "<div id=\"myModal\" class=\"modal\">\n";
-        echo "\n";
-        echo "  <div class=\"modal-content\">\n";
-        echo "    <span class=\"close\">×</span>\n";
-        echo '<div style="" >';
-        echo '<div id="bpWidget_wrapper">';
-        echo "<a name='bpWidget_wrapper'><a/>";
-        echo '<div id="bpWidget" style="height: 600px; display: none;"></div>';
-        echo '</div>';
-        echo '</div>';
-        echo "  </div>\n";
-        echo "\n";
-        echo "</div>";
+		echo '<div id=\"myModal\" class=\"modal\">\n';
+		echo '\n';
+		echo '<div class=\"modal-content\">\n';
+		echo '<span class=\"close\">×</span>\n';
+		echo '<div style="" >';
+		echo '<div id="bpWidget_wrapper">';
+		echo "<a name='bpWidget_wrapper'><a/>";
+		echo '<div id="bpWidget" style="height: 600px; display: none;"></div>';
+		echo '</div>';
+		echo '</div>';
+		echo '</div>\n';
+		echo '\n';
+		echo '</div>';
 	}
 
 	/**
@@ -457,11 +457,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		$chosen_methods        = WC()->session->get( 'chosen_shipping_methods' );
 		$chosen_method         = $chosen_methods[0];
 		$chosen_payment_method = WC()->session->get( 'chosen_payment_method' );
-        // @codingStandardsIgnoreStart
+		// @codingStandardsIgnoreStart
 		parse_str( $_POST['post_data'], $post_data );
 		$pos_operator = $post_data['bliskapaczka_posOperator'];
 		$pos_code     = $post_data['bliskapaczka_posCode'];
-        // @codingStandardsIgnoreEnd
+		// @codingStandardsIgnoreEnd
 		if ( 'bliskapaczka-courier' === $chosen_method ) {
 			$method = new Bliskapaczka_Courier_Shipping_Method();
 		}
