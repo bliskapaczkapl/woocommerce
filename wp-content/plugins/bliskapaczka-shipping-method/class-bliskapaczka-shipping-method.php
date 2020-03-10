@@ -189,7 +189,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				json_decode( $operators )
 			);
 			// @codingStandardsIgnoreStart
-			echo " <a href='#bpWidget_wrapper' " .
+			echo " <a id='myBtn' href='#bpWidget_wrapper' " .
 				"onclick='Bliskapaczka.showMap(" .
 					esc_html( json_encode($operators) ) .
 					', "' .
@@ -235,12 +235,19 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * @param mixed $checkout Some data.
 	 */
 	function add_widget_div( $checkout ) {
-		echo '<div style="">';
-		echo '<div id="bpWidget_wrapper">';
-		echo "<a name='bpWidget_wrapper'><a/>";
-		echo '<div id="bpWidget" style="height: 600px; display: none;"></div>';
-		echo '</div>';
-		echo '</div>';
+        echo "<div id=\"myModal\" class=\"modal\">\n";
+        echo "\n";
+        echo "  <div class=\"modal-content\">\n";
+        echo "    <span class=\"close\">×</span>\n";
+        echo '<div style="" >';
+        echo '<div id="bpWidget_wrapper">';
+        echo "<a name='bpWidget_wrapper'><a/>";
+        echo '<div id="bpWidget" style="height: 600px; display: none;"></div>';
+        echo '</div>';
+        echo '</div>';
+        echo "  </div>\n";
+        echo "\n";
+        echo "</div>";
 	}
 
 	/**
