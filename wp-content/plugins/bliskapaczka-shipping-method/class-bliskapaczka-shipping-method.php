@@ -125,8 +125,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			);
 			$is_courier = false;
 			$courier    = WC()->session->get( 'bliskapaczka_posOperator' );
-			foreach ( json_decode( $price_list )as $courier ) {
-				if ( $courier === $courier->operator ) {
+			foreach ( json_decode( $price_list )as $item ) {
+				if ( $courier === $item->operator ) {
 					$is_courier = true;
 					break;
 				}
