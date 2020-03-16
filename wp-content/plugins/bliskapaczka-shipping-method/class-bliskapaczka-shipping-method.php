@@ -422,7 +422,39 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 
 	add_action( 'woocommerce_calculate_totals', 'set_shipping_cost', 10 );
+    add_filter( 'woocommerce_order_button_html', 'disabled_checkout_button' );
 
+    function disabled_checkout_button($button_html) {
+
+        $chosen_shipping_method = WC()->session->get( 'chosen_shipping_methods' )[0];
+        $pos_code = WC()->session->get( 'bliskapaczka_posCode' );
+        $pos_operator = WC()->session->get( 'bliskapaczka_posOperator' );
+        if ('bliskapaczka-courier' === $chosen_shipping_method && empty($pos_operator)) {
+            return str_replace(
+                "<button",
+                "<button disabled  style=\"color:#fff;cursor:not-allowed;background-color:#999;\"",
+                $button_html)
+                ;
+        }
+        if ('bliskapaczka' === $chosen_shipping_method) {
+            if (empty($pos_code)) {
+                return str_replace(
+                    "<button",
+                    "<button disabled  style=\"color:#fff;cursor:not-allowed;background-color:#999;\"",
+                    $button_html
+                );
+            }
+            if (empty($pos_operator)) {
+                return str_replace(
+                    "<button",
+                    "<button disabled  style=\"color:#fff;cursor:not-allowed;background-color:#999;\"",
+                    $button_html
+                );
+            }
+            return $button_html;
+        }
+        return $button_html;
+    }
 	/**
 	 * Set correct price
 	 *
