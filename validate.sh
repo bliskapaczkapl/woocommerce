@@ -8,4 +8,5 @@ $VENDOR_DIR/bin/phpcpd wp-content/plugins/bliskapaczka-shipping-method/class-bli
 $VENDOR_DIR/bin/phploc wp-content/plugins/bliskapaczka-shipping-method/class-bliskapaczka-shipping-method.php
 $VENDOR_DIR/bin/phpunit --bootstrap wp-content/plugins/bliskapaczka-shipping-method/tests/bootstrap.php wp-content/plugins/bliskapaczka-shipping-method/tests/unit/
 
+
 docker run --rm -u $(id -u):$(id -g) -v $(pwd):/app -v ~/.composer:/tmp/composer -e COMPOSER_HOME=/tmp/composer composer install --no-dev
