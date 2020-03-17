@@ -42,7 +42,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # ENV WOOCOMMERCE_VERSION 3.3.3
-ENV WOOCOMMERCE_VERSION 3.9.1
+ENV WOOCOMMERCE_VERSION 4.0.0
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends unzip wget \

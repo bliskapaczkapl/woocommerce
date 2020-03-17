@@ -35,6 +35,7 @@ class Bliskapaczka_Shipping_Method_Helper
     const TITLE_COURIER = 'BLISKAPACZKA_COURIER_TITLE';
 
     const ENABLE_COURIER = 'BLISKAPACZKA_COURIER_ENABLE';
+    const AUTO_ADVICE = 'BLISKAPACZKA_AUTO_ADVICE';
 
 
     /**
@@ -146,7 +147,6 @@ class Bliskapaczka_Shipping_Method_Helper
      */
     public function getPriceList(array $data = null)
     {
-        $logger = new \WC_Logger();
         /* @var Bliskapaczka_Shipping_Method $bliskapaczka */
         $bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
         if (is_null($data)) {
@@ -156,12 +156,8 @@ class Bliskapaczka_Shipping_Method_Helper
               )
             );
         }
-        $logger->info('getPriceList');
-        $logger->info('1: '.microtime());
         $apiClient = $this->getApiClientPricing($bliskapaczka);
-        $logger->info('2: '.microtime());
         $priceList = $apiClient->get($data);
-        $logger->info('3: '.microtime());
 
         return json_decode($priceList);
     }
@@ -286,15 +282,14 @@ class Bliskapaczka_Shipping_Method_Helper
     }
 
     /**
-     * Get Bliskapaczka Api Client
-     * @param Bliskapaczka_Shipping_Method $bliskapaczka
+     * Get Bliskapaczka API Client
      *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka\Config
-     * @throws \Bliskapaczka\ApiClient\Exception
+     * @param Bliskapaczka_Shipping_Method $bliskapaczka
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka\Order\Advice
      */
-    public function getApiClientConfig($bliskapaczka)
+    public function getApiClientOrderAdvice($bliskapaczka)
     {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Config(
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Advice(
             $bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
             $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'])
         );
@@ -305,11 +300,12 @@ class Bliskapaczka_Shipping_Method_Helper
     /**
      * Get Bliskapaczka API Client
      *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     * @param Bliskapaczka_Shipping_Method $bliskapaczka
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka\Todoor\Advice
      */
-    public function getApiClientPricingTodoor($bliskapaczka)
+    public function getApiClientTodoorAdvice($bliskapaczka)
     {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pricing\Todoor(
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Todoor\Advice(
             $bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
             $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'])
         );
@@ -354,5 +350,20 @@ class Bliskapaczka_Shipping_Method_Helper
         }
 
         return $mode;
+    }
+
+    /**
+     * Check auto advice.
+     *
+     * @param Bliskapaczka_Shipping_Method$bliskapaczka
+     *
+     * @return bool
+     */
+    public function isAutoAdvice($bliskapaczka)
+    {
+        if ($bliskapaczka->settings['BLISKAPACZKA_AUTO_ADVICE'] === 'yes') {
+            return true;
+        }
+        return false;
     }
 }

@@ -346,7 +346,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			try {
 				$logger->info( wp_json_encode( $order_data ) );
 				$api_client = $helper->getApiClientOrder( $bliskapaczka );
-				$api_client->create( $order_data );
+				$result     = $api_client->create( $order_data );
+				if ( $helper->isAutoAdvice( $bliskapaczka ) === true ) {
+					$advice_api_client = $helper->getApiClientTodoorAdvice( $bliskapaczka );
+					$advice_api_client->setOrderId( $result['number'] );
+					$advice_api_client->create( $order_data );
+				}
 			} catch ( Exception $e ) {
 				throw new Exception( $e->getMessage(), 1 );
 			}
@@ -363,10 +368,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$order_data = $mapper->prepareCOD( $order_data, $order );
 				$order_data = $mapper->prepareInsuranceDataIfNeeded( $order_data, $order );
 			}
-			$logger->info( wp_json_encode( $order_data ) );
 			$api_client = $helper->getApiClientOrder( $bliskapaczka );
-			$api_client->create( $order_data );
-
+			$result     = $api_client->create( $order_data );
+			if ( $helper->isAutoAdvice( $bliskapaczka ) === true ) {
+				$advice_api_client = $helper->getApiClientOrderAdvice( $bliskapaczka );
+				$advice_api_client->setOrderId( $result['number'] );
+				$advice_api_client->create( $order_data );
+			}
 			WC()->session->set( 'bliskapaczka_posCode', '' );
 			WC()->session->set( 'bliskapaczka_posOperator', '' );
 		} catch ( Exception $e ) {
