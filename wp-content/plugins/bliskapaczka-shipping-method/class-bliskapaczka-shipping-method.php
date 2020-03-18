@@ -349,7 +349,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$result     = $api_client->create( $order_data );
 				if ( $helper->isAutoAdvice( $bliskapaczka ) === true ) {
 					$advice_api_client = $helper->getApiClientTodoorAdvice( $bliskapaczka );
-					$advice_api_client->setOrderId( $result['number'] );
+					$advice_api_client->setOrderId( json_decode( $result, true )['number'] );
 					$advice_api_client->create( $order_data );
 				}
 			} catch ( Exception $e ) {
@@ -372,7 +372,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$result     = $api_client->create( $order_data );
 			if ( $helper->isAutoAdvice( $bliskapaczka ) === true ) {
 				$advice_api_client = $helper->getApiClientOrderAdvice( $bliskapaczka );
-				$advice_api_client->setOrderId( $result['number'] );
+
+				$advice_api_client->setOrderId( json_decode( $result, true )['number'] );
 				$advice_api_client->create( $order_data );
 			}
 			WC()->session->set( 'bliskapaczka_posCode', '' );
