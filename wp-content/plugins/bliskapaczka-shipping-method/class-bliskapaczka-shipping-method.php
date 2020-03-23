@@ -432,10 +432,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 	add_action( 'woocommerce_calculate_totals', 'set_shipping_cost', 10 );
 	add_filter( 'woocommerce_order_button_html', 'disabled_checkout_button' );
+    add_filter( 'woocommerce_add_error', 'my_woocommerce_add_error' );
+
 	/**
 	 * Display polish error.
 	 *
-	 * @param $error
+	 * @param string $error Error.
 	 *
 	 * @return string
 	 */
@@ -445,7 +447,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		return 'Wystąpił błąd w prztwarzaniu zamówienia. Jeśli bład będzie się powtarzał,
         prosimy o kontakt.';
 	}
-	add_filter( 'woocommerce_add_error', 'my_woocommerce_add_error' );
+
 	/**
 	 * Disable button if needed
 	 *
