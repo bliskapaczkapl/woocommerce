@@ -142,7 +142,7 @@ class Bliskapaczka_Shipping_Method_Mapper
      */
     public function prepareInsuranceDataIfNeeded($data, WC_Order $order)
     {
-        if (in_array($order->pos_operator, self::OPERATORS_WITH_INSURANCE)) {
+        if (in_array($data['operatorName'], self::OPERATORS_WITH_INSURANCE)) {
             $data['parcel']['insuranceValue'] = $order->get_total();
         }
         return $data;
