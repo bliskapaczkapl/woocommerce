@@ -225,20 +225,21 @@ class Bliskapaczka_Shipping_Method_Mapper
      */
     public function prepareDataForPickup(array $data, $orderNumber)
     {
+        $nextDay = (new \DateTime())->modify('+1 day');
         $numbers = [$orderNumber];
         return ['orderNumbers' => $numbers,
                 'pickupWindow' => [
-                    'date' => '2020-03-30',
+                    'date' => $nextDay->format('Y-m-d'),
                     'timeRange' => [
-                        'from' => '14:00',
+                        'from' => '08:00',
                         'to' => '16:00'
                     ]
                 ],
                 'pickupAddress' => [
             'street' => $data['senderStreet'],
             'buildingNumber' => $data['senderBuildingNumber'],
-            'flatNumber' => "1",
-            'city' => 'Wroclaw',
+            'flatNumber' => $data['senderFlatNumber'],
+            'city' => $data['senderCity'],
             'postCode' => $data['senderPostCode']
         ]];
 
