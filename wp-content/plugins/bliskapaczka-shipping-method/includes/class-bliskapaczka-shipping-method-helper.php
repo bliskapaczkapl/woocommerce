@@ -312,6 +312,23 @@ class Bliskapaczka_Shipping_Method_Helper
 
         return $apiClient;
     }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @param Bliskapaczka_Shipping_Method $bliskapaczka
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka\Order\Pickup
+     */
+    public function getApiClientPickup($bliskapaczka)
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Pickup(
+            $bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
+            $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'])
+        );
+
+        return $apiClient;
+    }
+
     /**
      * Remove all non numeric chars from phone number
      *

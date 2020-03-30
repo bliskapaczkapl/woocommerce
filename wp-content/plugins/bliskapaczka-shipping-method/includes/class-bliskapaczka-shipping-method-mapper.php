@@ -214,4 +214,25 @@ class Bliskapaczka_Shipping_Method_Mapper
         return $data;
     }
 
+    /**
+     * Prepare data for pickup.
+     *
+     * @param array $data
+     *
+     * @param $orderNumber
+     *
+     * @return array
+     */
+    public function prepareDataForPickup(array $data, $orderNumber)
+    {
+        $numbers = [$orderNumber];
+        return ['orderNumbers' => $numbers, 'pickupWindow' => (new stdClass()), 'pickupAddress' => [
+            'street' => $data['senderStreet'],
+            'buildingNumber' => $data['senderBuildingNumber'],
+            'flatNumber' => "1",
+            'city' => 'Wroclaw',
+            'postCode' => $data['senderPostCode']
+        ]];
+
+    }
 }
