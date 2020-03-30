@@ -379,8 +379,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 				$advice_api_client->setOrderId( json_decode( $result, true )['number'] );
 				$advice_api_client->create( $order_data );
-                $pickup_api_client->setOrderId(json_decode( $result, true )['number']);
-                $pickup_api_client->create($mapper->prepareDataForPickup($order_data, json_decode( $result, true )['number']));
 			}
 			WC()->session->set( 'bliskapaczka_posCode', '' );
 			WC()->session->set( 'bliskapaczka_posOperator', '' );
