@@ -239,17 +239,14 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * @param mixed $checkout Some data.
 	 */
 	function add_widget_div( $checkout ) {
-		echo '<div id="myModal" class="modal">';
-		echo '<div class="modal-content">';
-		echo '<span class="close">×</span>';
+
 		echo '<div style="" >';
 		echo '<div id="bpWidget_wrapper">';
 		echo "<a name='bpWidget_wrapper'><a/>";
 		echo '<div id="bpWidget" style="height: 600px; display: none;"></div>';
 		echo '</div>';
 		echo '</div>';
-		echo '</div>';
-		echo '</div>';
+
 	}
 
 	/**
@@ -353,7 +350,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					$advice_api_client->setOrderId( json_decode( $result, true )['number'] );
 					$advice_api_client->create( $order_data );
 					$pickup_api_client->setOrderId( json_decode( $result, true )['number'] );
-					$pickup_api_client->create( $mapper->prepareDataForPickup( $order_data, json_decode( $result, true )['number'] ) );
+//					$pickup_api_client->create( $mapper->prepareDataForPickup( $order_data, json_decode( $result, true )['number'] ) );
 				}
 			} catch ( Exception $e ) {
 				$logger->error( $e->getMessage() );
