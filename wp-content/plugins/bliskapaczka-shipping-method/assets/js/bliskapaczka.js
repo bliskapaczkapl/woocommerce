@@ -117,4 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
         jQuery('input[value="bliskapaczka-courier"]').trigger('click');
         jQuery(document.body).trigger("update_checkout");
     })
+    jQuery('body').on('click','#map', function () {
+        jQuery(this).appendTo('body').modal();
+    })
 });
