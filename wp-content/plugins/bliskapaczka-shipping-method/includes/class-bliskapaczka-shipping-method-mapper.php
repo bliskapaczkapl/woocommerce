@@ -83,8 +83,8 @@ class Bliskapaczka_Shipping_Method_Mapper
     {
         $shippingAddress = $order->get_address('shipping');
         $data['receiverStreet'] = $shippingAddress['address_1'];
-        $data['receiverBuildingNumber'] = $this->getBuildingNumber($shippingAddress['address_2']);
-        $data['receiverFlatNumber'] = $this->getFlatNumber($shippingAddress['address_2']);
+        $data['receiverBuildingNumber'] = $this->getBuildingNumber($shippingAddress['address_1']);
+        $data['receiverFlatNumber'] = $this->getFlatNumber($shippingAddress['address_1']);
         $data['receiverPostCode'] = $shippingAddress['postcode'];
         $data['receiverCity'] = $shippingAddress['city'];
         return $data;
@@ -97,7 +97,7 @@ class Bliskapaczka_Shipping_Method_Mapper
      */
     protected function getBuildingNumber($address)
     {
-        $numbers = explode('/', $address);
+        $numbers = explode('/', substr(strrchr($address, ' '), 1));
         if (isset($numbers[0])) {
             return $numbers[0];
         }
@@ -111,7 +111,7 @@ class Bliskapaczka_Shipping_Method_Mapper
      */
     protected function getFlatNumber($address)
     {
-        $numbers = explode('/', $address);
+        $numbers = explode('/', substr(strrchr($address, ' '), 1));
         if (isset($numbers[1])) {
             return $numbers[1];
         }
