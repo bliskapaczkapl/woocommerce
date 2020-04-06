@@ -209,7 +209,9 @@ class Bliskapaczka_Shipping_Method_Mapper
         }
 
         if ($settings[$helper::BANK_ACCOUNT_NUMBER]) {
-            $data['codPayoutBankAccountNumber'] = $settings[$helper::BANK_ACCOUNT_NUMBER];
+            $data['codPayoutBankAccountNumber'] = str_replace(
+                ' ', '', $settings[$helper::BANK_ACCOUNT_NUMBER]
+            );
         }
         return $data;
     }
