@@ -193,7 +193,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				json_decode( $operators )
 			);
 			// @codingStandardsIgnoreStart
-			echo " <a id='map' href='#bpWidget_wrapper' " .
+			echo " <a id='myBtn' href='#bpWidget_wrapper' " .
 				"onclick='Bliskapaczka.showMap(" .
 					esc_html( json_encode($operators) ) .
 					', "' .
@@ -240,7 +240,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 */
 	function add_widget_div( $checkout ) {
 
-		echo '<div style="" class="modal" >';
+		echo '<div style="" >';
 		echo '<div id="bpWidget_wrapper">';
 		echo "<a name='bpWidget_wrapper'><a/>";
 		echo '<div id="bpWidget" style="height: 600px; display: none;"></div>';
