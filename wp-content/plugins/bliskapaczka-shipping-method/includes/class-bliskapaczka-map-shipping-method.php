@@ -122,14 +122,14 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
                 'description' => __( 'Sender street', 'bliskapaczka-shipping-method' ),
             ),
             $helper::SENDER_BUILDING_NUMBER => array(
-                'title'       => __( 'Sender building numbe', 'bliskapaczka-shipping-method' ),
+                'title'       => __( 'Sender building number', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
-                'description' => __( 'Sender building numbe', 'bliskapaczka-shipping-method' ),
+                'description' => __( 'Sender building number', 'bliskapaczka-shipping-method' ),
             ),
             $helper::SENDER_FLAT_NUMBER     => array(
-                'title'       => __( 'Sender flat numbe', 'bliskapaczka-shipping-method' ),
+                'title'       => __( 'Sender flat number', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
-                'description' => __( 'Sender flat numbe', 'bliskapaczka-shipping-method' ),
+                'description' => __( 'Sender flat number', 'bliskapaczka-shipping-method' ),
             ),
             $helper::SENDER_POST_CODE       => array(
                 'title'       => __( 'Sender post code', 'bliskapaczka-shipping-method' ),

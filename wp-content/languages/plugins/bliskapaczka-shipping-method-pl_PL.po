@@ -105,12 +105,12 @@ msgstr "Ulica wysyłającego"
 
 #: class-bliskapaczka-shipping-method.php:150
 #: class-bliskapaczka-shipping-method.php:152
-msgid "Sender building numbe"
+msgid "Sender building number"
 msgstr "Numer budynku wysyłającego"
 
 #: class-bliskapaczka-shipping-method.php:155
 #: class-bliskapaczka-shipping-method.php:157
-msgid "Sender flat numbe"
+msgid "Sender flat number"
 msgstr "Numer mieszkania wysyłającego"
 
 #: class-bliskapaczka-shipping-method.php:160
