@@ -240,10 +240,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 */
 	function add_widget_div( $checkout ) {
 
-		echo '<div style="" >';
+		echo '<div id="myModal" class="modal">';
 		echo '<div id="bpWidget_wrapper">';
 		echo "<a name='bpWidget_wrapper'><a/>";
-		echo '<div id="bpWidget" style="height: 600px; display: none;"></div>';
+		echo '<div id="bpWidget" class="modal-content"></div>';
 		echo '</div>';
 		echo '</div>';
 
@@ -413,11 +413,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 		wp_register_script( 'plugin-script', plugin_dir_url( __FILE__ ) . 'assets/js/bliskapaczka.js', array(), 'v5', false );
 		wp_enqueue_script( 'plugin-script' );
-
-		wp_register_script( 'modal-script', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js', array(), 'v5', false );
-		wp_enqueue_script( 'modal-script' );
-		wp_register_style( 'modal-styles', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css', array(), 'v5', false );
-		wp_enqueue_style( 'modal-styles' );
 
 	}
 

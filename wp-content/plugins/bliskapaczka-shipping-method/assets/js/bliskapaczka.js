@@ -3,8 +3,21 @@ function Bliskapaczka()
 }
 
 Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly = false) {
+
+
+
     bpWidget = document.getElementById('bpWidget');
     bpWidget.style.display = 'block';
+    myModal = document.getElementById('myModal');
+    if (window.location.href.search('sandbox') !== -1) {
+
+        myModal.style.display = 'block';
+    } else {
+        bpWidget.classList.remove('modal-content');
+        myModal.classList.remove('modal');
+        bpWidget.style.height = '600px';
+    }
+
 
     if (jQuery('#bliskapaczka_posCode').attr('value') === "") {
         jQuery('#bliskapaczka_posOperator').attr('value', "")
@@ -97,6 +110,21 @@ Bliskapaczka.checkFirstCourier = function() {
     }
 }
 document.addEventListener("DOMContentLoaded", function () {
+    if (window.location.href.search('sandbox') !== -1) {
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    }
+
     jQuery('form.checkout').on('change', 'input[name="payment_method"]', function(){
         jQuery(document.body).trigger("update_checkout");
 
