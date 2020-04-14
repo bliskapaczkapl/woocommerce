@@ -333,7 +333,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		$shipping_method    = array_shift( $order->get_shipping_methods() );
 		$shipping_method_id = $shipping_method['method_id'];
 		$mapper             = new Bliskapaczka_Shipping_Method_Mapper();
-		$pickup_api_client  = $helper->getApiClientPickup( $bliskapaczka );
+//		$pickup_api_client  = $helper->getApiClientPickup( $bliskapaczka );
 		if ( 'bliskapaczka-courier' === $shipping_method_id ) {
 			$order_data = $mapper->getDataForCourier( $order, $helper, $bliskapaczka->settings );
 
@@ -349,7 +349,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					$advice_api_client = $helper->getApiClientTodoorAdvice( $bliskapaczka );
 					$advice_api_client->setOrderId( json_decode( $result, true )['number'] );
 					$advice_api_client->create( $order_data );
-					$pickup_api_client->setOrderId( json_decode( $result, true )['number'] );
+//					$pickup_api_client->setOrderId( json_decode( $result, true )['number'] );
 				}
 			} catch ( Exception $e ) {
 				$logger->error( $e->getMessage() );
