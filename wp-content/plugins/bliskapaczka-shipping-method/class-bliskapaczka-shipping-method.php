@@ -239,11 +239,16 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * @param mixed $checkout Some data.
 	 */
 	function add_widget_div( $checkout ) {
-
-		echo '<div id="myModal" class="modal">';
+        $classModal = 'class="modal"';
+        $classWidget = 'class="modal-content"';
+        if (false === strpos($_SERVER['HTTP_HOST'], 'bliskapaczka')) {
+            $classModal = '';
+            $classWidget = '';
+        }
+		echo '<div id="myModal" '.$classModal.'>';
 		echo '<div id="bpWidget_wrapper">';
 		echo "<a name='bpWidget_wrapper'><a/>";
-		echo '<div id="bpWidget" class="modal-content"></div>';
+		echo '<div id="bpWidget" '.$classWidget.'></div>';
 		echo '</div>';
 		echo '</div>';
 
