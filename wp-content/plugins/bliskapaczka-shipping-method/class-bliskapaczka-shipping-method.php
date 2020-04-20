@@ -242,11 +242,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		$class_modal  = 'class="modal"';
 		$class_widget = 'class="modal-content"';
         // @codingStandardsIgnoreStart
-		if ( false === strpos( $_SERVER['HTTP_HOST'], 'bliskapaczka' ) ) {
+		if ( false === strpos( $_SERVER['HTTP_HOST'], 'bliskapaczka' )) {
 			$class_modal  = '';
 			$class_widget = '';
 		}
-        
+
 		echo '<div id="myModal" ' . $class_modal . '>';
 		echo '<div id="bpWidget_wrapper">';
 		echo "<a name='bpWidget_wrapper'><a/>";
