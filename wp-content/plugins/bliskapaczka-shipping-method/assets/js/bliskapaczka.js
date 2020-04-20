@@ -9,7 +9,7 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
     bpWidget = document.getElementById('bpWidget');
     bpWidget.style.display = 'block';
     myModal = document.getElementById('myModal');
-    if (window.location.href.search('sandbox') !== -1) {
+    if (window.location.href.search('sandbox') !== -1 || window.location.href.search('127') !== -1) {
 
         myModal.style.display = 'block';
     } else {
@@ -111,18 +111,13 @@ Bliskapaczka.checkFirstCourier = function() {
 }
 document.addEventListener("DOMContentLoaded", function () {
     if (window.location.href.search('sandbox') !== -1) {
-        // Get the modal
-        var modal = document.getElementById("myModal");
-
-// Get the button that opens the modal
-        var btn = document.getElementById("myBtn");
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
+        jQuery('#myModal').on('click', function (event) {
+            console.log(event.target);
+            if ((jQuery(event.target).children().hasClass('modal-content')) || event.target.className === 'modal') {
+                jQuery(this).hide();
             }
-        }
+
+        })
     }
 
     jQuery('form.checkout').on('change', 'input[name="payment_method"]', function(){
