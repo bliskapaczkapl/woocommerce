@@ -9,7 +9,7 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
     bpWidget = document.getElementById('bpWidget');
     bpWidget.style.display = 'block';
     myModal = document.getElementById('myModal');
-    if (window.location.href.search('sandbox') !== -1 || window.location.href.search('127') !== -1) {
+    if (window.location.href.search('sandbox') !== -1) {
 
         myModal.style.display = 'block';
     } else {
