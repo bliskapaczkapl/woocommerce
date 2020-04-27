@@ -82,7 +82,7 @@ class Bliskapaczka_Shipping_Method_Mapper
     protected function _prepareDestinationData($data, WC_Order $order)
     {
         $shippingAddress = $order->get_address('shipping');
-        $data['receiverStreet'] = $shippingAddress['address_1'];
+        $data['receiverStreet'] = implode(' ', explode(' ', $shippingAddress['address_1'], -1));
         $data['receiverBuildingNumber'] = $this->getBuildingNumber($shippingAddress['address_1']);
         $data['receiverFlatNumber'] = $this->getFlatNumber($shippingAddress['address_1']);
         $data['receiverPostCode'] = $shippingAddress['postcode'];
