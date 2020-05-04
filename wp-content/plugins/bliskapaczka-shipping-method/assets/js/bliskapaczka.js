@@ -4,12 +4,12 @@ function Bliskapaczka()
 
 Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly = false) {
 
-
-
+    if (!!event.pageX === false) {
+    return false;
+    }
     bpWidget = document.getElementById('bpWidget');
 
     myModal = document.getElementById('myModal');
-
     if (window.location.href.search('sandbox') !== -1) {
         bpWidget.classList.add('modal-content');
         bpWidget.style.display = 'block';
@@ -25,6 +25,7 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
     if (jQuery('#bliskapaczka_posCode').attr('value') === "") {
         jQuery('#bliskapaczka_posOperator').attr('value', "")
     }
+
     jQuery('input[value="bliskapaczka"]').trigger('click');
     Bliskapaczka.updateSelectedCarrier();
     BPWidget.init(
@@ -115,7 +116,6 @@ Bliskapaczka.checkFirstCourier = function() {
 document.addEventListener("DOMContentLoaded", function () {
     if (window.location.href.search('sandbox') !== -1) {
         jQuery('#myModal').on('click', function (event) {
-            console.log(event.target);
             if ((jQuery(event.target).children().hasClass('modal-content')) || event.target.className === 'modal') {
                 jQuery(this).hide();
             }
@@ -145,3 +145,4 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 
 });
+
