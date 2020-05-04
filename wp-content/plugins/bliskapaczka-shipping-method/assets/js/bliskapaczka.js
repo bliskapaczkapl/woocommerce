@@ -7,10 +7,13 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
 
 
     bpWidget = document.getElementById('bpWidget');
-    bpWidget.style.display = 'block';
-    myModal = document.getElementById('myModal');
-    if (window.location.href.search('sandbox') !== -1) {
 
+    myModal = document.getElementById('myModal');
+
+    if (window.location.href.search('sandbox') !== -1) {
+        bpWidget.classList.add('modal-content');
+        bpWidget.style.display = 'block';
+        myModal.classList.add('modal');
         myModal.style.display = 'block';
     } else {
         bpWidget.classList.remove('modal-content');
