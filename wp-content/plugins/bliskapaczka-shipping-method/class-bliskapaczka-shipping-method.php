@@ -240,12 +240,23 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 */
 	function add_widget_div( $checkout ) {
 
-		echo '<div id="myModal" >';
-		echo '<div id="bpWidget_wrapper">';
-		echo "<a name='bpWidget_wrapper'><a/>";
-		echo '<div id="bpWidget" ></div>';
-		echo '</div>';
-		echo '</div>';
+        $class_modal  = 'class="modal"';
+        $class_widget = 'class="modal-content"';
+        // @codingStandardsIgnoreStart
+        if ( false === strpos( $_SERVER['HTTP_HOST'], 'bliskapaczka' )) {
+            $class_modal  = '';
+            $class_widget = '';
+        }
+
+        echo '<div id="myModal" ' . $class_modal . '>';
+        echo '<div id="myModal" >';
+        echo '<div id="bpWidget_wrapper">';
+        echo "<a name='bpWidget_wrapper'><a/>";
+        echo '<div id="bpWidget" ' . $class_widget . '></div>';
+        echo '<div id="bpWidget" ></div>';
+        echo '</div>';
+        echo '</div>';
+        // @codingStandardsIgnoreEnd
 
 	}
 
@@ -349,6 +360,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					$advice_api_client->setOrderId( json_decode( $result, true )['number'] );
 					$advice_api_client->create( $order_data );
 				}
+				$order->update_meta_data('_bliskapaczka_order_id', json_decode( $result, true )['number']);
+				$order->update_meta_data('_need_to_pickup', true);
+				$order->save();
 			} catch ( Exception $e ) {
 				$logger->error( $e->getMessage() );
 				throw new Exception( $e->getMessage(), 1 );
@@ -374,6 +388,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$advice_api_client->setOrderId( json_decode( $result, true )['number'] );
 				$advice_api_client->create( $order_data );
 			}
+            $order->update_meta_data('_bliskapaczka_order_id', json_decode( $result, true )['number']);
+            $order->update_meta_data('_need_to_pickup', false);
+            $order->save();
 			WC()->session->set( 'bliskapaczka_posCode', '' );
 			WC()->session->set( 'bliskapaczka_posOperator', '' );
 		} catch ( Exception $e ) {
@@ -442,6 +459,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * @return string
 	 */
 	function my_woocommerce_add_error( $error ) {
+        if ( false === strpos( $_SERVER['HTTP_HOST'], 'bliskapaczka' )) {
+            return  $error;
+        }
 		$logger = new WC_Logger();
 		$logger->error( $error );
 		return 'Wystąpił błąd w prztwarzaniu zamówienia. Jeśli bład będzie się powtarzał,
@@ -553,4 +573,62 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		}
 		return $price;
 	}
+    add_action( 'pickup', 'bliskapaczka_pickup', 10, 3 );
+
+	function bliskapaczka_pickup()
+    {
+        $q = new WC_Order_Query(array('_need_to_pickup' => 1));
+        $bliskapaczka       = new Bliskapaczka_Map_Shipping_Method();
+		$helper             = new Bliskapaczka_Shipping_Method_Helper();
+		$api = $helper->getApiClientPickup($bliskapaczka);
+		$orderIds = array();
+        foreach ($q->get_orders() as $order)
+        {
+            $number = $order->get_meta('_bliskapaczka_order_id');
+            if (!empty($number)) {
+                $orderIds[] =$number;
+            }
+            $order->update_meta_data('_need_to_pickup', false);
+            $order->save();
+
+        }
+
+        $params = array(
+          'orderNumbers' => $orderIds,
+            'pickupWindow' => array(
+                'date' => (new \DateTime())->format(),
+                'timeRange' => array(
+                    'from' => '13:00',
+                    'to' => '16:00'
+                ),
+                'pickupAddress' => array(
+                    'street' => $bliskapaczka->settings[$helper::SENDER_STREET],
+                    'buildingNumber' => $bliskapaczka->settings[$helper::SENDER_BUILDING_NUMBER],
+                    'flatNumber' => $bliskapaczka->settings[$helper::SENDER_FLAT_NUMBER],
+                    'city' => $bliskapaczka->settings[$helper::SENDER_CITY],
+                    'postCode' => $bliskapaczka->settings[$helper::SENDER_POST_CODE]
+                )
+            )
+        );
+        var_dump($api->create($params));
+        die();
+    }
+
+    /**
+     * Handle a custom 'customvar' query var to get orders with the 'customvar' meta.
+     * @param array $query - Args for WP_Query.
+     * @param array $query_vars - Query vars from WC_Order_Query.
+     * @return array modified $query
+     */
+    function handle_custom_query_var( $query, $query_vars ) {
+        if ( ! empty( $query_vars['_need_to_pickup'] ) ) {
+            $query['meta_query'][] = array(
+                'key' => '_need_to_pickup',
+                'value' => esc_attr( $query_vars['_need_to_pickup'] ),
+            );
+        }
+
+        return $query;
+    }
+    add_filter( 'woocommerce_order_data_store_cpt_get_orders_query', 'handle_custom_query_var', 10, 2 );
 }
