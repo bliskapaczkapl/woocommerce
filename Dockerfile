@@ -21,6 +21,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     php7.0-gd \
     php7.0-xml \
     php7.0-mbstring \
+    php7.0-soap \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -53,6 +54,7 @@ RUN apt-get update \
     && rm /tmp/temp.zip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
 
 # WooCommerce Translations
 COPY ${plugin_path}/dev/docker/woocommerce/ ${woocommerce_path}/wp-content/languages/plugins/
