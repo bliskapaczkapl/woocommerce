@@ -466,7 +466,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
         // @codingStandardsIgnoreEnd
 		$logger = new WC_Logger();
 		$logger->error( $error );
-		return 'Wystąpił błąd w prztwarzaniu zamówienia. Jeśli bład będzie się powtarzał,
+		return 'Wystąpił błąd w przetwarzaniu zamówienia. Jeśli błąd będzie się powtarzał,
 		prosimy o kontakt.';
 	}
 
