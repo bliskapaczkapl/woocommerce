@@ -548,10 +548,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		$pos_operator = $pos_code = null;
 
 		if (isset($_POST['post_data'])) {
-		    $post_data = array();
-    		parse_str( $_POST['post_data'], $post_data );
-    		$pos_operator = $post_data['bliskapaczka_posOperator'];
-    		$pos_code     = $post_data['bliskapaczka_posCode'];
+			$post_data = array();
+			parse_str( $_POST['post_data'], $post_data );
+			$pos_operator = $post_data['bliskapaczka_posOperator'];
+			$pos_code     = $post_data['bliskapaczka_posCode'];
 		}
 		
 		// @codingStandardsIgnoreEnd
