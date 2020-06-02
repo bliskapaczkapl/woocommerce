@@ -545,9 +545,15 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		$chosen_method         = $chosen_methods[0];
 		$chosen_payment_method = WC()->session->get( 'chosen_payment_method' );
 		// @codingStandardsIgnoreStart
-		parse_str( $_POST['post_data'], $post_data );
-		$pos_operator = $post_data['bliskapaczka_posOperator'];
-		$pos_code     = $post_data['bliskapaczka_posCode'];
+		$pos_operator = $pos_code = null;
+
+		if (isset($_POST['post_data'])) {
+		    $post_data = array();
+    		parse_str( $_POST['post_data'], $post_data );
+    		$pos_operator = $post_data['bliskapaczka_posOperator'];
+    		$pos_code     = $post_data['bliskapaczka_posCode'];
+		}
+		
 		// @codingStandardsIgnoreEnd
 		if ( 'bliskapaczka-courier' === $chosen_method ) {
 			$method = new Bliskapaczka_Courier_Shipping_Method();
