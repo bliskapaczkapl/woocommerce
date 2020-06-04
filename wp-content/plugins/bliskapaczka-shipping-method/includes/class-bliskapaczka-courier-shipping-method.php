@@ -100,6 +100,7 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Map_Shipping_Met
         foreach ($price_list as $item) {
             if ($item->operator === $operator_name) {
                 $price = $item->price->gross;
+                break;
             }
         }
 
