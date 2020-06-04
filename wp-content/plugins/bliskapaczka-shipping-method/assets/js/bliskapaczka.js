@@ -113,6 +113,34 @@ Bliskapaczka.checkFirstCourier = function() {
         }
     }
 }
+/**
+ * Show loader spinner on element.
+ * 
+ * ex. Bliskapaczka.loadBlock('div.my_class');
+ * 
+ * @param {String} selector jQuery element selector string 
+ */
+Bliskapaczka.loadBlock = function( selector ) {
+	jQuery( selector ).addClass( 'processing' ).block( {
+		message: null,
+		overlayCSS: {
+			background: '#fff',
+			opacity: 0.6
+		}
+	});
+}
+
+/**
+ * Hide loader spinner on element
+ * 
+ * ex. Bliskapaczka.loadUnblock('div.my_class');
+ * 
+ * @param {String} selector jQuery element selector 
+ */
+Bliskapaczka.loadUnblock = function( selector ) {
+	jQuery( selector ).removeClass( 'processing' ).unblock();
+};
+
 document.addEventListener("DOMContentLoaded", function () {
     if (window.location.href.search('sandbox') !== -1) {
         jQuery('#myModal').on('click', function (event) {
@@ -133,6 +161,43 @@ document.addEventListener("DOMContentLoaded", function () {
             var arguments = a.attr('onclick');
             eval(arguments);
         }
+    });
+  
+    /**
+     * Remember choosed courier and show new total order price on cart page
+     */
+    jQuery('body.woocommerce-cart').on('click', '.bliskapaczka_courier_item_wrapper', function () {
+    	
+    	 // loader
+    	 Bliskapaczka.loadBlock('div.cart_totals');
+    	
+    	 const previousCourier =  jQuery('.bliskapaczka_courier_item_wrapper .checked').attr('data-operator');
+    	 const currentCourier = jQuery(this).attr('data-operator');
+    	 jQuery('.bliskapaczka_courier_item_wrapper').removeClass('checked');
+    	 jQuery('input[value="bliskapaczka-courier"]').trigger('click');
+    	 
+    	 // if data no changed then return
+    	 if (previousCourier === currentCourier) {
+    		 Bliskapaczka.loadUnblock('div.cart_totals');
+    		 return;
+    	 }
+    	 
+    	 // remember selected courier
+    	 var data = {
+	        action: 'bliskapaczka_wc_cart_switch_courier', //the function in php functions to call
+	        bliskapaczka_posOperator: currentCourier,
+	        security: BliskapaczkaAjax.security
+    	 };
+    	 
+    	 jQuery
+	    	 .post(BliskapaczkaAjax.ajax_url, data, function( response ) {
+	    		 if (typeof response !== 'undefined' && response.order_total_html !== 'undefined') {
+	    			 jQuery( '.cart_totals .order-total td' ).html( response.order_total_html );
+	    		 }
+	    	 }, 'json')
+	    	 .always(function() {
+	    		 Bliskapaczka.loadUnblock('div.cart_totals');
+	    	 });
     });
 
     jQuery('body').on('click', '.bliskapaczka_courier_item_wrapper', function () {
