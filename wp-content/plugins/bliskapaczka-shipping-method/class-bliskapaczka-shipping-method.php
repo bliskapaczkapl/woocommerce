@@ -293,7 +293,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	function update_price_for_chosen_carrier( $packages ) {
 
 		$checkout_data = [];
-		
+
 		// @codingStandardsIgnoreStart
 		if ( isset( $_POST['post_data'] ) ) {
 			parse_str( $_POST['post_data'], $checkout_data );
@@ -435,11 +435,15 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		wp_enqueue_style( 'widget-styles-bliskapaczka' );
 
 		wp_register_script( 'plugin-script', plugin_dir_url( __FILE__ ) . 'assets/js/bliskapaczka.js', array(), 'v5', false );
-		wp_enqueue_script( 'plugin-script' );		
-		wp_localize_script( 'plugin-script', 'BliskapaczkaAjax', array(
-			'ajax_url' => admin_url( 'admin-ajax.php' ),
-			'security' => wp_create_nonce( Bliskapaczka_Shipping_Method_Helper::getAjaxNonce() )
-		));
+		wp_enqueue_script( 'plugin-script' );
+		wp_localize_script(
+			'plugin-script',
+			'BliskapaczkaAjax',
+			array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'security' => wp_create_nonce( Bliskapaczka_Shipping_Method_Helper::getAjaxNonce() ),
+			)
+		);
 
 	}
 
@@ -614,35 +618,34 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 	/**
 	 * Handle a switch courier on the cart page.
-	 * 
+	 *
 	 * It's a hook for remember selected courier on a cart page.
-	 * 
 	 */
 	function bliskapaczka_wc_cart_switch_courier() {
-		
+
 		// check nonce, will die if it's bad.
 		check_ajax_referer( Bliskapaczka_Shipping_Method_Helper::getAjaxNonce(), 'security' );
-		
-		$reqKey = 'bliskapaczka_posOperator';
-		
-		if (isset($_POST[$reqKey]) && !empty( $_POST[$reqKey] ) ) {
-			$posOperator = esc_html($_POST[$reqKey]);
+
+		$req_key = 'bliskapaczka_posOperator';
+
+		if ( isset( $_POST[ $req_key ] ) && ! empty( $_POST[ $req_key ] ) ) {
+			$pos_operator = esc_html( $_POST[ $req_key ] );
 			//@TODO verify its a courier allowed
-			WC()->session->set( 'bliskapaczka_posoperator', $posOperator);
-			
+			WC()->session->set( 'bliskapaczka_posoperator', $pos_operator );
+
 			WC()->cart->calculate_totals();
 		}
-		
+
 		ob_start();
 			wc_cart_totals_order_total_html();
 			$content = ob_get_contents();
 		ob_end_clean();
-		
+
 		echo json_encode( array('order_total_html' => $content) );
 		wp_die();
 	}
-	
+
 	add_action( 'wp_ajax_bliskapaczka_wc_cart_switch_courier', 'bliskapaczka_wc_cart_switch_courier' );
 	add_action( 'wp_ajax_nopriv_bliskapaczka_wc_cart_switch_courier', 'bliskapaczka_wc_cart_switch_courier' );
-	
+
 }
