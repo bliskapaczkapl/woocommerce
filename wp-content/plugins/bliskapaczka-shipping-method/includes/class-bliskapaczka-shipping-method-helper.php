@@ -383,4 +383,14 @@ class Bliskapaczka_Shipping_Method_Helper
         }
         return false;
     }
+    
+    /**
+     * Get string for ajax security call
+     * 
+     * @return string
+     */
+    public static function getAjaxNonce() 
+    {
+    	return 'bliskapaczka_nonce_ajax';
+    }
 }
