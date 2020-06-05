@@ -200,6 +200,7 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
         foreach ($price_list as $item) {
             if ($item->operator === $operator_name) {
                 $price = $item->price->gross;
+                break;
             }
         }
         return $price;
