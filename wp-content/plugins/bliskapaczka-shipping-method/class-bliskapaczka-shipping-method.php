@@ -444,7 +444,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				'security' => wp_create_nonce( Bliskapaczka_Shipping_Method_Helper::getAjaxNonce() ),
 			)
 		);
-
 	}
 
 	add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'plugin_action_links' );
@@ -460,7 +459,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	add_action( 'woocommerce_checkout_update_order_meta', 'create_order_via_api' );
 
 	add_filter( 'woocommerce_checkout_fields', 'custom_override_checkout_fields' );
-
 
 	add_action( 'woocommerce_calculate_totals', 'set_shipping_cost', 10 );
 	add_filter( 'woocommerce_order_button_html', 'disabled_checkout_button' );
@@ -626,10 +624,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		// check nonce, will die if it's bad.
 		check_ajax_referer( Bliskapaczka_Shipping_Method_Helper::getAjaxNonce(), 'security' );
 
+
 		$req_key = 'bliskapaczka_posOperator';
 
 		if ( isset( $_POST[ $req_key ] ) && ! empty( $_POST[ $req_key ] ) ) {
 			$pos_operator = esc_html( $_POST[ $req_key ] );
+
 			//@TODO verify its a courier allowed
 			WC()->session->set( 'bliskapaczka_posoperator', $pos_operator );
 
