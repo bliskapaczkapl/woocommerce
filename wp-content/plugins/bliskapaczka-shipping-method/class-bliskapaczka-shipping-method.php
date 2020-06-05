@@ -110,7 +110,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$payment_method         = WC()->session->get( 'chosen_payment_method' );
 			$chosen_shipping_method = WC()->session->get( 'chosen_shipping_methods' )[0];
 			$reset_selection        = false;
-			
+
 			if ( 'bliskapaczka' === $chosen_shipping_method ) {
 				$reset_selection = true;
 			}
@@ -118,11 +118,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			if ( 'cod' === $payment_method ) {
 				$cod_only = true;
 			}
-			// On the cart page, we must show prices without COD (the smallest price). See JIRA WIW-222
+			// On the cart page, we must show prices without COD (the smallest price). See JIRA WIW-222.
 			if ( true === is_cart() ) {
 				$cod_only = false;
 			}
-			
+
 			$helper     = new Bliskapaczka_Shipping_Method_Helper();
 			$price_list = $helper->getPriceListForCourier(
 				WC()->cart->get_cart_contents_total(),
@@ -293,7 +293,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	function update_price_for_chosen_carrier( $packages ) {
 
 		$checkout_data = [];
-		
+
 		// @codingStandardsIgnoreStart
 		if ( isset( $_POST['post_data'] ) ) {
 			parse_str( $_POST['post_data'], $checkout_data );
@@ -435,12 +435,15 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		wp_enqueue_style( 'widget-styles-bliskapaczka' );
 
 		wp_register_script( 'plugin-script', plugin_dir_url( __FILE__ ) . 'assets/js/bliskapaczka.js', array(), 'v5', false );
-		wp_enqueue_script( 'plugin-script' );		
-		wp_localize_script( 'plugin-script', 'BliskapaczkaAjax', array(
-			'ajax_url' => admin_url( 'admin-ajax.php' ),
-			'security' => wp_create_nonce( Bliskapaczka_Shipping_Method_Helper::getAjaxNonce() )
-		));
-
+		wp_enqueue_script( 'plugin-script' );
+		wp_localize_script(
+			'plugin-script',
+			'BliskapaczkaAjax',
+			array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'security' => wp_create_nonce( Bliskapaczka_Shipping_Method_Helper::getAjaxNonce() ),
+			)
+		);
 	}
 
 	add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'plugin_action_links' );
@@ -456,7 +459,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	add_action( 'woocommerce_checkout_update_order_meta', 'create_order_via_api' );
 
 	add_filter( 'woocommerce_checkout_fields', 'custom_override_checkout_fields' );
-
 
 	add_action( 'woocommerce_calculate_totals', 'set_shipping_cost', 10 );
 	add_filter( 'woocommerce_order_button_html', 'disabled_checkout_button' );
@@ -614,35 +616,35 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 	/**
 	 * Handle a switch courier on the cart page.
-	 * 
+	 *
 	 * It's a hook for remember selected courier on a cart page.
-	 * 
 	 */
 	function bliskapaczka_wc_cart_switch_courier() {
-		
-		// check nonce, will die if it's bad.
+
+		// Check nonce, will die if it's bad.
 		check_ajax_referer( Bliskapaczka_Shipping_Method_Helper::getAjaxNonce(), 'security' );
-		
-		$reqKey = 'bliskapaczka_posOperator';
-		
-		if (isset($_POST[$reqKey]) && !empty( $_POST[$reqKey] ) ) {
-			$posOperator = esc_html($_POST[$reqKey]);
-			//@TODO verify its a courier allowed
-			WC()->session->set( 'bliskapaczka_posoperator', $posOperator);
-			
+
+		$req_key = 'bliskapaczka_posOperator';
+
+		if ( isset( $_POST[ $req_key ] ) && ! empty( $_POST[ $req_key ] ) ) {
+			$pos_operator = esc_html( sanitize_text_field( wp_unslash( $_POST[ $req_key ] ) ) );
+
+			// @TODO verify its a courier allowed.
+			WC()->session->set( 'bliskapaczka_posoperator', $pos_operator );
+
 			WC()->cart->calculate_totals();
 		}
-		
+
 		ob_start();
 			wc_cart_totals_order_total_html();
 			$content = ob_get_contents();
 		ob_end_clean();
-		
-		echo json_encode( array('order_total_html' => $content) );
+
+		echo wp_json_encode( array( 'order_total_html' => $content ) );
 		wp_die();
 	}
-	
+
 	add_action( 'wp_ajax_bliskapaczka_wc_cart_switch_courier', 'bliskapaczka_wc_cart_switch_courier' );
 	add_action( 'wp_ajax_nopriv_bliskapaczka_wc_cart_switch_courier', 'bliskapaczka_wc_cart_switch_courier' );
-	
+
 }
