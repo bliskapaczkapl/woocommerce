@@ -621,16 +621,15 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 */
 	function bliskapaczka_wc_cart_switch_courier() {
 
-		// check nonce, will die if it's bad.
+		// Check nonce, will die if it's bad.
 		check_ajax_referer( Bliskapaczka_Shipping_Method_Helper::getAjaxNonce(), 'security' );
-
 
 		$req_key = 'bliskapaczka_posOperator';
 
 		if ( isset( $_POST[ $req_key ] ) && ! empty( $_POST[ $req_key ] ) ) {
-			$pos_operator = esc_html( $_POST[ $req_key ] );
+			$pos_operator = esc_html( sanitize_text_field( wp_unslash( $_POST[ $req_key ] ) ) );
 
-			//@TODO verify its a courier allowed
+			// @TODO verify its a courier allowed.
 			WC()->session->set( 'bliskapaczka_posoperator', $pos_operator );
 
 			WC()->cart->calculate_totals();
@@ -641,7 +640,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$content = ob_get_contents();
 		ob_end_clean();
 
-		echo json_encode( array('order_total_html' => $content) );
+		echo wp_json_encode( array( 'order_total_html' => $content ) );
 		wp_die();
 	}
 
