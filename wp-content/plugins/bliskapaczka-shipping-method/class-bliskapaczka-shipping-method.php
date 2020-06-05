@@ -110,6 +110,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$payment_method         = WC()->session->get( 'chosen_payment_method' );
 			$chosen_shipping_method = WC()->session->get( 'chosen_shipping_methods' )[0];
 			$reset_selection        = false;
+			
 			if ( 'bliskapaczka' === $chosen_shipping_method ) {
 				$reset_selection = true;
 			}
@@ -117,6 +118,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			if ( 'cod' === $payment_method ) {
 				$cod_only = true;
 			}
+			// On the cart page, we must show prices without COD (the smallest price). See JIRA WIW-222
+			if ( true === is_cart() ) {
+				$cod_only = false;
+			}
+			
 			$helper     = new Bliskapaczka_Shipping_Method_Helper();
 			$price_list = $helper->getPriceListForCourier(
 				WC()->cart->get_cart_contents_total(),
@@ -147,7 +153,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				echo '<div class="bliskapaczka_courier_item">';
 				echo '<div class="bliskapaczka_courier_item_logo"><img src="https://bliskapaczka.pl/static/images/' . esc_html( $operator_name ) . '.png" alt="' . esc_html( $operator_name ) . '" style="height: 25px; width: auto"></div>';
 				echo '<div class="bliskapaczka_courier_item_price">';
-				echo '<span class="bliskapaczka_courier_item_price_value">' . esc_html( $price_show ) . '</span><span>zł</span>';
+				echo '<span class="bliskapaczka_courier_item_price_value">' . esc_html( $price_show ) . 'A</span><span>zł</span>';
 				echo '</div>';
 				echo '</div>';
 				echo '</label>';
