@@ -2,3 +2,6 @@
 wp-content/plugins/woocommerce
 /tools
 /src
+/.buildpath
+/.project
+/.settings/
