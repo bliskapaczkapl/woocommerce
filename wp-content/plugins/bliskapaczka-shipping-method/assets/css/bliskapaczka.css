@@ -58,6 +58,37 @@
     display: none;
     z-index: 99999;
 }
+
+/* Modal responsive breakpoints */
+@media only screen and (max-width: 568px) {
+    .modal-content {
+        width: 85%;
+    }
+}
+
+@media only screen and (min-width: 568px) {
+    .modal-content {
+        width: 80%;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .modal-content {
+        width: 70%;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .modal-content {
+        width: 60%;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .modal-content {
+        width: 50%;
+    }
+}
 /* The Close Button */
 .close {
     color: #aaa;
