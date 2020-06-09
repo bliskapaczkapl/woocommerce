@@ -90,7 +90,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		$helper     = new Bliskapaczka_Shipping_Method_Helper();
 		$price_list = $helper->getPriceListForCourier( 0.0 );
 
-		if ( count( $price_list ) !== 0 ) {
+		if ( count( json_decode( $price_list ) ) !== 0 ) {
 			$methods[] = 'Bliskapaczka_Courier_Shipping_Method';
 		}
 
