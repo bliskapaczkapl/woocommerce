@@ -445,11 +445,15 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			)
 		);
 	}
-    function bliskapaczka_admin_styles(){
-        wp_register_style( 'bliskapaczka_admin_styles', plugin_dir_url( __FILE__ ) . 'assets/css/bliskapaczka_admin.css', array(), 'v1', false );
-        wp_enqueue_style( 'bliskapaczka_admin_styles' );
-    }
-    add_action('admin_enqueue_scripts', 'bliskapaczka_admin_styles');
+
+	/**
+	 * Include custom CSS.
+	 */
+	function bliskapaczka_admin_styles() {
+		wp_register_style( 'bliskapaczka_admin_styles', plugin_dir_url( __FILE__ ) . 'assets/css/bliskapaczka_admin.css', array(), 'v1', false );
+		wp_enqueue_style( 'bliskapaczka_admin_styles' );
+	}
+	add_action( 'admin_enqueue_scripts', 'bliskapaczka_admin_styles' );
 
 	add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'plugin_action_links' );
 
