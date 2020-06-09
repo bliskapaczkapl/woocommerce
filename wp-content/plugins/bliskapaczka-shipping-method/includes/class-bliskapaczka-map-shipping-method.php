@@ -53,11 +53,15 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
                 'type'        => 'text',
                 'description' => __( 'Deliver name to be display on site', 'bliskapaczka-shipping-method' ),
                 'default'     => __( 'Delivery to point', 'bliskapaczka-shipping-method' ),
+                'custom_attributes' => array( 'required' => 'required' ),
+                'class' => 'bliskapaczka_admin_field_required',
             ),
             $helper::API_KEY                => array(
                 'title'       => __( 'API Key', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
                 'description' => __( 'The API key from www.bliskapaczka.pl panel', 'bliskapaczka-shipping-method' ),
+                'custom_attributes' => array( 'required' => 'required' ),
+                'class' => 'bliskapaczka_admin_field_required',
             ),
             $helper::AUTO_ADVICE            => array(
                 'title'       => __( 'Auto advice enabled', 'bliskapaczka-shipping-method' ),
@@ -74,6 +78,8 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
             $helper::GOOGLE_MAP_API_KEY     => array(
                 'title'       => __( 'Google Map API Key', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
+                'custom_attributes' => array( 'required' => 'required' ),
+                'class' => 'bliskapaczka_admin_field_required',
             ),
 			array(
 				'title' 	=> __( 'Dimensions and weight of the shipment', 'bliskapaczka-shipping-method' ),
@@ -83,21 +89,29 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
                 'title'       => __( 'Height', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
                 'description' => __( 'Enter the parcel height (cm)', 'bliskapaczka-shipping-method' ),
+                'custom_attributes' => array( 'required' => 'required' ),
+                'class' => 'bliskapaczka_admin_field_required',
             ),
             $helper::SIZE_TYPE_FIXED_SIZE_Y => array(
                 'title'       => __( 'Length', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
                 'description' => __( 'Enter the parcel length (cm)', 'bliskapaczka-shipping-method' ),
+                'custom_attributes' => array( 'required' => 'required' ),
+                'class' => 'bliskapaczka_admin_field_required',
             ),
             $helper::SIZE_TYPE_FIXED_SIZE_Z => array(
                 'title'       => __( 'Width', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
                 'description' => __( 'Enter the parcel width (cm)', 'bliskapaczka-shipping-method' ),
+                'custom_attributes' => array( 'required' => 'required' ),
+                'class' => 'bliskapaczka_admin_field_required',
             ),
             $helper::SIZE_TYPE_FIXED_SIZE_WEIGHT => array(
                 'title'       => __( 'Weight', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
                 'description' => __( 'Enter the parcel weight (kg)', 'bliskapaczka-shipping-method' ),
+                'custom_attributes' => array( 'required' => 'required' ),
+                'class' => 'bliskapaczka_admin_field_required',
             ),
 			array(
 				'title' 	=> __( 'Sender data', 'bliskapaczka-shipping-method' ),
@@ -106,26 +120,38 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
             $helper::SENDER_EMAIL           => array(
                 'title'       => __( 'Email', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
+                'custom_attributes' => array( 'required' => 'required' ),
+                'class' => 'bliskapaczka_admin_field_required',
             ),
             $helper::SENDER_FIRST_NAME      => array(
                 'title'       => __( 'First name', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
+                'custom_attributes' => array( 'required' => 'required' ),
+                'class' => 'bliskapaczka_admin_field_required',
             ),
             $helper::SENDER_LAST_NAME       => array(
                 'title'       => __( 'Last name', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
+                'custom_attributes' => array( 'required' => 'required' ),
+                'class' => 'bliskapaczka_admin_field_required',
             ),
             $helper::SENDER_PHONE_NUMBER    => array(
                 'title'       => __( 'Phone number', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
+                'custom_attributes' => array( 'required' => 'required' ),
+                'class' => 'bliskapaczka_admin_field_required',
             ),
             $helper::SENDER_STREET          => array(
                 'title'       => __( 'Street', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
+                'custom_attributes' => array( 'required' => 'required' ),
+                'class' => 'bliskapaczka_admin_field_required',
             ),
             $helper::SENDER_BUILDING_NUMBER => array(
                 'title'       => __( 'Building number', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
+                'custom_attributes' => array( 'required' => 'required' ),
+                'class' => 'bliskapaczka_admin_field_required',
             ),
             $helper::SENDER_FLAT_NUMBER     => array(
                 'title'       => __( 'Flat number', 'bliskapaczka-shipping-method' ),
@@ -134,14 +160,20 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
             $helper::SENDER_POST_CODE       => array(
                 'title'       => __( 'Zip', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
+                'custom_attributes' => array( 'required' => 'required' ),
+                'class' => 'bliskapaczka_admin_field_required',
             ),
             $helper::SENDER_CITY            => array(
                 'title'       => __( 'City', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
+                'custom_attributes' => array( 'required' => 'required' ),
+                'class' => 'bliskapaczka_admin_field_required',
             ),
 			$helper::BANK_ACCOUNT_NUMBER    => array(
                 'title'       => __( 'Bank account number', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
+                'custom_attributes' => array( 'required' => 'required' ),
+                'class' => 'bliskapaczka_admin_field_required',
             ),
         );
 
