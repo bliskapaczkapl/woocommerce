@@ -1,134 +1,36 @@
-# Copyright (C) 2017 Bliskapaczka.pl
-# This file is distributed under the same license as the Bliskapaczka.pl package.
+# Copyright (C) 2020 Bliskapaczka.pl
+# This file is distributed under the same license as the Bliskapaczka.pl plugin.
 msgid ""
 msgstr ""
 "Project-Id-Version: Bliskapaczka.pl 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bliskapaczka-"
-"shipping-method\n"
-"POT-Creation-Date: 2017-12-15 08:00:46+00:00\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bliskapaczka-shipping-method\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2020-06-08T20:53:21+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+"X-Domain: bliskapaczka-shipping-method\n"
 
-#: class-bliskapaczka-shipping-method.php:42
-#: class-bliskapaczka-shipping-method.php:53
-#: class-bliskapaczka-shipping-method.php:86
-msgid "Bliskapaczka Shipping"
+#. Plugin Name of the plugin
+msgid "Bliskapaczka.pl"
 msgstr ""
 
-#: class-bliskapaczka-shipping-method.php:43
-msgid "Custom Shipping Method for Bliskapaczka"
+#. Plugin URI of the plugin
+msgid "https://github.com/bliskapaczkapl/woocommerce"
 msgstr ""
 
-#: class-bliskapaczka-shipping-method.php:77
-msgid "Enable"
+#. Description of the plugin
+msgid "Bliskapaczka.pl Shipping Method for WooCommerce"
 msgstr ""
 
-#: class-bliskapaczka-shipping-method.php:79
-msgid "Włącz tę metodę wysyłki"
+#. Author of the plugin
+msgid "Mateusz Koszutowski"
 msgstr ""
 
-#: class-bliskapaczka-shipping-method.php:83
-msgid "Title"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:85
-msgid "Title to be display on site"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:89
-#: class-bliskapaczka-shipping-method.php:91
-#: class-bliskapaczka-shipping-method.php:102
-msgid "API Key"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:94
-#: class-bliskapaczka-shipping-method.php:96
-msgid "Test mode enabled"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:100
-msgid "Google Map API Key"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:105
-#: class-bliskapaczka-shipping-method.php:107
-#: class-bliskapaczka-shipping-method.php:112
-#: class-bliskapaczka-shipping-method.php:117
-msgid "Fixed parcel type size X (cm)"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:110
-msgid "Fixed parcel type size Y (cm)"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:115
-msgid "Fixed parcel type size Z (cm)"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:120
-#: class-bliskapaczka-shipping-method.php:122
-msgid "Fixed parcel type weight (kg)"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:125
-#: class-bliskapaczka-shipping-method.php:127
-msgid "Sender email"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:130
-#: class-bliskapaczka-shipping-method.php:132
-msgid "Sender first name"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:135
-#: class-bliskapaczka-shipping-method.php:137
-msgid "Sender last name"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:140
-#: class-bliskapaczka-shipping-method.php:142
-msgid "Sender phone number"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:145
-#: class-bliskapaczka-shipping-method.php:147
-msgid "Sender street"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:150
-#: class-bliskapaczka-shipping-method.php:152
-msgid "Sender building number"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:155
-#: class-bliskapaczka-shipping-method.php:157
-msgid "Sender flat number"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:160
-#: class-bliskapaczka-shipping-method.php:162
-msgid "Sender post code"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:165
-#: class-bliskapaczka-shipping-method.php:167
-msgid "Sender city"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:200
-#: class-bliskapaczka-shipping-method.php:357
-msgid "Bliskapaczka, od"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:245
-msgid "Select delivery point"
-msgstr ""
-
-#: class-bliskapaczka-shipping-method.php:250
+#: class-bliskapaczka-shipping-method.php:226
 msgid "Selected Point"
 msgstr ""
 
@@ -137,26 +39,169 @@ msgstr ""
 msgid "POS Code"
 msgstr ""
 
-#: class-bliskapaczka-shipping-method.php:390
+#: class-bliskapaczka-shipping-method.php:418
 msgid "View Bliskapaczka Settings"
 msgstr ""
 
-#: class-bliskapaczka-shipping-method.php:390
-msgid "Settings"
+#: includes/class-bliskapaczka-courier-shipping-method.php:8
+msgid "Bliskapaczka Courier Shipping"
 msgstr ""
 
-#. Plugin Name of the plugin/theme
-msgid "Bliskapaczka.pl"
+#: includes/class-bliskapaczka-courier-shipping-method.php:9
+msgid "Custom Coureir Shipping Method for Bliskapaczka"
 msgstr ""
 
-#. Plugin URI of the plugin/theme
-msgid "https://github.com/bliskapaczkapl/woocommerce"
+#: includes/class-bliskapaczka-courier-shipping-method.php:19
+#: includes/class-bliskapaczka-map-shipping-method.php:11
+#: includes/class-bliskapaczka-map-shipping-method.php:22
+msgid "Bliskapaczka Shipping"
 msgstr ""
 
-#. Description of the plugin/theme
-msgid "Bliskapaczka.pl Shipping Method for WooCommerce"
+#: includes/class-bliskapaczka-courier-shipping-method.php:39
+#: includes/class-bliskapaczka-map-shipping-method.php:46
+msgid "Enable"
 msgstr ""
 
-#. Author of the plugin/theme
-msgid "Mateusz Koszutowski"
+#: includes/class-bliskapaczka-courier-shipping-method.php:41
+#: includes/class-bliskapaczka-map-shipping-method.php:48
+msgid "Enable this shipping method"
+msgstr ""
+
+#: includes/class-bliskapaczka-courier-shipping-method.php:45
+msgid "Title"
+msgstr ""
+
+#: includes/class-bliskapaczka-courier-shipping-method.php:47
+msgid "Title to be display on site"
+msgstr ""
+
+#: includes/class-bliskapaczka-courier-shipping-method.php:48
+#: includes/class-bliskapaczka-courier-shipping-method.php:71
+msgid "Delivery to the door"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:12
+msgid "Custom Shipping Method for Bliskapaczka"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:52
+msgid "Delivery name"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:54
+msgid "Deliver name to be display on site"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:55
+#: includes/class-bliskapaczka-map-shipping-method.php:167
+msgid "Delivery to point"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:58
+#: includes/class-bliskapaczka-map-shipping-method.php:77
+msgid "API Key"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:60
+msgid "The API key from www.bliskapaczka.pl panel"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:63
+msgid "Auto advice enabled"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:65
+msgid "Sending the order to the service Bliskapaczka.pl, where the status \"Ready to send\" will be automatically set"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:69
+msgid "Test mode enabled"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:71
+msgid "Required to connect with www.sandbox-bliskapaczka.pl"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:75
+msgid "Google Map API Key"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:80
+msgid "Dimensions and weight of the shipment"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:84
+msgid "Height"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:86
+msgid "Enter the parcel height (cm)"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:89
+msgid "Length"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:91
+msgid "Enter the parcel length (cm)"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:94
+msgid "Width"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:96
+msgid "Enter the parcel width (cm)"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:99
+msgid "Weight"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:101
+msgid "Enter the parcel weight (kg)"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:104
+msgid "Sender data"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:108
+msgid "Email"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:112
+msgid "First name"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:116
+msgid "Last name"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:120
+msgid "Phone number"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:124
+msgid "Street"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:128
+msgid "Building number"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:132
+msgid "Flat number"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:136
+msgid "Zip"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:140
+msgid "City"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:144
+msgid "Bank account number"
 msgstr ""
