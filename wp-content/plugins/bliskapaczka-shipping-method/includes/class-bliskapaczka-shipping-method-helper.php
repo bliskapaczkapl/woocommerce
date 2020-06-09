@@ -204,7 +204,7 @@ class Bliskapaczka_Shipping_Method_Helper
      *
      * @param bool $is_cod
      *
-     * @return array
+     * @return string|null
      */
     public function getOperatorsForWidget($cart_total, $priceList = null, $is_cod = false)
     {
