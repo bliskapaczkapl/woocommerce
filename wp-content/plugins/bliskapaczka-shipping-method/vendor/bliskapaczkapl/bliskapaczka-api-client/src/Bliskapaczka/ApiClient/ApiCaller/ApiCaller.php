@@ -25,7 +25,7 @@ class ApiCaller
      */
     public function __construct(Logger $logger = null)
     {
-        $this->logger = $logger;
+        $this->logger = new \WC_Logger();
     }
 
     /**
@@ -34,6 +34,7 @@ class ApiCaller
      */
     public function doCall(array $options)
     {
+        $this->logger->debug(json_encode($options));
         $curl = curl_init();
 
         $options[CURLOPT_RETURNTRANSFER] = 1;

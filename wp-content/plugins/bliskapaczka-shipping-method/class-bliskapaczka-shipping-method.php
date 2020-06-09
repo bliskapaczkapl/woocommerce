@@ -355,6 +355,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					$pickup_api_client->setOrderId( json_decode( $result, true )['number'] );
 					$pickup_api_client->create( $mapper->prepareDataForPickup( $order_data, json_decode( $result, true )['number'] ) );
 				}
+				$order->update_meta_data('_bliskapaczka_order_id', json_decode( $result, true )['number']);
+				$order->update_meta_data('_need_to_pickup', true);
+				$order->save();
 			} catch ( Exception $e ) {
 				$logger->error( $e->getMessage() );
 				throw new Exception( $e->getMessage(), 1 );
@@ -380,6 +383,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$advice_api_client->setOrderId( json_decode( $result, true )['number'] );
 				$advice_api_client->create( $order_data );
 			}
+            $order->update_meta_data('_bliskapaczka_order_id', json_decode( $result, true )['number']);
+            $order->update_meta_data('_need_to_pickup', false);
+            $order->save();
 			WC()->session->set( 'bliskapaczka_posCode', '' );
 			WC()->session->set( 'bliskapaczka_posOperator', '' );
 		} catch ( Exception $e ) {
@@ -558,4 +564,97 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		}
 		return $price;
 	}
+    add_action( 'pickup', 'bliskapaczka_pickup', 10, 3 );
+
+	function bliskapaczka_pickup()
+    {
+        $q = new WC_Order_Query(array('_need_to_pickup' => 1));
+        $bliskapaczka       = new Bliskapaczka_Map_Shipping_Method();
+		$helper             = new Bliskapaczka_Shipping_Method_Helper();
+		$api = $helper->getApiClientPickup($bliskapaczka);
+		$orderIds = array();
+        foreach ($q->get_orders() as $order)
+        {
+            $number = $order->get_meta('_bliskapaczka_order_id');
+            if (!empty($number)) {
+                $orderIds[] =$number;
+            }
+            $order->update_meta_data('_need_to_pickup', false);
+            $order->save();
+
+        }
+
+        $params = array(
+          'orderNumbers' => $orderIds,
+            'pickupWindow' => array(
+                'date' => (new \DateTime())->format(),
+                'timeRange' => array(
+                    'from' => '13:00',
+                    'to' => '16:00'
+                ),
+                'pickupAddress' => array(
+                    'street' => $bliskapaczka->settings[$helper::SENDER_STREET],
+                    'buildingNumber' => $bliskapaczka->settings[$helper::SENDER_BUILDING_NUMBER],
+                    'flatNumber' => $bliskapaczka->settings[$helper::SENDER_FLAT_NUMBER],
+                    'city' => $bliskapaczka->settings[$helper::SENDER_CITY],
+                    'postCode' => $bliskapaczka->settings[$helper::SENDER_POST_CODE]
+                )
+            )
+        );
+        var_dump($api->create($params));
+        die();
+    }
+
+	/**
+	 * Handle a custom 'customvar' query var to get orders with the 'customvar' meta.
+	 *
+	 * @param array $query - Args for WP_Query.
+	 * @param array $query_vars - Query vars from WC_Order_Query.
+	 * @return array modified $query
+	 */
+	function handle_custom_query_var( $query, $query_vars ) {
+		if ( ! empty( $query_vars['_need_to_pickup'] ) ) {
+			$query['meta_query'][] = array(
+				'key'   => '_need_to_pickup',
+				'value' => esc_attr( $query_vars['_need_to_pickup'] ),
+			);
+		}
+
+		return $query;
+	}
+	add_filter( 'woocommerce_order_data_store_cpt_get_orders_query', 'handle_custom_query_var', 10, 2 );
+
+	/**
+	 * Handle a switch courier on the cart page.
+	 *
+	 * It's a hook for remember selected courier on a cart page.
+	 */
+	function bliskapaczka_wc_cart_switch_courier() {
+
+		// Check nonce, will die if it's bad.
+		check_ajax_referer( Bliskapaczka_Shipping_Method_Helper::getAjaxNonce(), 'security' );
+
+		$req_key = 'bliskapaczka_posOperator';
+
+		if ( isset( $_POST[ $req_key ] ) && ! empty( $_POST[ $req_key ] ) ) {
+			$pos_operator = esc_html( sanitize_text_field( wp_unslash( $_POST[ $req_key ] ) ) );
+
+			// @TODO verify its a courier allowed.
+			WC()->session->set( 'bliskapaczka_posoperator', $pos_operator );
+
+			WC()->cart->calculate_totals();
+		}
+
+		ob_start();
+			wc_cart_totals_order_total_html();
+			$content = ob_get_contents();
+		ob_end_clean();
+
+		echo wp_json_encode( array( 'order_total_html' => $content ) );
+		wp_die();
+	}
+
+	add_action( 'wp_ajax_bliskapaczka_wc_cart_switch_courier', 'bliskapaczka_wc_cart_switch_courier' );
+	add_action( 'wp_ajax_nopriv_bliskapaczka_wc_cart_switch_courier', 'bliskapaczka_wc_cart_switch_courier' );
+
 }
