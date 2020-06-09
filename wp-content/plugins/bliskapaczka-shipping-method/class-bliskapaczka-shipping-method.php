@@ -355,8 +355,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					$pickup_api_client->setOrderId( json_decode( $result, true )['number'] );
 					$pickup_api_client->create( $mapper->prepareDataForPickup( $order_data, json_decode( $result, true )['number'] ) );
 				}
-				$order->update_meta_data('_bliskapaczka_order_id', json_decode( $result, true )['number']);
-				$order->update_meta_data('_need_to_pickup', true);
+				$order->update_meta_data( '_bliskapaczka_order_id', json_decode( $result, true )['number'] );
+				$order->update_meta_data( '_need_to_pickup', true );
 				$order->save();
 			} catch ( Exception $e ) {
 				$logger->error( $e->getMessage() );
@@ -383,9 +383,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$advice_api_client->setOrderId( json_decode( $result, true )['number'] );
 				$advice_api_client->create( $order_data );
 			}
-            $order->update_meta_data('_bliskapaczka_order_id', json_decode( $result, true )['number']);
-            $order->update_meta_data('_need_to_pickup', false);
-            $order->save();
+			$order->update_meta_data( '_bliskapaczka_order_id', json_decode( $result, true )['number'] );
+			$order->update_meta_data( '_need_to_pickup', false );
+			$order->save();
 			WC()->session->set( 'bliskapaczka_posCode', '' );
 			WC()->session->set( 'bliskapaczka_posOperator', '' );
 		} catch ( Exception $e ) {
@@ -564,46 +564,46 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		}
 		return $price;
 	}
-    add_action( 'pickup', 'bliskapaczka_pickup', 10, 3 );
+	add_action( 'pickup', 'bliskapaczka_pickup', 10, 3 );
 
-	function bliskapaczka_pickup()
-    {
-        $q = new WC_Order_Query(array('_need_to_pickup' => 1));
-        $bliskapaczka       = new Bliskapaczka_Map_Shipping_Method();
-		$helper             = new Bliskapaczka_Shipping_Method_Helper();
-		$api = $helper->getApiClientPickup($bliskapaczka);
-		$orderIds = array();
-        foreach ($q->get_orders() as $order)
-        {
-            $number = $order->get_meta('_bliskapaczka_order_id');
-            if (!empty($number)) {
-                $orderIds[] =$number;
-            }
-            $order->update_meta_data('_need_to_pickup', false);
-            $order->save();
+	/**
+	 * Send request about pickup
+	 */
+	function bliskapaczka_pickup() {
+		$q            = new WC_Order_Query( array( '_need_to_pickup' => 1 ) );
+		$bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
+		$helper       = new Bliskapaczka_Shipping_Method_Helper();
+		$api          = $helper->getApiClientPickup( $bliskapaczka );
+		$order_ids    = array();
+		foreach ( $q->get_orders() as $order ) {
+			$number = $order->get_meta( '_bliskapaczka_order_id' );
+			if ( ! empty( $number ) ) {
+				$order_ids[] = $number;
+			}
+			$order->update_meta_data( '_need_to_pickup', false );
+			$order->save();
 
-        }
+		}
 
-        $params = array(
-          'orderNumbers' => $orderIds,
-            'pickupWindow' => array(
-                'date' => (new \DateTime())->format(),
-                'timeRange' => array(
-                    'from' => '13:00',
-                    'to' => '16:00'
-                ),
-                'pickupAddress' => array(
-                    'street' => $bliskapaczka->settings[$helper::SENDER_STREET],
-                    'buildingNumber' => $bliskapaczka->settings[$helper::SENDER_BUILDING_NUMBER],
-                    'flatNumber' => $bliskapaczka->settings[$helper::SENDER_FLAT_NUMBER],
-                    'city' => $bliskapaczka->settings[$helper::SENDER_CITY],
-                    'postCode' => $bliskapaczka->settings[$helper::SENDER_POST_CODE]
-                )
-            )
-        );
-        var_dump($api->create($params));
-        die();
-    }
+		$params = array(
+			'orderNumbers' => $order_ids,
+			'pickupWindow' => array(
+				'date'          => ( new \DateTime() )->format(),
+				'timeRange'     => array(
+					'from' => '13:00',
+					'to'   => '16:00',
+				),
+				'pickupAddress' => array(
+					'street'         => $bliskapaczka->settings[ $helper::SENDER_STREET ],
+					'buildingNumber' => $bliskapaczka->settings[ $helper::SENDER_BUILDING_NUMBER ],
+					'flatNumber'     => $bliskapaczka->settings[ $helper::SENDER_FLAT_NUMBER ],
+					'city'           => $bliskapaczka->settings[ $helper::SENDER_CITY ],
+					'postCode'       => $bliskapaczka->settings[ $helper::SENDER_POST_CODE ],
+				),
+			),
+		);
+
+	}
 
 	/**
 	 * Handle a custom 'customvar' query var to get orders with the 'customvar' meta.
