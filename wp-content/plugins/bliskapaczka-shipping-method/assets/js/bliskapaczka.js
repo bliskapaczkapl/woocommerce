@@ -3,30 +3,29 @@ function Bliskapaczka()
 }
 
 Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly = false) {
+
+    if (!!event.pageX === false) {
+    return false;
+    }
     bpWidget = document.getElementById('bpWidget');
-    bpWidget.style.display = 'block';
-    var modal = document.getElementById("myModal");
 
-    var btn = document.getElementById("myBtn");
-
-    var span = document.getElementsByClassName("close")[0];
-
-    btn.onclick = function() {
-        modal.style.display = "block";
+    myModal = document.getElementById('myModal');
+    if (window.location.href.search('sandbox') !== -1) {
+        bpWidget.classList.add('modal-content');
+        bpWidget.style.display = 'block';
+        myModal.classList.add('modal');
+        myModal.style.display = 'block';
+    } else {
+        bpWidget.classList.remove('modal-content');
+        myModal.classList.remove('modal');
+        bpWidget.style.height = '600px';
     }
 
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
 
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
     if (jQuery('#bliskapaczka_posCode').attr('value') === "") {
         jQuery('#bliskapaczka_posOperator').attr('value', "")
     }
+
     jQuery('input[value="bliskapaczka"]').trigger('click');
     Bliskapaczka.updateSelectedCarrier();
     BPWidget.init(
@@ -114,7 +113,44 @@ Bliskapaczka.checkFirstCourier = function() {
         }
     }
 }
+/**
+ * Show loader spinner on element.
+ * 
+ * ex. Bliskapaczka.loadBlock('div.my_class');
+ * 
+ * @param {String} selector jQuery element selector string 
+ */
+Bliskapaczka.loadBlock = function( selector ) {
+	jQuery( selector ).addClass( 'processing' ).block( {
+		message: null,
+		overlayCSS: {
+			background: '#fff',
+			opacity: 0.6
+		}
+	});
+}
+
+/**
+ * Hide loader spinner on element
+ * 
+ * ex. Bliskapaczka.loadUnblock('div.my_class');
+ * 
+ * @param {String} selector jQuery element selector 
+ */
+Bliskapaczka.loadUnblock = function( selector ) {
+	jQuery( selector ).removeClass( 'processing' ).unblock();
+};
+
 document.addEventListener("DOMContentLoaded", function () {
+    if (window.location.href.search('sandbox') !== -1) {
+        jQuery('#myModal').on('click', function (event) {
+            if ((jQuery(event.target).children().hasClass('modal-content')) || event.target.className === 'modal') {
+                jQuery(this).hide();
+            }
+
+        })
+    }
+
     jQuery('form.checkout').on('change', 'input[name="payment_method"]', function(){
         jQuery(document.body).trigger("update_checkout");
 
@@ -126,6 +162,43 @@ document.addEventListener("DOMContentLoaded", function () {
             eval(arguments);
         }
     });
+  
+    /**
+     * Remember choosed courier and show new total order price on cart page
+     */
+    jQuery('body.woocommerce-cart').on('click', '.bliskapaczka_courier_item_wrapper', function () {
+    	
+    	 // loader
+    	 Bliskapaczka.loadBlock('div.cart_totals');
+    	
+    	 const previousCourier =  jQuery('.bliskapaczka_courier_item_wrapper .checked').attr('data-operator');
+    	 const currentCourier = jQuery(this).attr('data-operator');
+    	 jQuery('.bliskapaczka_courier_item_wrapper').removeClass('checked');
+    	 jQuery('input[value="bliskapaczka-courier"]').trigger('click');
+    	 
+    	 // if data no changed then return
+    	 if (previousCourier === currentCourier) {
+    		 Bliskapaczka.loadUnblock('div.cart_totals');
+    		 return;
+    	 }
+    	 
+    	 // remember selected courier
+    	 var data = {
+	        action: 'bliskapaczka_wc_cart_switch_courier', //the function in php functions to call
+	        bliskapaczka_posOperator: currentCourier,
+	        security: BliskapaczkaAjax.security
+    	 };
+    	 
+    	 jQuery
+	    	 .post(BliskapaczkaAjax.ajax_url, data, function( response ) {
+	    		 if (typeof response !== 'undefined' && response.order_total_html !== 'undefined') {
+	    			 jQuery( '.cart_totals .order-total td' ).html( response.order_total_html );
+	    		 }
+	    	 }, 'json')
+	    	 .always(function() {
+	    		 Bliskapaczka.loadUnblock('div.cart_totals');
+	    	 });
+    });
 
     jQuery('body').on('click', '.bliskapaczka_courier_item_wrapper', function () {
         jQuery('.bliskapaczka_courier_item_wrapper').removeClass('checked');
@@ -135,4 +208,6 @@ document.addEventListener("DOMContentLoaded", function () {
         jQuery('input[value="bliskapaczka-courier"]').trigger('click');
         jQuery(document.body).trigger("update_checkout");
     })
+
 });
+

@@ -46,7 +46,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 *
 	 * @param array $methods List of shipping methods.
 	 */
-	function add_bliskapaczka_shipping_method( $methods ) {
+	function bliskapaczka_add_bliskapaczka_shipping_method( $methods ) {
 		if ( is_admin() !== false ) {
 			$methods[] = 'Bliskapaczka_Map_Shipping_Method';
 			return $methods;
@@ -73,7 +73,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 *
 	 * @param array $methods List of shipping methods.
 	 */
-	function add_bliskapaczka_courier_shipping_method( $methods ) {
+	function bliskapaczka_add_bliskapaczka_courier_shipping_method( $methods ) {
 		if ( is_admin() !== false ) {
 			$methods[] = 'Bliskapaczka_Courier_Shipping_Method';
 			return $methods;
@@ -97,19 +97,20 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		return $methods;
 	}
 
-	add_filter( 'woocommerce_shipping_methods', 'add_bliskapaczka_courier_shipping_method' );
+	add_filter( 'woocommerce_shipping_methods', 'bliskapaczka_add_bliskapaczka_courier_shipping_method' );
 
 	/**
 	 * Add link for select parcel point displayed on checkout page.
 	 *
 	 * @param Bliskapaczka_Shipping_Courier_Method $method Bliskapaczka Courier Shipping method.
 	 */
-	function show_table( $method ) {
+	function bliskapaczka_show_table( $method ) {
 		if ( 'bliskapaczka-courier' === $method->id ) {
 
 			$payment_method         = WC()->session->get( 'chosen_payment_method' );
 			$chosen_shipping_method = WC()->session->get( 'chosen_shipping_methods' )[0];
 			$reset_selection        = false;
+
 			if ( 'bliskapaczka' === $chosen_shipping_method ) {
 				$reset_selection = true;
 			}
@@ -117,6 +118,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			if ( 'cod' === $payment_method ) {
 				$cod_only = true;
 			}
+			// On the cart page, we must show prices without COD (the smallest price). See JIRA WIW-222.
+			if ( true === is_cart() ) {
+				$cod_only = false;
+			}
+
 			$helper     = new Bliskapaczka_Shipping_Method_Helper();
 			$price_list = $helper->getPriceListForCourier(
 				WC()->cart->get_cart_contents_total(),
@@ -158,13 +164,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			}
 		}
 	}
-	add_action( 'woocommerce_after_shipping_rate', 'show_table' );
+	add_action( 'woocommerce_after_shipping_rate', 'bliskapaczka_show_table' );
 	/**
 	 * Add link for select parcel point displayed on checkout page.
 	 *
 	 * @param Bliskapaczka_Shipping_Method $method Bliskapaczka Shipping method.
 	 */
-	function show_map_anchorn( $method ) {
+	function bliskapaczka_show_map_anchorn( $method ) {
 		$helper = new Bliskapaczka_Shipping_Method_Helper();
 
 		$bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
@@ -238,18 +244,26 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 *
 	 * @param mixed $checkout Some data.
 	 */
-	function add_widget_div( $checkout ) {
-		echo '<div id="myModal" class="modal">';
-		echo '<div class="modal-content">';
-		echo '<span class="close">×</span>';
-		echo '<div style="" >';
-		echo '<div id="bpWidget_wrapper">';
-		echo "<a name='bpWidget_wrapper'><a/>";
-		echo '<div id="bpWidget" style="height: 600px; display: none;"></div>';
-		echo '</div>';
-		echo '</div>';
-		echo '</div>';
-		echo '</div>';
+	function bliskapaczka_add_widget_div( $checkout ) {
+
+		$class_modal  = 'class="modal"';
+		$class_widget = 'class="modal-content"';
+        // @codingStandardsIgnoreStart
+        if ( false === strpos( $_SERVER['HTTP_HOST'], 'bliskapaczka' )) {
+            $class_modal  = '';
+            $class_widget = '';
+        }
+
+        echo '<div id="myModal" ' . $class_modal . '>';
+        echo '<div id="myModal" >';
+        echo '<div id="bpWidget_wrapper">';
+        echo "<a name='bpWidget_wrapper'><a/>";
+        echo '<div id="bpWidget" ' . $class_widget . '></div>';
+        echo '<div id="bpWidget" ></div>';
+        echo '</div>';
+        echo '</div>';
+        // @codingStandardsIgnoreEnd
+
 	}
 
 	/**
@@ -257,7 +271,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 *
 	 * @param array $fields Checkput fields list.
 	 */
-	function custom_override_checkout_fields( $fields ) {
+	function bliskapaczka_override_checkout_fields( $fields ) {
 		$fields['bliskapaczka'] = array(
 			'bliskapaczka_posCode'     => array(
 				'label' => __( 'POS Code', 'bliskapaczka-shipping-method' ),
@@ -276,7 +290,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 *
 	 * @param mixed $packages Some data.
 	 */
-	function update_price_for_chosen_carrier( $packages ) {
+	function bliskapaczka_update_price_for_chosen_carrier( $packages ) {
+
+		$checkout_data = [];
 
 		// @codingStandardsIgnoreStart
 		if ( isset( $_POST['post_data'] ) ) {
@@ -310,7 +326,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * @param int $order_id Order ID.
 	 * @throws Exception If can't send data to bliskapaczka.
 	 */
-	function create_order_via_api( $order_id ) {
+	function bliskapaczka_create_order_via_api( $order_id ) {
 		$logger = new WC_Logger();
 		if ( 0 < $order_id ) {
 			$order = wc_get_order( $order_id );
@@ -336,7 +352,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		$shipping_method    = array_shift( $order->get_shipping_methods() );
 		$shipping_method_id = $shipping_method['method_id'];
 		$mapper             = new Bliskapaczka_Shipping_Method_Mapper();
-		$pickup_api_client  = $helper->getApiClientPickup( $bliskapaczka );
 		if ( 'bliskapaczka-courier' === $shipping_method_id ) {
 			$order_data = $mapper->getDataForCourier( $order, $helper, $bliskapaczka->settings );
 
@@ -352,8 +367,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					$advice_api_client = $helper->getApiClientTodoorAdvice( $bliskapaczka );
 					$advice_api_client->setOrderId( json_decode( $result, true )['number'] );
 					$advice_api_client->create( $order_data );
-					$pickup_api_client->setOrderId( json_decode( $result, true )['number'] );
-					$pickup_api_client->create( $mapper->prepareDataForPickup( $order_data, json_decode( $result, true )['number'] ) );
 				}
 				$order->update_meta_data( '_bliskapaczka_order_id', json_decode( $result, true )['number'] );
 				$order->update_meta_data( '_need_to_pickup', true );
@@ -399,7 +412,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 *
 	 * @param array $links Links list.
 	 */
-	function plugin_action_links( $links ) {
+	function bliskapaczka_plugin_action_links( $links ) {
 		$action_links = array(
 			'settings' => '<a href="' . admin_url( 'admin.php?page=wc-settings&tab=shipping&section=bliskapaczka' ) .
 				'" title="' . esc_attr( __( 'View Bliskapaczka Settings', 'bliskapaczka-shipping-method' ) ) . '">' . __( 'Settings', 'bliskapaczka' ) . '</a>',
@@ -411,7 +424,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	/**
 	 * Include JS.
 	 */
-	function add_scripts_and_scripts() {
+	function bliskapaczka_add_scripts_and_scripts() {
 
 		wp_register_script( 'widget-script', 'https://widget.bliskapaczka.pl/v5/main.js', array(), 'v5', false );
 		wp_enqueue_script( 'widget-script' );
@@ -423,27 +436,33 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 		wp_register_script( 'plugin-script', plugin_dir_url( __FILE__ ) . 'assets/js/bliskapaczka.js', array(), 'v5', false );
 		wp_enqueue_script( 'plugin-script' );
+		wp_localize_script(
+			'plugin-script',
+			'BliskapaczkaAjax',
+			array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'security' => wp_create_nonce( Bliskapaczka_Shipping_Method_Helper::getAjaxNonce() ),
+			)
+		);
 	}
 
+	add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'bliskapaczka_plugin_action_links' );
 
-	add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'plugin_action_links' );
+	add_filter( 'woocommerce_shipping_packages', 'bliskapaczka_update_price_for_chosen_carrier' );
 
-	add_filter( 'woocommerce_shipping_packages', 'update_price_for_chosen_carrier' );
+	add_action( 'wp_enqueue_scripts', 'bliskapaczka_add_scripts_and_scripts' );
 
-	add_action( 'wp_enqueue_scripts', 'add_scripts_and_scripts' );
+	add_filter( 'woocommerce_shipping_methods', 'bliskapaczka_add_bliskapaczka_shipping_method' );
+	add_action( 'woocommerce_after_shipping_rate', 'bliskapaczka_show_map_anchorn' );
+	add_action( 'woocommerce_after_checkout_form', 'bliskapaczka_add_widget_div' );
 
-	add_filter( 'woocommerce_shipping_methods', 'add_bliskapaczka_shipping_method' );
-	add_action( 'woocommerce_after_shipping_rate', 'show_map_anchorn' );
-	add_action( 'woocommerce_after_checkout_form', 'add_widget_div' );
+	add_action( 'woocommerce_checkout_update_order_meta', 'bliskapaczka_create_order_via_api' );
 
-	add_action( 'woocommerce_checkout_update_order_meta', 'create_order_via_api' );
+	add_filter( 'woocommerce_checkout_fields', 'bliskapaczka_override_checkout_fields' );
 
-	add_filter( 'woocommerce_checkout_fields', 'custom_override_checkout_fields' );
-
-
-	add_action( 'woocommerce_calculate_totals', 'set_shipping_cost', 10 );
-	add_filter( 'woocommerce_order_button_html', 'disabled_checkout_button' );
-	add_filter( 'woocommerce_add_error', 'my_woocommerce_add_error' );
+	add_action( 'woocommerce_calculate_totals', 'bliskapaczka_set_shipping_cost', 10 );
+	add_filter( 'woocommerce_order_button_html', 'bliskapaczka_disabled_checkout_button' );
+	add_filter( 'woocommerce_add_error', 'bliskapaczka_woocommerce_add_error' );
 
 	/**
 	 * Display polish error.
@@ -452,10 +471,15 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 *
 	 * @return string
 	 */
-	function my_woocommerce_add_error( $error ) {
+	function bliskapaczka_woocommerce_add_error( $error ) {
+        // @codingStandardsIgnoreStart
+		if ( false === strpos( $_SERVER['HTTP_HOST'], 'bliskapaczka' ) ) {
+			return $error;
+		}
+        // @codingStandardsIgnoreEnd
 		$logger = new WC_Logger();
 		$logger->error( $error );
-		return 'Wystąpił błąd w prztwarzaniu zamówienia. Jeśli bład będzie się powtarzał,
+		return 'Wystąpił błąd w przetwarzaniu zamówienia. Jeśli błąd będzie się powtarzał,
 		prosimy o kontakt.';
 	}
 
@@ -466,7 +490,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 *
 	 * @return string
 	 */
-	function disabled_checkout_button( $button_html ) {
+	function bliskapaczka_disabled_checkout_button( $button_html ) {
 
 		$chosen_shipping_method = WC()->session->get( 'chosen_shipping_methods' )[0];
 		$pos_code               = WC()->session->get( 'bliskapaczka_posCode' );
@@ -502,13 +526,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 *
 	 * @param mixed $cart Cart from Woocommerce.
 	 */
-	function set_shipping_cost( $cart ) {
-		$price          = get_price();
+	function bliskapaczka_set_shipping_cost( $cart ) {
+		$price          = bliskapaczka_get_price();
 		$shipping_total = $cart->get_shipping_total();
 		$cart->set_shipping_total( $shipping_total + $price );
 	}
 
-		add_filter( 'woocommerce_calculated_total', 'custom_calculated_total', 10, 2 );
+		add_filter( 'woocommerce_calculated_total', 'bliskapaczka_calculated_total', 10, 2 );
 
 	/**
 	 * Recalculate total price
@@ -518,9 +542,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 *
 	 * @return int
 	 */
-	function custom_calculated_total( $total, $cart ) {
+	function bliskapaczka_calculated_total( $total, $cart ) {
 
-		return $total + get_price();
+		return $total + bliskapaczka_get_price();
 	}
 
 	/**
@@ -528,15 +552,21 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 *
 	 * @return int
 	 */
-	function get_price() {
+	function bliskapaczka_get_price() {
 		$price                 = 0;
 		$chosen_methods        = WC()->session->get( 'chosen_shipping_methods' );
 		$chosen_method         = $chosen_methods[0];
 		$chosen_payment_method = WC()->session->get( 'chosen_payment_method' );
 		// @codingStandardsIgnoreStart
-		parse_str( $_POST['post_data'], $post_data );
-		$pos_operator = $post_data['bliskapaczka_posOperator'];
-		$pos_code     = $post_data['bliskapaczka_posCode'];
+		$pos_operator = $pos_code = null;
+
+		if (isset($_POST['post_data'])) {
+			$post_data = array();
+			parse_str( $_POST['post_data'], $post_data );
+			$pos_operator = $post_data['bliskapaczka_posOperator'];
+			$pos_code     = $post_data['bliskapaczka_posCode'];
+		}
+		
 		// @codingStandardsIgnoreEnd
 		if ( 'bliskapaczka-courier' === $chosen_method ) {
 			$method = new Bliskapaczka_Courier_Shipping_Method();
@@ -564,6 +594,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		}
 		return $price;
 	}
+
 	add_action( 'pickup', 'bliskapaczka_pickup', 10, 3 );
 
 	/**
@@ -612,7 +643,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * @param array $query_vars - Query vars from WC_Order_Query.
 	 * @return array modified $query
 	 */
-	function handle_custom_query_var( $query, $query_vars ) {
+	function bliskapaczka_handle_custom_query_var( $query, $query_vars ) {
 		if ( ! empty( $query_vars['_need_to_pickup'] ) ) {
 			$query['meta_query'][] = array(
 				'key'   => '_need_to_pickup',
@@ -622,7 +653,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 		return $query;
 	}
-	add_filter( 'woocommerce_order_data_store_cpt_get_orders_query', 'handle_custom_query_var', 10, 2 );
+	add_filter( 'woocommerce_order_data_store_cpt_get_orders_query', 'bliskapaczka_handle_custom_query_var', 10, 2 );
 
 	/**
 	 * Handle a switch courier on the cart page.

@@ -38,14 +38,14 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Map_Shipping_Met
             'courier_enabled' => array(
                 'title'       => __( 'Enable', 'bliskapaczka-shipping-method' ),
                 'type'        => 'checkbox',
-                'description' => __( 'Włącz tę metodę wysyłki', 'bliskapaczka-shipping-method' ),
+                'description' => __( 'Enable this shipping method', 'bliskapaczka-shipping-method' ),
                 'default'     => 'yes',
             ),
             $helper::TITLE_COURIER => array(
                 'title'       => __( 'Title', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
                 'description' => __( 'Title to be display on site', 'bliskapaczka-shipping-method' ),
-                'default'     => __( 'Dostawa do drzwi', 'bliskapaczka-shipping-method' ),
+                'default'     => __( 'Delivery to the door', 'bliskapaczka-shipping-method' ),
             ),
 
         );
@@ -68,7 +68,7 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Map_Shipping_Met
 
         $label = $bliskapaczka->settings[$helper::TITLE_COURIER];
         if (empty($label)) {
-            $label = __( 'Dostawa do drzwi', 'bliskapaczka-shipping-method' );
+            $label = __( 'Delivery to the door', 'bliskapaczka-shipping-method' );
         }
         $rate = array(
             'id'       => $this->id,
@@ -100,6 +100,7 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Map_Shipping_Met
         foreach ($price_list as $item) {
             if ($item->operator === $operator_name) {
                 $price = $item->price->gross;
+                break;
             }
         }
 

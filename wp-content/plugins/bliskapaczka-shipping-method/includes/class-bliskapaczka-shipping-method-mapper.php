@@ -82,9 +82,18 @@ class Bliskapaczka_Shipping_Method_Mapper
     protected function _prepareDestinationData($data, WC_Order $order)
     {
         $shippingAddress = $order->get_address('shipping');
-        $data['receiverStreet'] = $shippingAddress['address_1'];
-        $data['receiverBuildingNumber'] = $this->getBuildingNumber($shippingAddress['address_2']);
-        $data['receiverFlatNumber'] = $this->getFlatNumber($shippingAddress['address_2']);
+        if (!empty($shippingAddress['address_2'])) {
+            $buildingNumber = explode('/', $shippingAddress['address_2'])[0];
+            $flatNumber = explode('/', $shippingAddress['address_2'])[1];
+            $street = $shippingAddress['address_1'];
+        } else {
+            $buildingNumber = $this->getBuildingNumber($shippingAddress['address_1']);
+            $flatNumber = $this->getFlatNumber($shippingAddress['address_1']);
+            $street = implode(' ', explode(' ', $shippingAddress['address_1'], -1));
+        }
+        $data['receiverStreet'] = $street;
+        $data['receiverBuildingNumber'] = $buildingNumber;
+        $data['receiverFlatNumber'] = $flatNumber;
         $data['receiverPostCode'] = $shippingAddress['postcode'];
         $data['receiverCity'] = $shippingAddress['city'];
         return $data;
@@ -97,7 +106,7 @@ class Bliskapaczka_Shipping_Method_Mapper
      */
     protected function getBuildingNumber($address)
     {
-        $numbers = explode('/', $address);
+        $numbers = explode('/', substr(strrchr($address, ' '), 1));
         if (isset($numbers[0])) {
             return $numbers[0];
         }
@@ -111,7 +120,7 @@ class Bliskapaczka_Shipping_Method_Mapper
      */
     protected function getFlatNumber($address)
     {
-        $numbers = explode('/', $address);
+        $numbers = explode('/', substr(strrchr($address, ' '), 1));
         if (isset($numbers[1])) {
             return $numbers[1];
         }
@@ -209,7 +218,9 @@ class Bliskapaczka_Shipping_Method_Mapper
         }
 
         if ($settings[$helper::BANK_ACCOUNT_NUMBER]) {
-            $data['codPayoutBankAccountNumber'] = $settings[$helper::BANK_ACCOUNT_NUMBER];
+            $data['codPayoutBankAccountNumber'] = str_replace(
+                ' ', '', $settings[$helper::BANK_ACCOUNT_NUMBER]
+            );
         }
         return $data;
     }

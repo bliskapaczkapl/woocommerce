@@ -6,7 +6,10 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname(dirname(dirname(dirname($vendorDir))));
 
 return array(
+    '320cde22f66dd4f5d3fd621d3e88b98f' => $vendorDir . '/symfony/polyfill-ctype/bootstrap.php',
+    '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => $vendorDir . '/symfony/polyfill-mbstring/bootstrap.php',
     '241d2bc730dc592f76425fee315639b6' => $vendorDir . '/globalcitizen/php-iban/oophp-iban.php',
     'ac2da84b5f360a33c0c760ac23936bfb' => $vendorDir . '/globalcitizen/php-iban/php-iban.php',
+    '6124b4c8570aa390c21fafd04a26c69f' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
     '7d5e26177ec0c967a595fc634f0744a3' => $vendorDir . '/bliskapaczkapl/bliskapaczka-api-client/src/helpers.php',
 );
