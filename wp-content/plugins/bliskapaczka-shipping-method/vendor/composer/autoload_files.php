@@ -7,6 +7,7 @@ $baseDir = dirname(dirname(dirname(dirname($vendorDir))));
 
 return array(
     '320cde22f66dd4f5d3fd621d3e88b98f' => $vendorDir . '/symfony/polyfill-ctype/bootstrap.php',
+    'a4a119a56e50fbb293281d9a48007e0e' => $vendorDir . '/symfony/polyfill-php80/bootstrap.php',
     '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => $vendorDir . '/symfony/polyfill-mbstring/bootstrap.php',
     '241d2bc730dc592f76425fee315639b6' => $vendorDir . '/globalcitizen/php-iban/oophp-iban.php',
     'ac2da84b5f360a33c0c760ac23936bfb' => $vendorDir . '/globalcitizen/php-iban/php-iban.php',

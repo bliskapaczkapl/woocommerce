@@ -25,7 +25,7 @@ class ApiCaller
      */
     public function __construct(Logger $logger = null)
     {
-        $this->logger = new \WC_Logger();
+        $this->logger = $logger;
     }
 
     /**
@@ -34,7 +34,6 @@ class ApiCaller
      */
     public function doCall(array $options)
     {
-        $this->logger->debug(json_encode($options));
         $curl = curl_init();
 
         $options[CURLOPT_RETURNTRANSFER] = 1;
@@ -55,9 +54,6 @@ class ApiCaller
         $responseDecoded = json_decode($response);
 
         if (isset($responseDecoded->error)) {
-            $logger = new \WC_Logger();
-            $logger->info('aaatest');
-            $logger->info($response);
             $this->logger->error($error);
             throw new \Exception($responseDecoded->error, 1);
         }

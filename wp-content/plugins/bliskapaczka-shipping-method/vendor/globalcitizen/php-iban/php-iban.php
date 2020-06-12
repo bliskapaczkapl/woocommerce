@@ -66,6 +66,32 @@ function iban_to_human_format($iban) {
  return wordwrap($iban,4,' ',true);
 }
 
+# Convert an IBAN to obfuscated presentation. To do this, we
+# replace the checksum and all subsequent characters with an
+# asterisk, except for the final four characters, and then
+# return in human format, ie.
+#  HU69107000246667654851100005 -> HU** **** **** **** **** **** 0005
+# 
+# We avoid the checksum as it may be used to infer the rest
+# of the IBAN in cases where the country has few valid banks
+# and branches, or other information about the account such
+# as bank, branch, or date issued is known (where a sequential
+# issuance scheme is in use).
+# 
+# Note that output of this function should be presented with 
+# other information to a user, such as the date last used or 
+# the date added to their account, in order to better facilitate
+# unambiguous relative identification.
+function iban_to_obfuscated_format($iban) {
+ $iban = iban_to_machine_format($iban);
+ $tr = substr($iban,0,2);
+ for($i=2;$i<strlen($iban)-4;$i++) {
+  $tr .= '*';
+ }
+ $tr .= substr($iban,strlen($iban)-4);
+ return iban_to_human_format($tr);
+}
+
 # Get the country part from an IBAN
 function iban_get_country_part($iban) {
  $iban = iban_to_machine_format($iban);
@@ -376,6 +402,7 @@ function iban_country_get_central_bank_name($iban_country) {
 
 # Get the list of all IBAN countries
 function iban_countries() {
+ _iban_load_registry();
  global $_iban_registry;
  return array_keys($_iban_registry);
 }
@@ -471,7 +498,6 @@ function iban_mistranscription_suggestions($incorrect_iban) {
 # Load the IBAN registry from disk.
 global $_iban_registry;
 $_iban_registry = array();
-_iban_load_registry();
 function _iban_load_registry() {
  global $_iban_registry;
  # if the registry is not yet loaded, or has been corrupted, reload
@@ -538,6 +564,7 @@ function _iban_get_info($iban,$code) {
 
 # Get information from the IBAN registry by country / code combination
 function _iban_country_get_info($country,$code) {
+ _iban_load_registry();
  global $_iban_registry;
  $country = strtoupper($country);
  $code = strtolower($code);
@@ -785,11 +812,6 @@ function _iban_nationalchecksum_implementation_cg($iban,$mode) {
 
 # Implement the national checksum for a Djibouti (DJ) IBAN
 function _iban_nationalchecksum_implementation_dj($iban,$mode) {
- return _iban_nationalchecksum_implementation_fr($iban,$mode);
-}
-
-# Implement the national checksum for an Egypt (EG) IBAN
-function _iban_nationalchecksum_implementation_eg($iban,$mode) {
  return _iban_nationalchecksum_implementation_fr($iban,$mode);
 }
 

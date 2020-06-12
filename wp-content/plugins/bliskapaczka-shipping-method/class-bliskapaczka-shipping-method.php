@@ -327,7 +327,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * @throws Exception If can't send data to bliskapaczka.
 	 */
 	function bliskapaczka_create_order_via_api( $order_id ) {
-		$logger = new WC_Logger();
+		$logger = wc_get_logger();
 		if ( 0 < $order_id ) {
 			$order = wc_get_order( $order_id );
 		}
@@ -363,17 +363,52 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$logger->info( wp_json_encode( $order_data ) );
 				$api_client = $helper->getApiClientOrder( $bliskapaczka );
 				$result     = $api_client->create( $order_data );
+
+				$bliskapczka_order_id = json_decode( $result, true )['number'];
+				$order->update_meta_data( '_bliskapaczka_order_id', $bliskapczka_order_id );
 				if ( $helper->isAutoAdvice( $bliskapaczka ) === true ) {
 					$advice_api_client = $helper->getApiClientTodoorAdvice( $bliskapaczka );
-					$advice_api_client->setOrderId( json_decode( $result, true )['number'] );
+					$advice_api_client->setOrderId( $bliskapczka_order_id );
 					$advice_api_client->create( $order_data );
+
+					// Auto order pickup when auto advice is enabled WIW-127.
+					$api_pickup = $helper->getApiClientPickup( $bliskapaczka );
+					try {
+						$mapper->prepareDataForPickup( $bliskapaczka, [ $bliskapczka_order_id ] );
+						$pickup_params       = $mapper->prepareDataForPickup( $bliskapaczka, [ $bliskapczka_order_id ] );
+						$api_pickup_response = $api_pickup->create( $pickup_params );
+
+						if ( isset( $api_pickup_response['id'] ) && isset( $api_pickup_response['number'] ) ) {
+							$order->update_meta_data( 'bliskapaczka_need_to_pickup', false );
+							$order->update_meta_data( '_bliskapaczka_pickup_id', $api_pickup_response['id'] );
+							$order->update_meta_data( '_bliskapaczka_pickup_number', $api_pickup_response['number'] );
+						} else {
+							$logger->error(
+								'BLISKAPACZKA: Order pickup faild: Udefined resposne from API',
+								[
+									'order_id' => $order_id,
+									'_bliskapaczka_order_id' => $bliskapczka_order_id,
+									'response' => $api_pickup_response,
+								]
+							);
+						}
+					} catch ( \Exception $e ) {
+						$order->update_meta_data( 'bliskapaczka_need_to_pickup', true );
+						$logger->error(
+							'BLISKAPACZKA: Order pickup faild: ' . $e->getMessage(),
+							[
+								'order_id'               => $order_id,
+								'_bliskapaczka_order_id' => $bliskapczka_order_id,
+								'response'               => $api_pickup_response,
+							]
+						);
+					}
 				}
-				$order->update_meta_data( '_bliskapaczka_order_id', json_decode( $result, true )['number'] );
-				$order->update_meta_data( '_need_to_pickup', true );
+
 				$order->save();
 			} catch ( Exception $e ) {
 				$logger->error( $e->getMessage() );
-				throw new Exception( $e->getMessage(), 1 );
+				throw new Exception( $e->getMessage() . $e->getTraceAsString(), 1 );
 			}
 		}
 		// TODO: "Bliskapaczka, od" to const.
@@ -397,7 +432,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$advice_api_client->create( $order_data );
 			}
 			$order->update_meta_data( '_bliskapaczka_order_id', json_decode( $result, true )['number'] );
-			$order->update_meta_data( '_need_to_pickup', false );
+			$order->update_meta_data( 'bliskapaczka_need_to_pickup', false );
 			$order->save();
 			WC()->session->set( 'bliskapaczka_posCode', '' );
 			WC()->session->set( 'bliskapaczka_posOperator', '' );
@@ -601,39 +636,25 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * Send request about pickup
 	 */
 	function bliskapaczka_pickup() {
-		$q            = new WC_Order_Query( array( '_need_to_pickup' => 1 ) );
+		$q            = new WC_Order_Query( array( 'bliskapaczka_need_to_pickup' => 1 ) );
 		$bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
 		$helper       = new Bliskapaczka_Shipping_Method_Helper();
-		$api          = $helper->getApiClientPickup( $bliskapaczka );
-		$order_ids    = array();
+		$mapper       = new Bliskapaczka_Shipping_Method_Mapper();
+
+		$api       = $helper->getApiClientPickup( $bliskapaczka );
+		$order_ids = array();
 		foreach ( $q->get_orders() as $order ) {
 			$number = $order->get_meta( '_bliskapaczka_order_id' );
 			if ( ! empty( $number ) ) {
 				$order_ids[] = $number;
 			}
-			$order->update_meta_data( '_need_to_pickup', false );
+			$order->update_meta_data( 'bliskapaczka_need_to_pickup', false );
 			$order->save();
-
 		}
 
-		$params = array(
-			'orderNumbers' => $order_ids,
-			'pickupWindow' => array(
-				'date'          => ( new \DateTime() )->format(),
-				'timeRange'     => array(
-					'from' => '13:00',
-					'to'   => '16:00',
-				),
-				'pickupAddress' => array(
-					'street'         => $bliskapaczka->settings[ $helper::SENDER_STREET ],
-					'buildingNumber' => $bliskapaczka->settings[ $helper::SENDER_BUILDING_NUMBER ],
-					'flatNumber'     => $bliskapaczka->settings[ $helper::SENDER_FLAT_NUMBER ],
-					'city'           => $bliskapaczka->settings[ $helper::SENDER_CITY ],
-					'postCode'       => $bliskapaczka->settings[ $helper::SENDER_POST_CODE ],
-				),
-			),
+		return $api->create(
+			$mapper->prepareDataForPickup( $bliskapaczka, $order_ids )
 		);
-
 	}
 
 	/**
@@ -644,10 +665,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * @return array modified $query
 	 */
 	function bliskapaczka_handle_custom_query_var( $query, $query_vars ) {
-		if ( ! empty( $query_vars['_need_to_pickup'] ) ) {
+		if ( ! empty( $query_vars['bliskapaczka_need_to_pickup'] ) ) {
 			$query['meta_query'][] = array(
-				'key'   => '_need_to_pickup',
-				'value' => esc_attr( $query_vars['_need_to_pickup'] ),
+				'key'   => 'bliskapaczka_need_to_pickup',
+				'value' => esc_attr( $query_vars['bliskapaczka_need_to_pickup'] ),
 			);
 		}
 
