@@ -51,7 +51,6 @@
 .modal-content {
     background-color: #fefefe;
     margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
     border: 1px solid #888;
     height: 600px;
     display: none;
@@ -59,33 +58,38 @@
 }
 
 /* Modal responsive breakpoints */
-@media only screen and (max-width: 568px) {
+@media only screen (max-width:360px) {
     .modal-content {
-        width: 85%;
+        width: 100%;
+        padding:0px
     }
 }
 
-@media only screen and (min-width: 568px) {
+@media only screen and (min-width: 361px) {
     .modal-content {
-        width: 80%;
+        width: 90%;
+        padding:5px
     }
 }
 
 @media only screen and (min-width: 768px) {
     .modal-content {
         width: 70%;
+        padding:20px
     }
 }
 
 @media only screen and (min-width: 992px) {
     .modal-content {
         width: 60%;
+        padding:20px
     }
 }
 
 @media only screen and (min-width: 1200px) {
     .modal-content {
         width: 50%;
+        padding:20px
     }
 }
 /* The Close Button */
