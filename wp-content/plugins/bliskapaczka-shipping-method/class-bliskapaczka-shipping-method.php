@@ -254,7 +254,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		echo '<div id="bpWidget" ></div>';
 		echo '</div>';
 		echo '</div>';
-		// @codingStandardsIgnoreEnd
+		
 	}
 
 	/**
