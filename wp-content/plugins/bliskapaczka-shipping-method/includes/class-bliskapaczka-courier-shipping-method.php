@@ -42,10 +42,12 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Map_Shipping_Met
                 'default'     => 'yes',
             ),
             $helper::TITLE_COURIER => array(
-                'title'       => __( 'Title', 'bliskapaczka-shipping-method' ),
+                'title'       => __( 'Delivery name', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
-                'description' => __( 'Title to be display on site', 'bliskapaczka-shipping-method' ),
+                'description' => __( 'Deliver name to be display on site', 'bliskapaczka-shipping-method' ),
                 'default'     => __( 'Delivery to the door', 'bliskapaczka-shipping-method' ),
+            	'custom_attributes' => array( 'required' => 'required' ),
+            	'class' => 'bliskapaczka_admin_field_required',
             ),
 
         );
