@@ -10,17 +10,10 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
     bpWidget = document.getElementById('bpWidget');
 
     myModal = document.getElementById('myModal');
-    if (window.location.href.search('sandbox') !== -1) {
-        bpWidget.classList.add('modal-content');
-        bpWidget.style.display = 'block';
-        myModal.classList.add('modal');
-        myModal.style.display = 'block';
-    } else {
-        bpWidget.classList.remove('modal-content');
-        myModal.classList.remove('modal');
-        bpWidget.style.height = '600px';
-    }
-
+    bpWidget.classList.add('modal-content');
+    bpWidget.style.display = 'block';
+    myModal.classList.add('modal');
+    myModal.style.display = 'block';
 
     if (jQuery('#bliskapaczka_posCode').attr('value') === "") {
         jQuery('#bliskapaczka_posOperator').attr('value', "")
@@ -142,14 +135,13 @@ Bliskapaczka.loadUnblock = function( selector ) {
 };
 
 document.addEventListener("DOMContentLoaded", function () {
-    if (window.location.href.search('sandbox') !== -1) {
+
         jQuery('#myModal').on('click', function (event) {
             if ((jQuery(event.target).children().hasClass('modal-content')) || event.target.className === 'modal') {
                 jQuery(this).hide();
             }
 
         })
-    }
 
     jQuery('form.checkout').on('change', 'input[name="payment_method"]', function(){
         jQuery(document.body).trigger("update_checkout");
