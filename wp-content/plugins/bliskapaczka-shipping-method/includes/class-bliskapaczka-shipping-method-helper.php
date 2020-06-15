@@ -37,6 +37,11 @@ class Bliskapaczka_Shipping_Method_Helper
     const ENABLE_COURIER = 'BLISKAPACZKA_COURIER_ENABLE';
     const AUTO_ADVICE = 'BLISKAPACZKA_AUTO_ADVICE';
 
+    /**
+     * Temporarily blocked this functionality, because is not yet finished.
+     * @var string
+     */
+    const FUNCTIONALITY_AUTO_ADVICE_ENABLED = false;
 
     /**
      * Get parcel dimensions in format accptable by Bliskapaczka API
@@ -378,7 +383,7 @@ class Bliskapaczka_Shipping_Method_Helper
      */
     public function isAutoAdvice($bliskapaczka)
     {
-        if ($bliskapaczka->settings['BLISKAPACZKA_AUTO_ADVICE'] === 'yes') {
+    	if ( Bliskapaczka_Shipping_Method_Helper::FUNCTIONALITY_AUTO_ADVICE_ENABLED === true && $bliskapaczka->settings['BLISKAPACZKA_AUTO_ADVICE'] === 'yes') {
             return true;
         }
         return false;

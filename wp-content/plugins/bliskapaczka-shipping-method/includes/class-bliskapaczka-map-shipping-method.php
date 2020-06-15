@@ -63,12 +63,14 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
                 'custom_attributes' => array( 'required' => 'required' ),
                 'class' => 'bliskapaczka_admin_field_required',
             ),
+/*
             $helper::AUTO_ADVICE            => array(
                 'title'       => __( 'Auto advice enabled', 'bliskapaczka-shipping-method' ),
                 'type'        => 'checkbox',
                 'description' => __( 'Sending the order to the service Bliskapaczka.pl, where the status "Ready to send" will be automatically set', 'bliskapaczka-shipping-method' ),
                 'default'     => 'no',
             ),
+*/
             $helper::TEST_MODE              => array(
                 'title'       => __( 'Test mode enabled', 'bliskapaczka-shipping-method' ),
                 'type'        => 'checkbox',

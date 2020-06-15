@@ -354,13 +354,15 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$logger->info( wp_json_encode( $order_data ) );
 				$api_client = $helper->getApiClientOrder( $bliskapaczka );
 				$result     = $api_client->create( $order_data );
+
 				if ( $helper->isAutoAdvice( $bliskapaczka ) === true ) {
 					$advice_api_client = $helper->getApiClientTodoorAdvice( $bliskapaczka );
 					$advice_api_client->setOrderId( json_decode( $result, true )['number'] );
 					$advice_api_client->create( $order_data );
+					$order->update_meta_data( '_bliskapaczka_need_to_pickup', true );
 				}
 				$order->update_meta_data( '_bliskapaczka_order_id', json_decode( $result, true )['number'] );
-				$order->update_meta_data( '_need_to_pickup', true );
+
 				$order->save();
 			} catch ( Exception $e ) {
 				$logger->error( $e->getMessage() );
@@ -386,9 +388,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 				$advice_api_client->setOrderId( json_decode( $result, true )['number'] );
 				$advice_api_client->create( $order_data );
+				$order->update_meta_data( '_bliskapaczka_need_to_pickup', false );
 			}
 			$order->update_meta_data( '_bliskapaczka_order_id', json_decode( $result, true )['number'] );
-			$order->update_meta_data( '_need_to_pickup', false );
+
 			$order->save();
 			WC()->session->set( 'bliskapaczka_posCode', '' );
 			WC()->session->set( 'bliskapaczka_posOperator', '' );
@@ -604,10 +607,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * @return array modified $query
 	 */
 	function bliskapaczka_handle_custom_query_var( $query, $query_vars ) {
-		if ( ! empty( $query_vars['_need_to_pickup'] ) ) {
+		if ( Bliskapaczka_Shipping_Method_Helper::FUNCTIONALITY_AUTO_ADVICE_ENABLED === true && ! empty( $query_vars['_bliskapaczka_need_to_pickup'] ) ) {
 			$query['meta_query'][] = array(
-				'key'   => '_need_to_pickup',
-				'value' => esc_attr( $query_vars['_need_to_pickup'] ),
+				'key'   => '_bliskapaczka_need_to_pickup',
+				'value' => esc_attr( $query_vars['_bliskapaczka_need_to_pickup'] ),
 			);
 		}
 
