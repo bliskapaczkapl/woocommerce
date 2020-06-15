@@ -1,15 +1,15 @@
 <?php
 /**
  * Plugin Name: Bliskapaczka.pl
- * Plugin URI: https://github.com/bliskapaczkapl/woocommerce
- * Description: Bliskapaczka.pl Shipping Method for WooCommerce
- * Version: 1.0.0
- * Author: Mateusz Koszutowski
+ * Plugin URI: https://bliskapaczka.pl/narzedzia/integracja-sklep-wordpress-woocommerce
+ * Description: Integracja metod dostaw z serwisem Bliskapaczka.pl
+ * Version: 1.1.0
+ * Author: Bliskapaczka.pl
  * Text Domain: bliskapaczka-shipping-method
  *
  * @package  Bliskapaczka
  * @subpackage Woocommerce
- * @author Mateusz Koszutowski
+ * @author Bliskapaczka
  * @copyright Bliskapaczka
  */
 
