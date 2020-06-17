@@ -44,6 +44,46 @@ class Bliskapaczka_Shipping_Method_Helper
     const FUNCTIONALITY_AUTO_ADVICE_ENABLED = false;
 
     /**
+     * Instance of helper
+     * 
+     * @var Bliskapaczka_Shipping_Method_Helper
+     */
+	private static $instance;
+
+	/**
+	 * Instance of Bliskapaczka_Map_Shipping_Method
+	 * 
+	 * It's lazy variable. Please use a getMapShippingMethod() method to access it.
+	 * 
+	 * @see Bliskapaczka_Shipping_Method_Helper::getMapShippingMethod()
+	 * 
+	 * @var Bliskapaczka_Map_Shipping_Method
+	 */
+	private $map_shipping_method;
+	
+    /**
+	 * Instance of Bliskapaczka_Courier_Shipping_Method
+	 * 
+	 * It's lazy variable. Please use a getCourierShippingMethod() method to access it.
+	 * 
+	 * @see Bliskapaczka_Shipping_Method_Helper::getCourierShippingMethod()
+	 * 
+	 * @var Bliskapaczka_Courier_Shipping_Method
+	 */
+	private $courier_shipping_method;
+
+	/**
+	 * Returns a signle instance of this helper
+	 */
+	public static function instance() {
+		if ( !isset( self::$instance ) ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
+	}
+
+    /**
      * Get parcel dimensions in format accptable by Bliskapaczka API
      *
      * @return array
@@ -152,8 +192,7 @@ class Bliskapaczka_Shipping_Method_Helper
      */
     public function getPriceList(array $data = null)
     {
-        /* @var Bliskapaczka_Shipping_Method $bliskapaczka */
-        $bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
+    	$bliskapaczka = $this->getMapShippingMethod();
         if (is_null($data)) {
             $data = array(
               "parcel" => array(
@@ -170,8 +209,7 @@ class Bliskapaczka_Shipping_Method_Helper
     public function getPriceListForCourier($cart_total, $priceList = null, $is_cod = false)
     {
         if (is_null($priceList)) {
-            /* @var Bliskapaczka_Shipping_Method $bliskapaczka */
-            $bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
+        	$bliskapaczka = $this->getMapShippingMethod();
             $data = array(
                 "parcel" => array(
                     'dimensions' => $this->getParcelDimensions($bliskapaczka->settings)
@@ -210,8 +248,7 @@ class Bliskapaczka_Shipping_Method_Helper
     public function getOperatorsForWidget($cart_total, $priceList = null, $is_cod = false)
     {
         if (is_null($priceList)) {
-            /* @var Bliskapaczka_Shipping_Method $bliskapaczka */
-            $bliskapaczka = new Bliskapaczka_Map_Shipping_Method();
+            $bliskapaczka = $this->getMapShippingMethod();
             $data = array(
                 "parcel" => array(
                     'dimensions' => $this->getParcelDimensions($bliskapaczka->settings)
@@ -241,97 +278,79 @@ class Bliskapaczka_Shipping_Method_Helper
     /**
      * Get Bliskapaczka API Client
      *
-     * @param Bliskapaczka_Shipping_Method $bliskapaczka
      * @return \Bliskapaczka\ApiClient\Bliskapaczka\Pricing
      */
-    public function getApiClientPricing($bliskapaczka)
+    public function getApiClientPricing()
     {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pricing(
-        	$bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
-            $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'])
+        return new \Bliskapaczka\ApiClient\Bliskapaczka\Pricing(
+        	$this->getApiKey(),
+            $this->getApiMode()
         );
-
-        return $apiClient;
     }
 
     /**
      * Get Bliskapaczka API Client
      *
-     * @param Bliskapaczka_Shipping_Method $bliskapaczka
      * @return \Bliskapaczka\ApiClient\Bliskapaczka\Pos
      */
-    public function getApiClientPos($bliskapaczka)
+    public function getApiClientPos()
     {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pos(
-            $bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
-            $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'])
+        return new \Bliskapaczka\ApiClient\Bliskapaczka\Pos(
+        	$this->getApiKey(),
+            $this->getApiMode()
         );
-
-        return $apiClient;
     }
 
     /**
      * Get Bliskapaczka API Client
      *
-     * @param Bliskapaczka_Shipping_Method $bliskapaczka
      * @return \Bliskapaczka\ApiClient\Bliskapaczka\Order
      */
-    public function getApiClientOrder($bliskapaczka)
+    public function getApiClientOrder()
     {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order(
-            $bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
-            $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'])
+    	return new \Bliskapaczka\ApiClient\Bliskapaczka\Order(
+        	$this->getApiKey(),
+            $this->getApiMode()
         );
-
-        return $apiClient;
     }
 
     /**
      * Get Bliskapaczka API Client
      *
-     * @param Bliskapaczka_Shipping_Method $bliskapaczka
      * @return \Bliskapaczka\ApiClient\Bliskapaczka\Order\Advice
      */
-    public function getApiClientOrderAdvice($bliskapaczka)
+    public function getApiClientOrderAdvice()
     {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Advice(
-            $bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
-            $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'])
+        return new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Advice(
+        	$this->getApiKey(),
+            $this->getApiMode()
         );
-
-        return $apiClient;
     }
 
     /**
      * Get Bliskapaczka API Client
      *
-     * @param Bliskapaczka_Shipping_Method $bliskapaczka
      * @return \Bliskapaczka\ApiClient\Bliskapaczka\Todoor\Advice
      */
-    public function getApiClientTodoorAdvice($bliskapaczka)
+    public function getApiClientTodoorAdvice()
     {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Todoor\Advice(
-            $bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
-            $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'])
+        return new \Bliskapaczka\ApiClient\Bliskapaczka\Todoor\Advice(
+        	$this->getApiKey(),
+            $this->getApiMode()
         );
-
-        return $apiClient;
     }
 
     /**
      * Get Bliskapaczka API Client
      *
-     * @param Bliskapaczka_Shipping_Method $bliskapaczka
      * @return \Bliskapaczka\ApiClient\Bliskapaczka\Order\Pickup
      */
-    public function getApiClientPickup($bliskapaczka)
+    public function getApiClientPickup()
     {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Pickup(
-            $bliskapaczka->settings['BLISKAPACZKA_API_KEY'],
-            $this->getApiMode($bliskapaczka->settings['BLISKAPACZKA_TEST_MODE'])
+        return new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Pickup(
+        	$this->getApiKey(),
+            $this->getApiMode()
         );
-
-        return $apiClient;
     }
 
     /**
@@ -352,41 +371,94 @@ class Bliskapaczka_Shipping_Method_Helper
     }
 
     /**
+     * Returns a url to waybill for given bliskapaczka order id
+     * 
+     * @param string $order_id Bliskapaczka order id
+     * @throws \InvalidArgumentException
+     *  
+     * @return array of waybills urls 
+     */
+    public function getWaybillUrls(string $order_id)
+    {
+    	$data = [];
+    	
+    	$order_id = trim( $order_id );
+    	
+    	if ( mb_strlen($order_id) === 0) {
+    		throw new \InvalidArgumentException('Invalid bliskapaczka order id');
+    	}
+		
+		try {
+	 		$api = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Waybill(
+	 			$this->getApiKey(),
+	 			$this->getApiMode()
+	 		);
+
+	 		$api->setOrderId($order_id);
+
+	 		$response = json_decode($api->get(), true);
+	 		
+	 		if (is_array($response) && count($response) > 0) {
+	 			foreach ($response as $r) {
+	 				$data[] = $r['url'];
+	 			}
+	 		}
+		} catch (\Exception $e) {
+			wc_get_logger()->debug($e->getMessage(), ['bliskapczka_order_id' => $order_id]);
+     	}
+	 	return $data;
+    }
+
+ 	/**
+ 	 * Returns a API Key for bliskapaczka.pl
+ 	 * 
+ 	 * @throws \Exception If key not set
+ 	 * return string API key
+ 	 */
+    public function getApiKey()
+    {
+    	$key = $this->getMapShippingMethod()->get_option(self::API_KEY, null);
+
+    	if ( !\is_string($key) || \mb_strlen( $key ) === 0 ) {
+    		throw new \Exception('API KEY for bliskapaczka.pl was not set in configuration.');
+    	}
+
+    	return $key;
+    }
+    /**
      * Get API mode
      *
-     * @param string $configValue
-     * @return string
+     * @return string 'prod' for production, 'test' for sandbox.
      */
-    public function getApiMode($configValue = '')
+    public function getApiMode()
     {
-        $mode = '';
+        $mode = 'prod';
 
-        switch ($configValue) {
-            case 'yes':
-                $mode = 'test';
-                break;
-
-            default:
-                $mode = 'prod';
-                break;
+        if ( $this->getMapShippingMethod()->get_option(self::TEST_MODE, 'no') === 'yes') {
+			$mode = 'test';	
         }
 
         return $mode;
     }
+	
+    /**
+     * Returns  information about sandbox api mode
+     * @return boolean  TRUE is sandbox
+     */
+	public function isSandbox() 
+	{
+		return $this->getApiMode() !== 'prod';
+	}
 
     /**
-     * Check auto advice.
-     *
-     * @param Bliskapaczka_Shipping_Method$bliskapaczka
+     * Returns information if auto advice is enabled.
      *
      * @return bool
      */
-    public function isAutoAdvice($bliskapaczka)
+    public function isAutoAdvice()
     {
-    	if ( Bliskapaczka_Shipping_Method_Helper::FUNCTIONALITY_AUTO_ADVICE_ENABLED === true && $bliskapaczka->settings['BLISKAPACZKA_AUTO_ADVICE'] === 'yes') {
-            return true;
-        }
-        return false;
+    	return self::FUNCTIONALITY_AUTO_ADVICE_ENABLED === true 
+    			&& $this->getMapShippingMethod()->get_option( self::AUTO_ADVICE, 'no' ) === 'yes';
     }
     
     /**
@@ -398,4 +470,51 @@ class Bliskapaczka_Shipping_Method_Helper
     {
     	return 'bliskapaczka_nonce_ajax';
     }
+
+    /**
+     * Returns instance of map shipping method
+     * 
+     * @return Bliskapaczka_Map_Shipping_Method
+     */
+    public function getMapShippingMethod()
+    {
+    	if ( !isset($this->map_shipping_method) ) {
+    		$this->map_shipping_method = new Bliskapaczka_Map_Shipping_Method();
+    	}
+
+    	return $this->map_shipping_method;
+    }
+
+    /**
+     * Returns instance of courier shipping method
+     * 
+     * @return Bliskapaczka_Courier_Shipping_Method
+     */
+    public function getCourierShippingMethod()
+    {
+    	if ( !isset($this->courier_shipping_method) ) {
+    		$this->courier_shipping_method = new Bliskapaczka_Courier_Shipping_Method();
+    	}
+    	
+    	return $this->courier_shipping_method;
+    }
+    
+    /**
+     * Returns choosed shipping method id from WooCommerce order.
+     * 
+     * @param WC_Order $order  WooCommerce order
+     * @return string|NULL shipping method id
+     */
+    public function getWCShipingMethodId(WC_Order $order) 
+    {
+    	$methods = $order->get_shipping_methods();
+
+    	if ( count($methods) > 0 ) {
+    		$method = \array_shift($methods);
+    		return $method->get_method_id();
+    	}
+    	
+    	return null;
+    }
+    
 }
