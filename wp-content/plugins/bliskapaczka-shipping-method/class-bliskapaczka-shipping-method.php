@@ -51,8 +51,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$methods[] = 'Bliskapaczka_Map_Shipping_Method';
 			return $methods;
 		}
-		$helper    = Bliskapaczka_Shipping_Method_Helper::instance();
-		
+		$helper = Bliskapaczka_Shipping_Method_Helper::instance();
+
 		$bliskapaczka = $helper->getMapShippingMethod();
 		if ( empty( $bliskapaczka->settings['BLISKAPACZKA_API_KEY'] ) ) {
 			return $methods;
@@ -60,7 +60,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		if ( 'no' === $bliskapaczka->settings['enabled'] ) {
 			return $methods;
 		}
-		
+
 		$operators = json_decode( $helper->getOperatorsForWidget( 0.0 ) );
 
 		if ( count( $operators ) !== 0 ) {
@@ -80,8 +80,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$methods[] = 'Bliskapaczka_Courier_Shipping_Method';
 			return $methods;
 		}
-		$helper     = Bliskapaczka_Shipping_Method_Helper::instance();
-		
+		$helper = Bliskapaczka_Shipping_Method_Helper::instance();
+
 		$bliskapaczka = $helper->getMapShippingMethod();
 		if ( empty( $bliskapaczka->settings['BLISKAPACZKA_API_KEY'] ) ) {
 			return $methods;
@@ -91,7 +91,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			return $methods;
 		}
 
-		
 		$price_list = $helper->getPriceListForCourier( 0.0 );
 
 		if ( count( json_decode( $price_list ) ) !== 0 ) {
@@ -323,11 +322,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 */
 	function bliskapaczka_create_order_via_api( $order_id ) {
 		$logger = wc_get_logger();
-		
+
 		if ( 0 < $order_id ) {
 			$order = wc_get_order( $order_id );
-		} 
-		
+		}
+
 		if ( ! $order ) {
 			return false;
 		}
@@ -343,12 +342,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		wc_add_order_item_meta( $shipping_item_id, '_bliskapaczka_posCode', $pos_code );
 		wc_add_order_item_meta( $shipping_item_id, '_bliskapaczka_posOperator', $pos_operator );
 
-		$helper             = Bliskapaczka_Shipping_Method_Helper::instance();
-		$bliskapaczka 		= $helper->getMapShippingMethod();
-		
-		$shipping_method_id = $helper->getWCShipingMethodId($order);
+		$helper       = Bliskapaczka_Shipping_Method_Helper::instance();
+		$bliskapaczka = $helper->getMapShippingMethod();
 
-		$mapper             = new Bliskapaczka_Shipping_Method_Mapper();
+		$shipping_method_id = $helper->getWCShipingMethodId( $order );
+
+		$mapper = new Bliskapaczka_Shipping_Method_Mapper();
 		if ( 'bliskapaczka-courier' === $shipping_method_id ) {
 			$order_data = $mapper->getDataForCourier( $order, $helper, $bliskapaczka->settings );
 
@@ -391,7 +390,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$result     = $api_client->create( $order_data );
 			$order->update_meta_data( '_bliskapaczka_order_id', json_decode( $result, true )['number'] );
 			$order->save();
-			
+
 			if ( $helper->isAutoAdvice() === true ) {
 				$advice_api_client = $helper->getApiClientOrderAdvice();
 
@@ -399,7 +398,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$advice_api_client->create( $order_data );
 				$order->update_meta_data( '_bliskapaczka_need_to_pickup', false );
 			}
-			
+
 			WC()->session->set( 'bliskapaczka_posCode', '' );
 			WC()->session->set( 'bliskapaczka_posOperator', '' );
 		} catch ( Exception $e ) {
