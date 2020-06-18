@@ -250,12 +250,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	function bliskapaczka_add_widget_div( $checkout ) {
 
 		echo '<div id="myModal">';
-		echo '<div id="myModal" >';
-		echo '<div id="bpWidget_wrapper">';
-		echo "<a name='bpWidget_wrapper'><a/>";
-		echo '<div id="bpWidget"></div>';
-		echo '<div id="bpWidget" ></div>';
-		echo '</div>';
+		echo '	<div id="bpWidget_wrapper">';
+		echo '		<a name="bpWidget_wrapper"><a/>';
+		echo '		<div id="bpWidget"></div>';
+		echo '	</div>';
 		echo '</div>';
 
 	}
