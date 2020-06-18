@@ -5,3 +5,4 @@ wp-content/plugins/woocommerce
 /.buildpath
 /.project
 /.settings/
+.DS_Store
