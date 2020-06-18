@@ -235,9 +235,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 						 ( ( $pos_info->postalCode ) ? esc_html( $pos_info->postalCode ) . ' ' : '' ) . esc_html( $pos_info->city );
 					// @codingStandardsIgnoreEnd
+					
 				}
 				echo '</span></p>';
 				echo '</div>';
+				
+				echo '<div><strong>' . esc_html( __( 'Shipping cost', 'bliskapaczka-shipping-method' ) ) . ': ' . wc_price( bliskapaczka_get_price() ) . '</strong></div>';
 			}
 		}
 	}
