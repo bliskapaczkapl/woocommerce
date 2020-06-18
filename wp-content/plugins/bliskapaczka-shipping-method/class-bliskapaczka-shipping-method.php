@@ -162,7 +162,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				echo '</label>';
 			}
 			$shipping_methods = WC()->shipping->get_shipping_methods();
-			if ( null === $shipping_methods['bliskapaczka'] ) {
+			if ( ! isset( $shipping_methods['bliskapaczka'] ) || null === $shipping_methods['bliskapaczka'] ) {
 				echo '<input name="bliskapaczka_posOperator" type="hidden" id="bliskapaczka_posOperator" value="' . esc_html( WC()->session->get( 'bliskapaczka_posOperator' ) ) . '" />';
 			}
 		}
