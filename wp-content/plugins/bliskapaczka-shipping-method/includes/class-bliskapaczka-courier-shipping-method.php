@@ -33,7 +33,7 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Map_Shipping_Met
      * Add field to admin panel
      */
     function init_form_fields() {
-        $helper            = new Bliskapaczka_Shipping_Method_Helper();
+        $helper            = Bliskapaczka_Shipping_Method_Helper::instance();
         $this->form_fields = array(
             'courier_enabled' => array(
                 'title'       => __( 'Enable', 'bliskapaczka-shipping-method' ),
@@ -65,8 +65,8 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Map_Shipping_Met
     public function calculate_shipping( $package = array() ) {
 
         // @codingStandardsIgnoreStart
-        $helper         = new Bliskapaczka_Shipping_Method_Helper();
-        $bliskapaczka   = new Bliskapaczka_Courier_Shipping_Method();
+    	$helper         = Bliskapaczka_Shipping_Method_Helper::instance();
+        $bliskapaczka   = $helper->getCourierShippingMethod();
 
         $label = $bliskapaczka->settings[$helper::TITLE_COURIER];
         if (empty($label)) {
@@ -96,7 +96,7 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Map_Shipping_Met
         $operator_code = '',
         $is_cod = false
     ) {
-        $helper         = new Bliskapaczka_Shipping_Method_Helper();
+    	$helper         = Bliskapaczka_Shipping_Method_Helper::instance();
         $price_list = json_decode($helper->getPriceListForCourier($cart_total, null, $is_cod));
         $price = 0;
         foreach ($price_list as $item) {
