@@ -43,7 +43,7 @@ class Bliskapaczka_Admin_Order_Details {
 			$waybill_html = '<tr><td colspan="2">';
 
 			foreach ( $waybill_urls as $url ) {
-				$waybill_html .= sprintf( '<a href="%s" target="_blank">%s</a>', esc_url( $url ), esc_html_x( 'Waybill', 'bliskapaczka-shipping-method' ) );
+				$waybill_html .= sprintf( '<a href="%s" target="_blank">%s</a>', esc_url( $url ), esc_html( __( 'Waybill', 'bliskapaczka-shipping-method') ) );
 			}
 
 			$waybill_html .= '</td></tr>';
@@ -54,7 +54,7 @@ class Bliskapaczka_Admin_Order_Details {
 				<h3>Bliskapczka.pl - ' . esc_html( $order->get_shipping_method() ) . '</h3>
 				<table>
 					<tr>
-						<td>' . esc_html_x( 'Order number', 'bliskapaczka-shipping-method' ) . ':</td>
+						<td>' . esc_html( __( 'Order number', 'bliskapaczka-shipping-method' ) ) . ':</td>
 						<td>' . esc_html( $bliska_order_id ) . '</td>
 					</tr>
 					' . $waybill_html . '
