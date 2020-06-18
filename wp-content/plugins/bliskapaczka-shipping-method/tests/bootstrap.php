@@ -68,7 +68,7 @@ function autoloader($class)
         // @codingStandardsIgnoreEnd
     }
 
-    $filePath = '/var/www/wordpress/wp-content/plugins/woocommerce/includes/class-wc-order.php';
+    $filePath =  $GLOBALS['ROOT_DIR'] . '../woocommerce/includes/class-wc-order.php';
     if (isset($filePath) && is_file($filePath)) {
         require_once($filePath);
     }
