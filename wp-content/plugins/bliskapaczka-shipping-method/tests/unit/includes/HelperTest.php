@@ -43,69 +43,69 @@ class HelperTest extends TestCase
     {
         $this->assertEquals(
             'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_X',
-            $this->helper::SIZE_TYPE_FIXED_SIZE_X
+            Bliskapaczka_Shipping_Method_Helper::SIZE_TYPE_FIXED_SIZE_X
         );
         $this->assertEquals(
             'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_Y',
-            $this->helper::SIZE_TYPE_FIXED_SIZE_Y
+            Bliskapaczka_Shipping_Method_Helper::SIZE_TYPE_FIXED_SIZE_Y
         );
         $this->assertEquals(
             'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_Z',
-            $this->helper::SIZE_TYPE_FIXED_SIZE_Z
+            Bliskapaczka_Shipping_Method_Helper::SIZE_TYPE_FIXED_SIZE_Z
         );
         $this->assertEquals(
             'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_WEIGHT',
-            $this->helper::SIZE_TYPE_FIXED_SIZE_WEIGHT
+            Bliskapaczka_Shipping_Method_Helper::SIZE_TYPE_FIXED_SIZE_WEIGHT
         );
 
         $this->assertEquals(
             'BLISKAPACZKA_API_KEY',
-            $this->helper::API_KEY
+            Bliskapaczka_Shipping_Method_Helper::API_KEY
         );
         $this->assertEquals(
             'BLISKAPACZKA_TEST_MODE',
-            $this->helper::TEST_MODE
+            Bliskapaczka_Shipping_Method_Helper::TEST_MODE
         );
 
         $this->assertEquals(
             'BLISKAPACZKA_SENDER_EMAIL',
-            $this->helper::SENDER_EMAIL
+            Bliskapaczka_Shipping_Method_Helper::SENDER_EMAIL
         );
         $this->assertEquals(
             'BLISKAPACZKA_SENDER_FIRST_NAME',
-            $this->helper::SENDER_FIRST_NAME
+            Bliskapaczka_Shipping_Method_Helper::SENDER_FIRST_NAME
         );
         $this->assertEquals(
             'BLISKAPACZKA_SENDER_LAST_NAME',
-            $this->helper::SENDER_LAST_NAME
+            Bliskapaczka_Shipping_Method_Helper::SENDER_LAST_NAME
         );
         $this->assertEquals(
             'BLISKAPACZKA_SENDER_PHONE_NUMBER',
-            $this->helper::SENDER_PHONE_NUMBER
+            Bliskapaczka_Shipping_Method_Helper::SENDER_PHONE_NUMBER
         );
         $this->assertEquals(
             'BLISKAPACZKA_SENDER_STREET',
-            $this->helper::SENDER_STREET
+            Bliskapaczka_Shipping_Method_Helper::SENDER_STREET
         );
         $this->assertEquals(
             'BLISKAPACZKA_SENDER_BUILDING_NUMBER',
-            $this->helper::SENDER_BUILDING_NUMBER
+            Bliskapaczka_Shipping_Method_Helper::SENDER_BUILDING_NUMBER
         );
         $this->assertEquals(
             'BLISKAPACZKA_SENDER_FLAT_NUMBER',
-            $this->helper::SENDER_FLAT_NUMBER
+            Bliskapaczka_Shipping_Method_Helper::SENDER_FLAT_NUMBER
         );
         $this->assertEquals(
             'BLISKAPACZKA_SENDER_POST_CODE',
-            $this->helper::SENDER_POST_CODE
+            Bliskapaczka_Shipping_Method_Helper::SENDER_POST_CODE
         );
         $this->assertEquals(
             'BLISKAPACZKA_SENDER_CITY',
-            $this->helper::SENDER_CITY
+            Bliskapaczka_Shipping_Method_Helper::SENDER_CITY
         );
         $this->assertEquals(
             'BLISKAPACZKA_GOOGLE_MAP_API_KEY',
-            $this->helper::GOOGLE_MAP_API_KEY
+            Bliskapaczka_Shipping_Method_Helper::GOOGLE_MAP_API_KEY
         );
     }
 
