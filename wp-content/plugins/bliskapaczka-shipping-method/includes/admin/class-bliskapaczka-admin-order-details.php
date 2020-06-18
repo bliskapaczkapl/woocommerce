@@ -61,7 +61,7 @@ class Bliskapaczka_Admin_Order_Details {
 				</table>
 			</div>';
 
-		print wp_kses_post($content);
+		echo wp_kses_post( $content );
 	}
 
 	/**

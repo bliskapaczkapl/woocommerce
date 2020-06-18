@@ -114,13 +114,11 @@ class Bliskapaczka_Shipping_Method_Helper
      */
     public function getGoogleMapApiKey($settings)
     {
-        $googleApiKey = self::DEFAULT_GOOGLE_API_KEY;
-
-        if ($settings[self::GOOGLE_MAP_API_KEY]) {
-            $googleApiKey = $settings[self::GOOGLE_MAP_API_KEY];
+    	if ( isset( $settings[ self::GOOGLE_MAP_API_KEY ] ) && ! empty( $settings[ self::GOOGLE_MAP_API_KEY ] ) ) {
+            return $settings[ self::GOOGLE_MAP_API_KEY ];
         }
 
-        return $googleApiKey;
+        return self::DEFAULT_GOOGLE_API_KEY;
     }
 
     /**
