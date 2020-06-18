@@ -4,15 +4,32 @@ use PHPUnit\Framework\TestCase;
 
 class HelperTest extends TestCase
 {
+	/**
+	 * @var Bliskapaczka_Shipping_Method_Helper
+	 */
+	private $helper;
+	
     protected function setUp()
     {
-        $this->getMockBuilder(\Bliskapaczka_Map_Shipping_Method::class)
+        $map = $this->getMockBuilder(\Bliskapaczka_Map_Shipping_Method::class)
              ->disableOriginalConstructor()
              ->getMock();
 
-        $this->getMockBuilder(\Bliskapaczka_Courier_Shipping_Method::class)
+        $courier = $this->getMockBuilder(\Bliskapaczka_Courier_Shipping_Method::class)
              ->disableOriginalConstructor()
              ->getMock();
+        
+        $this->helper = new Bliskapaczka_Shipping_Method_Helper();
+
+        $ref = new ReflectionObject($this->helper);
+        
+        $property = $ref->getProperty('map_shipping_method');
+        $property->setAccessible(true);
+        $property->setValue($this->helper, $map);
+        
+        $property = $ref->getProperty('courier_shipping_method');
+        $property->setAccessible(true);
+        $property->setValue($this->helper, $courier);
     }
 
     public function testClassHasMethods()
@@ -24,73 +41,71 @@ class HelperTest extends TestCase
 
     public function testConstants()
     {
-        $hepler = new Bliskapaczka_Shipping_Method_Helper();
-
         $this->assertEquals(
             'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_X',
-            $hepler::SIZE_TYPE_FIXED_SIZE_X
+            Bliskapaczka_Shipping_Method_Helper::SIZE_TYPE_FIXED_SIZE_X
         );
         $this->assertEquals(
             'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_Y',
-            $hepler::SIZE_TYPE_FIXED_SIZE_Y
+            Bliskapaczka_Shipping_Method_Helper::SIZE_TYPE_FIXED_SIZE_Y
         );
         $this->assertEquals(
             'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_Z',
-            $hepler::SIZE_TYPE_FIXED_SIZE_Z
+            Bliskapaczka_Shipping_Method_Helper::SIZE_TYPE_FIXED_SIZE_Z
         );
         $this->assertEquals(
             'BLISKAPACZKA_PARCEL_SIZE_TYPE_FIXED_SIZE_WEIGHT',
-            $hepler::SIZE_TYPE_FIXED_SIZE_WEIGHT
+            Bliskapaczka_Shipping_Method_Helper::SIZE_TYPE_FIXED_SIZE_WEIGHT
         );
 
         $this->assertEquals(
             'BLISKAPACZKA_API_KEY',
-            $hepler::API_KEY
+            Bliskapaczka_Shipping_Method_Helper::API_KEY
         );
         $this->assertEquals(
             'BLISKAPACZKA_TEST_MODE',
-            $hepler::TEST_MODE
+            Bliskapaczka_Shipping_Method_Helper::TEST_MODE
         );
 
         $this->assertEquals(
             'BLISKAPACZKA_SENDER_EMAIL',
-            $hepler::SENDER_EMAIL
+            Bliskapaczka_Shipping_Method_Helper::SENDER_EMAIL
         );
         $this->assertEquals(
             'BLISKAPACZKA_SENDER_FIRST_NAME',
-            $hepler::SENDER_FIRST_NAME
+            Bliskapaczka_Shipping_Method_Helper::SENDER_FIRST_NAME
         );
         $this->assertEquals(
             'BLISKAPACZKA_SENDER_LAST_NAME',
-            $hepler::SENDER_LAST_NAME
+            Bliskapaczka_Shipping_Method_Helper::SENDER_LAST_NAME
         );
         $this->assertEquals(
             'BLISKAPACZKA_SENDER_PHONE_NUMBER',
-            $hepler::SENDER_PHONE_NUMBER
+            Bliskapaczka_Shipping_Method_Helper::SENDER_PHONE_NUMBER
         );
         $this->assertEquals(
             'BLISKAPACZKA_SENDER_STREET',
-            $hepler::SENDER_STREET
+            Bliskapaczka_Shipping_Method_Helper::SENDER_STREET
         );
         $this->assertEquals(
             'BLISKAPACZKA_SENDER_BUILDING_NUMBER',
-            $hepler::SENDER_BUILDING_NUMBER
+            Bliskapaczka_Shipping_Method_Helper::SENDER_BUILDING_NUMBER
         );
         $this->assertEquals(
             'BLISKAPACZKA_SENDER_FLAT_NUMBER',
-            $hepler::SENDER_FLAT_NUMBER
+            Bliskapaczka_Shipping_Method_Helper::SENDER_FLAT_NUMBER
         );
         $this->assertEquals(
             'BLISKAPACZKA_SENDER_POST_CODE',
-            $hepler::SENDER_POST_CODE
+            Bliskapaczka_Shipping_Method_Helper::SENDER_POST_CODE
         );
         $this->assertEquals(
             'BLISKAPACZKA_SENDER_CITY',
-            $hepler::SENDER_CITY
+            Bliskapaczka_Shipping_Method_Helper::SENDER_CITY
         );
         $this->assertEquals(
             'BLISKAPACZKA_GOOGLE_MAP_API_KEY',
-            $hepler::GOOGLE_MAP_API_KEY
+            Bliskapaczka_Shipping_Method_Helper::GOOGLE_MAP_API_KEY
         );
     }
 
@@ -99,8 +114,7 @@ class HelperTest extends TestCase
      */
     public function getParcelDimensions($settings, $expectedValue)
     {
-        $hepler = new Bliskapaczka_Shipping_Method_Helper();
-        $this->assertEquals($expectedValue, $hepler->getParcelDimensions($settings));
+        $this->assertEquals($expectedValue, $this->helper->getParcelDimensions($settings));
     }
 
     public function parcelDimensionsModuleSettings()
@@ -132,8 +146,7 @@ class HelperTest extends TestCase
      */
     public function testGetGoogleMapApiKey($apiKey, $expectedValue)
     {
-        $hepler = new Bliskapaczka_Shipping_Method_Helper();
-        $this->assertEquals($expectedValue, $hepler->getGoogleMapApiKey($apiKey));
+        $this->assertEquals($expectedValue, $this->helper->getGoogleMapApiKey($apiKey));
     }
 
     public function googleMapModuleSettings()
@@ -211,24 +224,24 @@ class HelperTest extends TestCase
                 }
             }]';
 
-        $hepler = new Bliskapaczka_Shipping_Method_Helper();
+        $this->helper = new Bliskapaczka_Shipping_Method_Helper();
 
-        $lowestPrice = $hepler->getLowestPrice(json_decode($priceListEachOther));
+        $lowestPrice = $this->helper->getLowestPrice(json_decode($priceListEachOther));
         $this->assertEquals(5.99, $lowestPrice);
 
-        $lowestPrice = $hepler->getLowestPrice(json_decode($priceListOneTheSame));
+        $lowestPrice = $this->helper->getLowestPrice(json_decode($priceListOneTheSame));
         $this->assertEquals(8.99, $lowestPrice);
 
-        $lowestPrice = $hepler->getLowestPrice(json_decode($priceListOnlyOne));
+        $lowestPrice = $this->helper->getLowestPrice(json_decode($priceListOnlyOne));
         $this->assertEquals(10.27, $lowestPrice);
 
-        $lowestPrice = $hepler->getLowestPrice(json_decode($priceListEachOther), false);
+        $lowestPrice = $this->helper->getLowestPrice(json_decode($priceListEachOther), false);
         $this->assertEquals(4.87, $lowestPrice);
 
-        $lowestPrice = $hepler->getLowestPrice(json_decode($priceListOneTheSame), false);
+        $lowestPrice = $this->helper->getLowestPrice(json_decode($priceListOneTheSame), false);
         $this->assertEquals(7.31, $lowestPrice);
 
-        $lowestPrice = $hepler->getLowestPrice(json_decode($priceListOnlyOne), false);
+        $lowestPrice = $this->helper->getLowestPrice(json_decode($priceListOnlyOne), false);
         $this->assertEquals(8.35, $lowestPrice);
     }
 
@@ -253,24 +266,23 @@ class HelperTest extends TestCase
                 "price":{"net":7.31,"vat":1.68,"gross":8.99},
                 "unavailabilityReason":null
             }]';
-        $hepler = new Bliskapaczka_Shipping_Method_Helper();
 
-        $price = $hepler->getPriceForCarrier(json_decode($priceList), 'INPOST');
+        $price = $this->helper->getPriceForCarrier(json_decode($priceList), 'INPOST');
         $this->assertEquals(10.27, $price);
 
-        $price = $hepler->getPriceForCarrier(json_decode($priceList), 'RUCH');
+        $price = $this->helper->getPriceForCarrier(json_decode($priceList), 'RUCH');
         $this->assertEquals(5.99, $price);
 
-        $price = $hepler->getPriceForCarrier(json_decode($priceList), 'POCZTA');
+        $price = $this->helper->getPriceForCarrier(json_decode($priceList), 'POCZTA');
         $this->assertEquals(8.99, $price);
 
-        $price = $hepler->getPriceForCarrier(json_decode($priceList), 'INPOST', false);
+        $price = $this->helper->getPriceForCarrier(json_decode($priceList), 'INPOST', false);
         $this->assertEquals(8.35, $price);
 
-        $price = $hepler->getPriceForCarrier(json_decode($priceList), 'RUCH', false);
+        $price = $this->helper->getPriceForCarrier(json_decode($priceList), 'RUCH', false);
         $this->assertEquals(4.87, $price);
 
-        $price = $hepler->getPriceForCarrier(json_decode($priceList), 'POCZTA', false);
+        $price = $this->helper->getPriceForCarrier(json_decode($priceList), 'POCZTA', false);
         $this->assertEquals(7.31, $price);
     }
 
@@ -307,11 +319,10 @@ class HelperTest extends TestCase
                'INPOST' => 0,
                'RUCH' => 1
            );
-        $helper = new Bliskapaczka_Shipping_Method_Helper();
 
         $this->assertEquals(
             '[{"operator":"INPOST","price":{"net":8.35,"vat":1.92,"gross":10.27}},{"operator":"RUCH","price":{"net":4.87,"vat":1.12,"gross":5.99}}]',
-            $helper->getOperatorsForWidget(0.0, json_decode($priceList), $cods)
+            $this->helper->getOperatorsForWidget(0.0, json_decode($priceList), $cods)
         );
     }
 
@@ -320,9 +331,7 @@ class HelperTest extends TestCase
      */
     public function testCleaningPhoneNumber($phoneNumber)
     {
-        $hepler = new Bliskapaczka_Shipping_Method_Helper();
-     
-        $this->assertEquals('606606606', $hepler->telephoneNumberCeaning($phoneNumber));
+        $this->assertEquals('606606606', $this->helper->telephoneNumberCeaning($phoneNumber));
     }
 
     public function phpneNumbers()
@@ -339,12 +348,8 @@ class HelperTest extends TestCase
 
     public function testGetApiMode()
     {
-        $hepler = new Bliskapaczka_Shipping_Method_Helper();
-
-        $mode = $hepler->getApiMode('yes');
-        $this->assertEquals('test', $mode);
-
-        $mode = $hepler->getApiMode();
-        $this->assertEquals('prod', $mode);
+        $this->helper->isSandbox() 
+        	? $this->assertEquals('test', $this->helper->getApiMode())
+        	: $this->assertEquals('prod', $this->helper->getApiMode());
     }
 }
