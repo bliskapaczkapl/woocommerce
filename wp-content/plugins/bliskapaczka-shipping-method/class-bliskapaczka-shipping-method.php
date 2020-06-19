@@ -586,7 +586,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		}
 
 		if ( ! isset( $pos_operator ) ) {
-			$pos_operator = WC()->session->get( 'bliskapaczka_posoperator' );
+			$pos_operator = WC()->session->get( 'bliskapaczka_posOperator' );
 		}
 		if ( ( 'bliskapaczka-courier' === $chosen_method ) || ( 'bliskapaczka' === $chosen_method ) ) {
 			if ( 'cod' === $chosen_payment_method ) {
@@ -640,7 +640,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$pos_operator = esc_html( sanitize_text_field( wp_unslash( $_POST[ $req_key ] ) ) );
 
 			// @TODO verify its a courier allowed.
-			WC()->session->set( 'bliskapaczka_posoperator', $pos_operator );
+			WC()->session->set( 'bliskapaczka_posOperator', $pos_operator );
 
 			WC()->cart->calculate_totals();
 		}
