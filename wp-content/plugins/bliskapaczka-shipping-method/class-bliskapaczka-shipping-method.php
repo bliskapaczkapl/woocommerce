@@ -240,7 +240,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				echo '</span></p>';
 				echo '</div>';
 
-				echo '<div><strong>' . esc_html( __( 'Shipping cost', 'bliskapaczka-shipping-method' ) ) . ': ' . wc_price( esc_html( bliskapaczka_get_price() ) ) . '</strong></div>';
+				echo '<div><strong>' . esc_html( __( 'Shipping cost', 'bliskapaczka-shipping-method' ) ) . ': ' . wp_kses_post( wc_price( bliskapaczka_get_price() ) ) . '</strong></div>';
 			}
 		}
 	}
