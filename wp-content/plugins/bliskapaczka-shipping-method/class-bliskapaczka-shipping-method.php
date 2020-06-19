@@ -435,7 +435,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		wp_register_style( 'widget-styles-bliskapaczka', plugin_dir_url( __FILE__ ) . 'assets/css/bliskapaczka.css', array(), 'v6', false );
 		wp_enqueue_style( 'widget-styles-bliskapaczka' );
 
-		wp_register_script( 'plugin-script', plugin_dir_url( __FILE__ ) . 'assets/js/bliskapaczka.js', array(), 'v6', false );
+		wp_register_script( 'plugin-script', plugin_dir_url( __FILE__ ) . 'assets/js/bliskapaczka.js', array(), 'v7', false );
 		wp_enqueue_script( 'plugin-script' );
 		wp_localize_script(
 			'plugin-script',
