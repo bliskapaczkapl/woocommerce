@@ -15,25 +15,27 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
     myModal.classList.add('modal');
     myModal.style.display = 'block';
 
-    if (jQuery('#bliskapaczka_posCode').attr('value') === "") {
-        jQuery('#bliskapaczka_posOperator').attr('value', "")
+    let posCode = jQuery('#bliskapaczka_posCode').val();
+    let posOperator = jQuery('#bliskapaczka_posOperator').val();
+ 
+    if (posCode === "") {
+        jQuery('#bliskapaczka_posOperator').val("");
     }
 
     jQuery('input[value="bliskapaczka"]').trigger('click');
     Bliskapaczka.updateSelectedCarrier();
+    
     BPWidget.init(
         bpWidget,
         {
             googleMapApiKey: googleMapApiKey,
             callback: function (data) {
-                console.log(data)
-                console.log('BPWidget callback:', data.code, data.operator)
 
                 posCodeForm = document.getElementById('bliskapaczka_posCode')
                 posOperatorForm = document.getElementById('bliskapaczka_posOperator')
 
-                posCodeForm.value = data.code;
-                posOperatorForm.value = data.operator;
+                posCode = posCodeForm.value = data.code;
+                posOperator = posOperatorForm.value = data.operator;
 
                 Bliskapaczka.pointSelected(data, operators);
             },
@@ -41,7 +43,11 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
             posType: 'DELIVERY',
             testMode: testMode,
             codOnly: codOnly,
-            showCod: false
+            showCod: false,
+            selectedPos: {
+            	code: posCode,
+            	operator: posOperator
+            }
         }
     );
 }
@@ -56,7 +62,6 @@ Bliskapaczka.pointSelected = function (data, operators) {
 Bliskapaczka.updatePrice = function (posOperator, operators) {
     item = Bliskapaczka.getTableRow();
     var shippingMethod = jQuery('input[class="shipping_method"]:checked');
-    console.log(shippingMethod)
     if (item) {
         priceDiv = item.find('.delivery_option_price').first();
 
