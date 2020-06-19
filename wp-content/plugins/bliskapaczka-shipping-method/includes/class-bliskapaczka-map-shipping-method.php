@@ -191,8 +191,8 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
      */
     public function calculate_shipping( $package = array() ) {
 
-        $helper         = new Bliskapaczka_Shipping_Method_Helper();
-        $bliskapaczka   = new Bliskapaczka_Map_Shipping_Method();
+        $helper         = Bliskapaczka_Shipping_Method_Helper::instance();
+        $bliskapaczka   = $helper->getMapShippingMethod();
 
         // @codingStandardsIgnoreStart
         $label = $bliskapaczka->settings[ $helper::TITLE ];
@@ -224,7 +224,7 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
         $operator_code = '',
         $is_cod = false
     ) {
-        $helper             = new Bliskapaczka_Shipping_Method_Helper();
+    	$helper         = Bliskapaczka_Shipping_Method_Helper::instance();
         $price_list         = $helper->getOperatorsForWidget($cart_total, null, $is_cod);
         $price_list = json_decode($price_list);
         $price = 0;

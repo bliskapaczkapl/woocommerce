@@ -162,7 +162,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				echo '</label>';
 			}
 			$shipping_methods = WC()->shipping->get_shipping_methods();
-			if ( null === $shipping_methods['bliskapaczka'] ) {
+			if ( ! isset( $shipping_methods['bliskapaczka'] ) || null === $shipping_methods['bliskapaczka'] ) {
 				echo '<input name="bliskapaczka_posOperator" type="hidden" id="bliskapaczka_posOperator" value="' . esc_html( WC()->session->get( 'bliskapaczka_posOperator' ) ) . '" />';
 			}
 		}
@@ -235,9 +235,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 						 ( ( $pos_info->postalCode ) ? esc_html( $pos_info->postalCode ) . ' ' : '' ) . esc_html( $pos_info->city );
 					// @codingStandardsIgnoreEnd
+
 				}
 				echo '</span></p>';
 				echo '</div>';
+
+				echo '<div><strong>' . esc_html( __( 'Shipping cost', 'bliskapaczka-shipping-method' ) ) . ': ' . wp_kses_post( wc_price( bliskapaczka_get_price() ) ) . '</strong></div>';
 			}
 		}
 	}
@@ -250,12 +253,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	function bliskapaczka_add_widget_div( $checkout ) {
 
 		echo '<div id="myModal">';
-		echo '<div id="myModal" >';
-		echo '<div id="bpWidget_wrapper">';
-		echo "<a name='bpWidget_wrapper'><a/>";
-		echo '<div id="bpWidget"></div>';
-		echo '<div id="bpWidget" ></div>';
-		echo '</div>';
+		echo '	<div id="bpWidget_wrapper">';
+		echo '		<a name="bpWidget_wrapper"><a/>';
+		echo '		<div id="bpWidget"></div>';
+		echo '	</div>';
 		echo '</div>';
 
 	}
@@ -572,8 +573,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		if (isset($_POST['post_data'])) {
 			$post_data = array();
 			parse_str( $_POST['post_data'], $post_data );
-			$pos_operator = $post_data['bliskapaczka_posOperator'];
-			$pos_code     = $post_data['bliskapaczka_posCode'];
+			$pos_operator = isset( $post_data['bliskapaczka_posOperator'] ) ? $post_data['bliskapaczka_posOperator'] : null;
+			$pos_code     = isset( $post_data['bliskapaczka_posCode'] ) ? $post_data['bliskapaczka_posCode'] : null;
 		}
 		
 		// @codingStandardsIgnoreEnd
