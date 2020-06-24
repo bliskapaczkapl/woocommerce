@@ -73,6 +73,13 @@ class Bliskapaczka_Shipping_Method_Helper
 	private $courier_shipping_method;
 
 	/**
+	 * Price list response from API buffor.
+	 * 
+	 * @var array
+	 */
+	private $buf_price_list = array();
+
+	/**
 	 * Returns a signle instance of this helper
 	 */
 	public static function instance() {
@@ -191,6 +198,7 @@ class Bliskapaczka_Shipping_Method_Helper
     public function getPriceList(array $data = null)
     {
     	$bliskapaczka = $this->getMapShippingMethod();
+
         if (is_null($data)) {
             $data = array(
               "parcel" => array(
@@ -198,10 +206,18 @@ class Bliskapaczka_Shipping_Method_Helper
               )
             );
         }
-        $apiClient = $this->getApiClientPricing($bliskapaczka);
-        $priceList = $apiClient->get($data);
 
-        return json_decode($priceList);
+        // We generete hash for the request data, to remember response from api. 
+        $hash = \md5( \json_encode( $data ) );
+        
+        // Take data, if it's not buffered.
+        if ( ! isset( $this->buf_price_list[ $hash ]) ) {
+        	$apiClient = $this->getApiClientPricing($bliskapaczka);
+        	$priceList = $apiClient->get($data);
+        	$this->buf_price_list[ $hash ] = json_decode($priceList);
+        }
+
+    	return $this->buf_price_list[ $hash ];
     }
 
     public function getPriceListForCourier($cart_total, $priceList = null, $is_cod = false)
@@ -218,6 +234,10 @@ class Bliskapaczka_Shipping_Method_Helper
             }
             $data['deliveryType'] = 'D2D';
             $priceList = $this->getPriceList($data);
+
+            if ( !is_array( $priceList ) ) {
+            	$priceList = array();
+            }
 
         }
         $operators = array();
@@ -244,32 +264,43 @@ class Bliskapaczka_Shipping_Method_Helper
      * @return string|null
      */
     public function getOperatorsForWidget($cart_total, $priceList = null, $is_cod = false)
-    {
-        if (is_null($priceList)) {
-            $bliskapaczka = $this->getMapShippingMethod();
-            $data = array(
-                "parcel" => array(
-                    'dimensions' => $this->getParcelDimensions($bliskapaczka->settings)
-                )
-            );
-            if ($is_cod === true) {
-                $data['codValue'] = $cart_total;
-            }
-            $priceList = $this->getPriceList($data);
-            $data['deliveryType'] = 'D2P';
-            $priceListForD2P = $this->getPriceList($data);
-            $priceList = array_merge($priceList, $priceListForD2P);
-        }
-        $operators = array();
-        foreach ($priceList as $item) {
-            if ($item->availabilityStatus === true) {
-                $operators[] = array(
-                    "operator" => $item->operatorName,
-                    "price" => $item->price
-                );
-            }
-        }
+    {	
+    	static $operators;
+    	// Hash is used to dected if we must request data from API again, in the same PHP process.
+    	static $hash; 
+    	$newHash = "" . $cart_total . $is_cod ? '_0' : '_1';
+    	
+    	if ( ! isset($operators) || $hash !== $newHash) {
+    		$hash = $newHash;
 
+	        if (is_null($priceList)) {
+	            $bliskapaczka = $this->getMapShippingMethod();
+	            $data = array(
+	                "parcel" => array(
+	                    'dimensions' => $this->getParcelDimensions($bliskapaczka->settings)
+	                )
+	            );
+	            if ($is_cod === true) {
+	                $data['codValue'] = $cart_total;
+	            }
+	            $priceList = $this->getPriceList($data);
+	            if (! is_array( $priceList) ) {
+	            	$priceList = [];
+	            }
+	            $data['deliveryType'] = 'D2P';
+	            $priceListForD2P = $this->getPriceList($data);
+	            $priceList = array_merge($priceList, $priceListForD2P);
+	        }
+	        $operators = array();
+	        foreach ($priceList as $item) {
+	            if ($item->availabilityStatus === true) {
+	                $operators[] = array(
+	                    "operator" => $item->operatorName,
+	                    "price" => $item->price
+	                );
+	            }
+	        }
+    	}
         return json_encode($operators);
     }
 
@@ -511,8 +542,17 @@ class Bliskapaczka_Shipping_Method_Helper
     		$method = \array_shift($methods);
     		return $method->get_method_id();
     	}
-    	
+
     	return null;
     }
-    
+	
+    /**
+     * Returns information if current method on order page is COD (cash on delivery)
+     * 
+     * @return boolean TRUE 
+     */
+    public function isChoosedPaymentCOD() 
+    {
+    	return 'cod' === WC()->session->get( 'chosen_payment_method', null );
+    }
 }
