@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Bliskapaczka Core class
+ * Bliskapaczka autoloader
  */
-class Bliskapaczka_Shipping_Method_Core
+class Bliskapaczka_Loader
 {
     /**
      * Autoloader for Bliskapaczka namespace
@@ -15,7 +15,7 @@ class Bliskapaczka_Shipping_Method_Core
         if (preg_match('#^(Bliskapaczka\\\\ApiClient)\b#', $class)) {
             $libDir = BLISKAPACZKA_ABSPATH . 'vendor/bliskapaczkapl/bliskapaczka-api-client/src/';
             $filePath = $libDir . str_replace('\\', '/', $class) . '.php';
-        } else if (preg_match('#^(IBAN)\b#', $class)) {
+        } else if ($class == 'IBAN' || preg_match('#^(IBAN)\b#', $class)) {
         	$filePath = BLISKAPACZKA_ABSPATH . 'vendor/globalcitizen/php-iban/oophp-iban.php';
         } else if (preg_match('#^(Bliskapaczka_Admin_)#', $class)) {
         	$filePath = BLISKAPACZKA_ABSPATH . 'includes/admin/' . self::prepareClassFileName($class) ;
@@ -40,6 +40,4 @@ class Bliskapaczka_Shipping_Method_Core
     }
 }
 
-spl_autoload_register('Bliskapaczka_Shipping_Method_Core::autoloader', true, true);
-
-
+spl_autoload_register('Bliskapaczka_Loader::autoloader', true, true);
