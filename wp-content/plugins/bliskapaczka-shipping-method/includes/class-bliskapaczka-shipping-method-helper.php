@@ -112,10 +112,9 @@ class Bliskapaczka_Shipping_Method_Helper
     /**
      * Get Google API key. If key is not defined return default.
      *
-     * @param array $settings
      * @return string
      */
-    public function getGoogleMapApiKey($settings)
+    public function getGoogleMapApiKey()
     {
     	$key = $this->getMapShippingMethod()->get_option( self::GOOGLE_MAP_API_KEY, null );
     	
