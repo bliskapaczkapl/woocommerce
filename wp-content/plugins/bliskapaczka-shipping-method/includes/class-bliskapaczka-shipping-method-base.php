@@ -26,7 +26,9 @@ abstract class Bliskapaczka_Shipping_Method_Base extends WC_Shipping_Method
 	 * 
 	 * @return string Delivery method identity
 	 */
-	abstract public static function get_identity();
+	public static function get_identity() {
+		throw new \Bliskapaczka_Exception('This method must be overwrited.');
+	}
 	
 	/**
 	 * Returns the price list for the shipping method.
