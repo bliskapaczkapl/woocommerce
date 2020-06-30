@@ -494,15 +494,16 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 		$chosen_shipping_method = WC()->session->get( 'chosen_shipping_methods' )[0];
 		$pos_code               = WC()->session->get( 'bliskapaczka_point_code' );
-		$pos_operator           = WC()->session->get( 'bliskapaczka_point_operator' );
+		$door_operator           = WC()->session->get( 'bliskapaczka_door_operator' );
+		$point_operator           = WC()->session->get( 'bliskapaczka_point_operator' );
 		$disabled               = false;
 
-		if ( Bliskapaczka_Courier_Shipping_Method::get_identity() === $chosen_shipping_method && empty( $pos_operator ) ) {
+		if ( Bliskapaczka_Courier_Shipping_Method::get_identity() === $chosen_shipping_method && empty( $door_operator ) ) {
 			$disabled = true;
 		} elseif ( Bliskapaczka_Map_Shipping_Method::get_identity() === $chosen_shipping_method ) {
 			if ( empty( $pos_code ) ) {
 				$disabled = true;
-			} elseif ( empty( $pos_operator ) ) {
+			} elseif ( empty( $point_operator ) ) {
 				$disabled = true;
 			}
 		}
