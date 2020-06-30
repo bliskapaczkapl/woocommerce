@@ -36,7 +36,7 @@ class HelperTest extends TestCase
     {
         $this->assertTrue(method_exists('Bliskapaczka_Shipping_Method_Helper', 'getParcelDimensions'));
         $this->assertTrue(method_exists('Bliskapaczka_Shipping_Method_Helper', 'getLowestPrice'));
-        $this->assertTrue(method_exists('Bliskapaczka_Shipping_Method_Helper', 'getPriceForCarrier'));
+        $this->assertTrue(method_exists('Bliskapaczka_Shipping_Method_Helper', 'getPriceList'));
     }
 
     public function testConstants()
