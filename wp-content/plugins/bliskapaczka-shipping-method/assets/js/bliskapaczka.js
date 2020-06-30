@@ -15,11 +15,11 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
     myModal.classList.add('modal');
     myModal.style.display = 'block';
 
-    let posCode = jQuery('#bliskapaczka_posCode').val();
-    let posOperator = jQuery('#bliskapaczka_posOperator').val();
+    let posCode = jQuery('#bliskapaczka-point-code').val();
+    let posOperator = jQuery('#bliskapaczka-point-operator').val();
  
     if (posCode === "") {
-        jQuery('#bliskapaczka_posOperator').val("");
+        jQuery('#bliskapaczka-point-operator').val("");
     }
 
     jQuery('input[value="bliskapaczka"]').trigger('click');
@@ -31,8 +31,8 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
             googleMapApiKey: googleMapApiKey,
             callback: function (data) {
 
-                posCodeForm = document.getElementById('bliskapaczka_posCode')
-                posOperatorForm = document.getElementById('bliskapaczka_posOperator')
+                posCodeForm = document.getElementById('bliskapaczka-point-code')
+                posOperatorForm = document.getElementById('bliskapaczka-point-operator')
 
                 posCode = posCodeForm.value = data.code;
                 posOperator = posOperatorForm.value = data.operator;
@@ -102,15 +102,15 @@ Bliskapaczka.getTableRow = function () {
     return item;
 }
 
-Bliskapaczka.checkFirstCourier = function() {
-    if (jQuery('.bliskapaczka_courier_item_wrapper.checked').length === 0) {
-        if (jQuery('.bliskapaczka_courier_item_wrapper').length !== 0) {
-            jQuery(jQuery('.bliskapaczka_courier_item_wrapper')[0]).addClass('checked');
-            jQuery('#bliskapaczka_posOperator').val(jQuery(jQuery('.bliskapaczka_courier_item_wrapper')[0])
-              .attr('data-operator'));
-        }
-    }
-}
+//Bliskapaczka.checkFirstCourier = function() {
+//    if (jQuery('.bliskapaczka_courier_item_wrapper.checked').length === 0) {
+//        if (jQuery('.bliskapaczka_courier_item_wrapper').length !== 0) {
+//            jQuery(jQuery('.bliskapaczka_courier_item_wrapper')[0]).addClass('checked');
+//            jQuery('#bliskapaczka-point-operator').val(jQuery(jQuery('.bliskapaczka_courier_item_wrapper')[0])
+//              .attr('data-operator'));
+//        }
+//    }
+//}
 /**
  * Show loader spinner on element.
  * 
@@ -141,12 +141,12 @@ Bliskapaczka.loadUnblock = function( selector ) {
 
 document.addEventListener("DOMContentLoaded", function () {
 
-        jQuery('#myModal').on('click', function (event) {
-            if ((jQuery(event.target).children().hasClass('modal-content')) || event.target.className === 'modal') {
-                jQuery(this).hide();
-            }
+    jQuery('#myModal').on('click', function (event) {
+        if ((jQuery(event.target).children().hasClass('modal-content')) || event.target.className === 'modal') {
+            jQuery(this).hide();
+        }
 
-        })
+    });
 
     jQuery('form.checkout').on('change', 'input[name="payment_method"]', function(){
         jQuery(document.body).trigger("update_checkout");
@@ -159,19 +159,17 @@ document.addEventListener("DOMContentLoaded", function () {
             eval(arguments);
         }
     });
-  
+
     /**
      * Remember choosed courier and show new total order price on cart page
      */
-    jQuery('body.woocommerce-cart').on('click', '.bliskapaczka_courier_item_wrapper', function () {
+    jQuery('body').on('click', '.bliskapaczka_courier_item_wrapper', function () {
     	
     	 // loader
     	 Bliskapaczka.loadBlock('div.cart_totals');
     	
     	 const previousCourier =  jQuery('.bliskapaczka_courier_item_wrapper .checked').attr('data-operator');
     	 const currentCourier = jQuery(this).attr('data-operator');
-    	 jQuery('.bliskapaczka_courier_item_wrapper').removeClass('checked');
-    	 jQuery('input[value="bliskapaczka-courier"]').trigger('click');
     	 
     	 // if data no changed then return
     	 if (previousCourier === currentCourier) {
@@ -179,32 +177,32 @@ document.addEventListener("DOMContentLoaded", function () {
     		 return;
     	 }
     	 
+    	 jQuery('.bliskapaczka_courier_item_wrapper').removeClass('checked');
+    	 jQuery(this).addClass('checked');
+    	 
     	 // remember selected courier
     	 var data = {
-	        action: 'bliskapaczka_wc_cart_switch_courier', //the function in php functions to call
-	        bliskapaczka_posOperator: currentCourier,
-	        security: BliskapaczkaAjax.security
+	        action: 'bliskapaczka_delivery_to_door_switch_courier', //the function in php functions to call
+	        bliskapaczka_door_operator: currentCourier,
+	        security: BliskapaczkaAjax.security,
     	 };
     	 
     	 jQuery
 	    	 .post(BliskapaczkaAjax.ajax_url, data, function( response ) {
 	    		 if (typeof response !== 'undefined' && response.order_total_html !== 'undefined') {
-	    			 jQuery( '.cart_totals .order-total td' ).html( response.order_total_html );
+	    			 jQuery( '.order-total td' ).html( response.order_total_html );
 	    		 }
+	    		 
+	    		 // if the shipping method is not checked, we update it
+	    		 if ( ! jQuery('input[value="bliskapaczka-courier"]').is(':checked'))  {
+	        		 jQuery('input[value="bliskapaczka-courier"]').trigger('click');
+	        	 } 
+	    		 
 	    	 }, 'json')
 	    	 .always(function() {
 	    		 Bliskapaczka.loadUnblock('div.cart_totals');
 	    	 });
     });
-
-    jQuery('body').on('click', '.bliskapaczka_courier_item_wrapper', function () {
-        jQuery('.bliskapaczka_courier_item_wrapper').removeClass('checked');
-        jQuery(this).addClass('checked');
-        jQuery('#bliskapaczka_posOperator').val(jQuery(this)
-          .attr('data-operator'));
-        jQuery('input[value="bliskapaczka-courier"]').trigger('click');
-        jQuery(document.body).trigger("update_checkout");
-    })
 
 });
 

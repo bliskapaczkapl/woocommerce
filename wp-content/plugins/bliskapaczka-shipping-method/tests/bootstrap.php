@@ -6,6 +6,8 @@ ini_set('error_reporting', E_ALL);
 $GLOBALS['ROOT_DIR'] = dirname(__FILE__) . '/../';
 define('BLISKAPACZKA_ABSPATH', $GLOBALS['ROOT_DIR']);
 define('ABSPATH', $GLOBALS['ROOT_DIR']);
+define('WC_ABSPATH', $GLOBALS['ROOT_DIR'] . '../woocommerce/');
+
 
 //Define include path for Pseudo Mocks
 // ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . dirname(__FILE__) . '/pseudo_mock');
@@ -66,6 +68,14 @@ function autoloader($class)
         // @codingStandardsIgnoreStart
         require_once($filePath);
         // @codingStandardsIgnoreEnd
+    }
+    
+    if ($class == 'Bliskapaczka_Loader') {
+    	$filePath = BLISKAPACZKA_ABSPATH . 'includes/class-bliskapaczka-loader.php';
+    	// @codingStandardsIgnoreStart
+    	require_once($filePath);
+    	return;
+    	// @codingStandardsIgnoreEnd
     }
 
     $filePath =  $GLOBALS['ROOT_DIR'] . '../woocommerce/includes/class-wc-order.php';

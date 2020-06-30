@@ -36,7 +36,7 @@ class HelperTest extends TestCase
     {
         $this->assertTrue(method_exists('Bliskapaczka_Shipping_Method_Helper', 'getParcelDimensions'));
         $this->assertTrue(method_exists('Bliskapaczka_Shipping_Method_Helper', 'getLowestPrice'));
-        $this->assertTrue(method_exists('Bliskapaczka_Shipping_Method_Helper', 'getPriceForCarrier'));
+        $this->assertTrue(method_exists('Bliskapaczka_Shipping_Method_Helper', 'getPriceList'));
     }
 
     public function testConstants()
@@ -141,20 +141,9 @@ class HelperTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider googleMapModuleSettings
-     */
-    public function testGetGoogleMapApiKey($apiKey, $expectedValue)
+    public function testGetGoogleMapApiKey()
     {
-        $this->assertEquals($expectedValue, $this->helper->getGoogleMapApiKey($apiKey));
-    }
-
-    public function googleMapModuleSettings()
-    {
-        return [
-            [['BLISKAPACZKA_GOOGLE_MAP_API_KEY' => false] , 'AIzaSyCUyydNCGhxGi5GIt5z5I-X6hofzptsRjE'],
-            [['BLISKAPACZKA_GOOGLE_MAP_API_KEY' => 'abcd'], 'abcd']
-        ];
+        $this->assertNotNull($this->helper->getGoogleMapApiKey());
     }
 
     public function testGetLowestPrice()
@@ -243,87 +232,6 @@ class HelperTest extends TestCase
 
         $lowestPrice = $this->helper->getLowestPrice(json_decode($priceListOnlyOne), false);
         $this->assertEquals(8.35, $lowestPrice);
-    }
-
-    public function testGetPriceForCarrier()
-    {
-        $priceList = '[
-            {
-                "operatorName":"INPOST",
-                "availabilityStatus":true,
-                "price":{"net":8.35,"vat":1.92,"gross":10.27},
-                "unavailabilityReason":null
-            },
-            {
-                "operatorName":"RUCH",
-                "availabilityStatus":true,
-                "price":{"net":4.87,"vat":1.12,"gross":5.99},
-                "unavailabilityReason":null
-            },
-            {
-                "operatorName":"POCZTA",
-                "availabilityStatus":true,
-                "price":{"net":7.31,"vat":1.68,"gross":8.99},
-                "unavailabilityReason":null
-            }]';
-
-        $price = $this->helper->getPriceForCarrier(json_decode($priceList), 'INPOST');
-        $this->assertEquals(10.27, $price);
-
-        $price = $this->helper->getPriceForCarrier(json_decode($priceList), 'RUCH');
-        $this->assertEquals(5.99, $price);
-
-        $price = $this->helper->getPriceForCarrier(json_decode($priceList), 'POCZTA');
-        $this->assertEquals(8.99, $price);
-
-        $price = $this->helper->getPriceForCarrier(json_decode($priceList), 'INPOST', false);
-        $this->assertEquals(8.35, $price);
-
-        $price = $this->helper->getPriceForCarrier(json_decode($priceList), 'RUCH', false);
-        $this->assertEquals(4.87, $price);
-
-        $price = $this->helper->getPriceForCarrier(json_decode($priceList), 'POCZTA', false);
-        $this->assertEquals(7.31, $price);
-    }
-
-    public function testGetOperatorsForWidget()
-    {
-        $priceList = '[
-            {
-                "operatorName":"INPOST",
-                "availabilityStatus":true,
-                "price":{"net":8.35,"vat":1.92,"gross":10.27},
-                "unavailabilityReason":null
-            },
-            {
-                "operatorName":"RUCH",
-                "availabilityStatus":true,
-                "price":{"net":4.87,"vat":1.12,"gross":5.99},
-                "unavailabilityReason":null
-            },
-            {
-                "operatorName":"POCZTA",
-                "availabilityStatus":false,
-                "price":null,
-                "unavailabilityReason": {
-                    "errors": {
-                        "messageCode": "ppo.api.error.pricing.algorithm.constraints.dimensionsTooSmall",
-                        "message": "Allowed parcel dimensions too small. Min dimensions: 16x10x1 cm",
-                        "field": null,
-                        "value": null
-                    }
-                }
-            }]';
-           $cods = array(
-               'POCZTA' => 5,
-               'INPOST' => 0,
-               'RUCH' => 1
-           );
-
-        $this->assertEquals(
-            '[{"operator":"INPOST","price":{"net":8.35,"vat":1.92,"gross":10.27}},{"operator":"RUCH","price":{"net":4.87,"vat":1.12,"gross":5.99}}]',
-            $this->helper->getOperatorsForWidget(0.0, json_decode($priceList), $cods)
-        );
     }
 
     /**
