@@ -69,6 +69,14 @@ function autoloader($class)
         require_once($filePath);
         // @codingStandardsIgnoreEnd
     }
+    
+    if ($class == 'Bliskapaczka_Loader') {
+    	$filePath = BLISKAPACZKA_ABSPATH . 'includes/class-bliskapaczka-loader.php';
+    	// @codingStandardsIgnoreStart
+    	require_once($filePath);
+    	return;
+    	// @codingStandardsIgnoreEnd
+    }
 
     $filePath =  $GLOBALS['ROOT_DIR'] . '../woocommerce/includes/class-wc-order.php';
     if (isset($filePath) && is_file($filePath)) {
