@@ -1,10 +1,12 @@
 <?php
-class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Map_Shipping_Method {
+class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Shipping_Method_Base {
+	
     /**
      * Bliskapaczka_Courier_Shipping_Method constructor.
      */
     public function __construct() {
-        $this->id                 = 'bliskapaczka-courier';
+    	
+    	$this->id                 = self::get_identity();
         $this->method_title       = __( 'Bliskapaczka Courier Shipping', 'bliskapaczka-shipping-method' );
         $this->method_description = __( 'Custom Coureir Shipping Method for Bliskapaczka', 'bliskapaczka-shipping-method' );
 
@@ -18,11 +20,20 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Map_Shipping_Met
         $this->enabled = isset( $this->settings['enabled'] ) ? $this->settings['enabled'] : 'yes';
         $this->title   = isset( $this->settings['title'] ) ? $this->settings['title'] : __( 'Bliskapaczka Shipping', 'bliskapaczka-shipping-method' );
     }
+    
+    /**
+     *
+     * {@inheritDoc}
+     * @see Bliskapaczka_Shipping_Method_Base::get_identity()
+     */
+    public static function get_identity() {
+    	return 'bliskapaczka-courier';
+    }
 
     /**
      * Init function
      */
-    function init() {
+    private function init() {
         $this->init_form_fields();
         $this->init_settings();
 
@@ -33,7 +44,6 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Map_Shipping_Met
      * Add field to admin panel
      */
     function init_form_fields() {
-        $helper            = Bliskapaczka_Shipping_Method_Helper::instance();
         $this->form_fields = array(
             'courier_enabled' => array(
                 'title'       => __( 'Enable', 'bliskapaczka-shipping-method' ),
@@ -41,7 +51,7 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Map_Shipping_Met
                 'description' => __( 'Enable this shipping method', 'bliskapaczka-shipping-method' ),
                 'default'     => 'yes',
             ),
-            $helper::TITLE_COURIER => array(
+        	Bliskapaczka_Shipping_Method_Helper::TITLE_COURIER => array(
                 'title'       => __( 'Delivery name', 'bliskapaczka-shipping-method' ),
                 'type'        => 'text',
                 'description' => __( 'Deliver name to be display on site', 'bliskapaczka-shipping-method' ),
@@ -49,9 +59,7 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Map_Shipping_Met
             	'custom_attributes' => array( 'required' => 'required' ),
             	'class' => 'bliskapaczka_admin_field_required',
             ),
-
         );
-
     }
 
     /**
@@ -64,6 +72,7 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Map_Shipping_Met
      */
     public function calculate_shipping( $package = array() ) {
 
+    	
         // @codingStandardsIgnoreStart
     	$helper         = Bliskapaczka_Shipping_Method_Helper::instance();
         $bliskapaczka   = $helper->getCourierShippingMethod();
@@ -83,29 +92,37 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Map_Shipping_Met
 
     }
 
-    /**
-     * @param string $operator_name
-     * @param string $operator_code
-     * @param boolean $is_cod
-     *
-     * @return int
-     */
-    public function recalculate_shipping_cost(
-        $cart_total = 0.0,
-        $operator_name = '',
-        $operator_code = '',
-        $is_cod = false
-    ) {
-    	$helper         = Bliskapaczka_Shipping_Method_Helper::instance();
-        $price_list = json_decode($helper->getPriceListForCourier($cart_total, null, $is_cod));
-        $price = 0;
-        foreach ($price_list as $item) {
-            if ($item->operator === $operator_name) {
-                $price = $item->price->gross;
-                break;
-            }
-        }
+   	/**
+   	 * 
+   	 * {@inheritDoc}
+   	 * @see Bliskapaczka_Shipping_Method_Base::price_list()
+   	 */
+    public function get_price_list( $cart_total,  $is_cod = false )
+    {
+    	$helper = $this->helper();
+    	$priceList = new Bliskapaczka_Price_List();
+    	
+    	$request = array(
+    		'parcel' => array(
+    			'dimensions' => $helper->getParcelDimensions()
+    		),
+    		'deliveryType' => 'D2D'
+    	);
+    	
+    	if ( true === $is_cod) {
+    		$request['codValue'] = $cart_total;
+    	}
+    	
+    	$items = $helper->getPriceList($request);
 
-        return $price;
+    	if ( is_array( $items ) ) {
+    		foreach ($items as $item) {
+    			if ($item->availabilityStatus === true) {
+    				$priceList->append( Bliskapaczka_Price_List_Item_Factory::fromApiItem( $item ) );
+    			}
+    		}
+    	}
+    	
+    	return $priceList;
     }
 }

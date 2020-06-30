@@ -1,5 +1,6 @@
 <?php
-class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
+class Bliskapaczka_Map_Shipping_Method extends Bliskapaczka_Shipping_Method_Base {
+	
     /**
      * Constructor for your shipping class
      *
@@ -7,7 +8,7 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
      * @return void
      */
     public function __construct() {
-        $this->id                 = 'bliskapaczka';
+    	$this->id                 = self::get_identity();
         $this->method_title       = __( 'Bliskapaczka Shipping', 'bliskapaczka-shipping-method' );
         $this->method_description = __( 'Custom Shipping Method for Bliskapaczka', 'bliskapaczka-shipping-method' );
 
@@ -22,6 +23,15 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
         $this->title   = isset( $this->settings['title'] ) ? $this->settings['title'] : __( 'Bliskapaczka Shipping', 'bliskapaczka-shipping-method' );
         add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
     }
+    
+    /**
+     *
+     * {@inheritDoc}
+     * @see Bliskapaczka_Shipping_Method_Base::get_identity()
+     */
+    public static function get_identity() {
+    	return 'bliskapaczka';
+    }
 
     /**
      * Init your settings
@@ -29,7 +39,7 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
      * @access public
      * @return void
      */
-    public function init() {
+    private function init() {
         $this->init_form_fields();
         $this->init_settings();
     }
@@ -191,11 +201,8 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
      */
     public function calculate_shipping( $package = array() ) {
 
-        $helper         = Bliskapaczka_Shipping_Method_Helper::instance();
-        $bliskapaczka   = $helper->getMapShippingMethod();
-
         // @codingStandardsIgnoreStart
-        $label = $bliskapaczka->settings[ $helper::TITLE ];
+        $label = $this->get_option( Bliskapaczka_Shipping_Method_Helper::TITLE );
         if (empty($label)) {
             $label = __( 'Delivery to point', 'bliskapaczka-shipping-method' );
         }
@@ -209,31 +216,50 @@ class Bliskapaczka_Map_Shipping_Method extends WC_Shipping_Method {
         $this->add_rate( $rate );
 
     }
-
+    
     /**
-     * @param float $cart_total
-     * @param string $operator_name
-     * @param string $operator_code
-     * @param boolean $is_cod
-     *
-     * @return int
+     * 
+     * {@inheritDoc}
+     * @see Bliskapaczka_Shipping_Method_Base::price_list()
      */
-    public function recalculate_shipping_cost(
-        $cart_total = 0.0,
-        $operator_name = '',
-        $operator_code = '',
-        $is_cod = false
-    ) {
-    	$helper         = Bliskapaczka_Shipping_Method_Helper::instance();
-        $price_list         = $helper->getOperatorsForWidget($cart_total, null, $is_cod);
-        $price_list = json_decode($price_list);
-        $price = 0;
-        foreach ($price_list as $item) {
-            if ($item->operator === $operator_name) {
-                $price = $item->price->gross;
-                break;
-            }
-        }
-        return $price;
+    public function get_price_list( $cart_total,  $is_cod = false ) 
+	{
+		$helper = $this->helper();
+		$priceList = new Bliskapaczka_Price_List();
+
+		$request = array(
+			'parcel' => array(
+				'dimensions' => $helper->getParcelDimensions($this->settings)
+			),
+			'deliveryType' => 'P2P'
+		);
+
+		if ( true === $is_cod) {
+			$request['codValue'] = $cart_total;
+ 		}
+
+ 		$items = $helper->getPriceList($request);
+
+ 		if ( is_array( $items ) ) {
+ 			foreach ($items as $item) {
+ 				if ($item->availabilityStatus === true) {
+ 					$priceList->append( Bliskapaczka_Price_List_Item_Factory::fromApiItem( $item ) );
+ 				}
+ 			}
+		}
+
+		$request['deliveryType'] = 'D2P';
+
+		$items = $helper->getPriceList($request);
+ 
+		if ( is_array( $items ) ) {
+			foreach ($items as $item) {
+				if ($item->availabilityStatus === true) {
+					$priceList->append( Bliskapaczka_Price_List_Item_Factory::fromApiItem( $item ) );
+				}
+			}
+		}
+		
+		return $priceList;
     }
 }

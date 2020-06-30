@@ -63,7 +63,7 @@ abstract class Bliskapaczka_Shipping_Method_Base extends WC_Shipping_Method
 		}
 
 		// If we are here, that this mean that the given operator not found.
-		throw new \Bliskapaczka_Exception('Operator not found in current offer.');
+		throw new \Bliskapaczka_Exception('The given operator was not found in current offer.');
 	}
 
 	/**

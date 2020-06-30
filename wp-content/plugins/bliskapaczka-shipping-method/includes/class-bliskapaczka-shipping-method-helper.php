@@ -95,21 +95,17 @@ class Bliskapaczka_Shipping_Method_Helper
      *
      * @return array
      */
-    public function getParcelDimensions($settings)
+    public function getParcelDimensions()
     {
-        // $type = Mage::getStoreConfig(self::PARCEL_SIZE_TYPE_XML_PATH);
-        $height = $settings[self::SIZE_TYPE_FIXED_SIZE_X];
-        $length = $settings[self::SIZE_TYPE_FIXED_SIZE_Y];
-        $width = $settings[self::SIZE_TYPE_FIXED_SIZE_Z];
-        $weight = $settings[self::SIZE_TYPE_FIXED_SIZE_WEIGHT];
-
+    	$bliskapaczka = $this->getMapShippingMethod();
+    
         $dimensions = array(
-            "height" => $height,
-            "length" => $length,
-            "width" => $width,
-            "weight" => $weight
+        	"height" => $bliskapaczka->get_option(self::SIZE_TYPE_FIXED_SIZE_X),
+        	"length" => $bliskapaczka->get_option(self::SIZE_TYPE_FIXED_SIZE_Y),
+        	"width"  => $bliskapaczka->get_option(self::SIZE_TYPE_FIXED_SIZE_Z),
+        	"weight" => $bliskapaczka->get_option(self::SIZE_TYPE_FIXED_SIZE_WEIGHT)
         );
-
+        
         return $dimensions;
     }
 
@@ -121,11 +117,11 @@ class Bliskapaczka_Shipping_Method_Helper
      */
     public function getGoogleMapApiKey($settings)
     {
-    	if ( isset( $settings[ self::GOOGLE_MAP_API_KEY ] ) && ! empty( $settings[ self::GOOGLE_MAP_API_KEY ] ) ) {
-            return $settings[ self::GOOGLE_MAP_API_KEY ];
-        }
-
-        return self::DEFAULT_GOOGLE_API_KEY;
+    	$key = $this->getMapShippingMethod()->get_option( self::GOOGLE_MAP_API_KEY, null );
+    	
+    	return null === $key 
+    		? self::DEFAULT_GOOGLE_API_KEY 
+    		: $key;
     }
 
     /**
@@ -161,34 +157,6 @@ class Bliskapaczka_Shipping_Method_Helper
     }
 
     /**
-     * Get price for specific carrier
-     *
-     * @param array $priceList
-     * @param string $carrierName
-     * @param bool $taxInc
-     * @param bool $cod
-     *
-     * @return float
-     * @throws \Bliskapaczka\ApiClient\Exception
-     */
-    public function getPriceForCarrier($priceList, $carrierName, $taxInc = true, $cod = false)
-    {
-        $price = null;
-
-        foreach ($priceList as $carrier) {
-            if ($carrier->operatorName == $carrierName) {
-                if ($taxInc) {
-                    $price = $carrier->price->gross;
-                } else {
-                    $price = $carrier->price->net;
-                }
-            }
-        }
-
-        return $price;
-    }
-
-    /**
      * Get operators and prices from Bliskapaczka API
      *
      * @param array|null $data
@@ -197,12 +165,10 @@ class Bliskapaczka_Shipping_Method_Helper
      */
     public function getPriceList(array $data = null)
     {
-    	$bliskapaczka = $this->getMapShippingMethod();
-
         if (is_null($data)) {
             $data = array(
               "parcel" => array(
-                  'dimensions' => $this->getParcelDimensions($bliskapaczka->settings)
+                  'dimensions' => $this->getParcelDimensions()
               )
             );
         }
@@ -212,96 +178,11 @@ class Bliskapaczka_Shipping_Method_Helper
         
         // Take data, if it's not buffered.
         if ( ! isset( $this->buf_price_list[ $hash ]) ) {
-        	$apiClient = $this->getApiClientPricing($bliskapaczka);
-        	$priceList = $apiClient->get($data);
+        	$priceList = $this->getApiClientPricing()->get($data);
         	$this->buf_price_list[ $hash ] = json_decode($priceList);
         }
-
+		
     	return $this->buf_price_list[ $hash ];
-    }
-
-    public function getPriceListForCourier($cart_total, $priceList = null, $is_cod = false)
-    {
-        if (is_null($priceList)) {
-        	$bliskapaczka = $this->getMapShippingMethod();
-            $data = array(
-                "parcel" => array(
-                    'dimensions' => $this->getParcelDimensions($bliskapaczka->settings)
-                )
-            );
-            if ($is_cod === true) {
-                $data['codValue'] = $cart_total;
-            }
-            $data['deliveryType'] = 'D2D';
-            $priceList = $this->getPriceList($data);
-
-            if ( !is_array( $priceList ) ) {
-            	$priceList = array();
-            }
-
-        }
-        $operators = array();
-        foreach ($priceList as $item) {
-            if ($item->availabilityStatus === true) {
-                $operators[] = array(
-                    "operator" => $item->operatorName,
-                    "price" => $item->price
-                );
-            }
-        }
-
-        return json_encode($operators);
-    }
-
-    /**
-     * Get widget configuration
-     *
-     * @param float $cart_total
-     * @param array $priceList
-     *
-     * @param bool $is_cod
-     *
-     * @return string|null
-     */
-    public function getOperatorsForWidget($cart_total, $priceList = null, $is_cod = false)
-    {	
-    	static $operators;
-    	// Hash is used to dected if we must request data from API again, in the same PHP process.
-    	static $hash; 
-    	$newHash = "" . $cart_total . $is_cod ? '_0' : '_1';
-    	
-    	if ( ! isset($operators) || $hash !== $newHash) {
-    		$hash = $newHash;
-
-	        if (is_null($priceList)) {
-	            $bliskapaczka = $this->getMapShippingMethod();
-	            $data = array(
-	                "parcel" => array(
-	                    'dimensions' => $this->getParcelDimensions($bliskapaczka->settings)
-	                )
-	            );
-	            if ($is_cod === true) {
-	                $data['codValue'] = $cart_total;
-	            }
-	            $priceList = $this->getPriceList($data);
-	            if (! is_array( $priceList) ) {
-	            	$priceList = [];
-	            }
-	            $data['deliveryType'] = 'D2P';
-	            $priceListForD2P = $this->getPriceList($data);
-	            $priceList = array_merge($priceList, $priceListForD2P);
-	        }
-	        $operators = array();
-	        foreach ($priceList as $item) {
-	            if ($item->availabilityStatus === true) {
-	                $operators[] = array(
-	                    "operator" => $item->operatorName,
-	                    "price" => $item->price
-	                );
-	            }
-	        }
-    	}
-        return json_encode($operators);
     }
 
     /**
@@ -554,5 +435,52 @@ class Bliskapaczka_Shipping_Method_Helper
     public function isChoosedPaymentCOD() 
     {
     	return 'cod' === WC()->session->get( 'chosen_payment_method', null );
+    }
+
+    /**
+     * Append bliskapaczka shipping method to WooCommerce avaible methods
+     * 
+     * @param Bliskapaczka_Shipping_Method_Base $method Instance of bliskapaczka shipping method to append.
+     * @param string[] $methods  List of shipping methods.
+     * 
+     * @return array List of shipping methods.
+     */
+    public function append_to_wc_methods( $method, array $methods )
+    {
+    	if ( ! ( $method instanceof Bliskapaczka_Shipping_Method_Base ) ) {
+    		throw new Bliskapaczka_Exception('Method argument must be instance of "Bliskapaczka_Shipping_Method_Base" class.');
+    	}
+    	
+    	$name_parts =  explode( '\\', get_class( $method ) );
+    	$method_name =  end( $name_parts );
+    
+    	// Always append in admin panel.
+    	if ( is_admin() ) {
+    		$methods[$method::get_identity()] = $method_name;
+    		return $methods; 
+    	}
+    	
+    	// Skip if method is disabled.
+    	if ( ! $method->is_enabled() ) {
+    		return $methods;
+    	}
+    	
+    	// Verify API Key configuration.
+    	try {
+    		$this->getApiKey();
+    	} catch (\Exception $e) {
+    		// Api key is not setted, so we log warning and don't append.
+    		wc_get_logger()->warning( $e->getMessage() );
+    		return $methods;
+    	}
+    	
+    	// Verify if any courier is enabled for this method. 
+    	$price_list = $method->get_price_list(0, false);
+    	
+    	if ( count( $price_list ) > 0 ) {
+    		$methods[$method::get_identity()] = $method_name;
+    	}
+    	
+    	return $methods;
     }
 }
