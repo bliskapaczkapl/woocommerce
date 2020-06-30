@@ -9,13 +9,13 @@ class CoreTest extends TestCase
      */
     public function testPrepareClassFileName($class, $expected)
     {
-        $this->assertEquals($expected, Bliskapaczka_Shipping_Method_Core::prepareClassFileName($class));
+    	$this->assertEquals($expected, Bliskapaczka_Loader::prepareClassFileName($class));
     }
 
     public function classesNames()
     {
         return [
-            ['Bliskapaczka_Shipping_Method_Core', 'class-bliskapaczka-shipping-method-core.php'],
+            ['Bliskapaczka_Loader', 'class-bliskapaczka-loader.php'],
             ['Bliskapaczka_Shipping_Method_Helper', 'class-bliskapaczka-shipping-method-helper.php'],
             ['Bliskapaczka_Shipping_Method_Mapper', 'class-bliskapaczka-shipping-method-mapper.php'],
         ];
