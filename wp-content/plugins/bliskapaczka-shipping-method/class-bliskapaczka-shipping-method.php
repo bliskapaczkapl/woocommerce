@@ -224,7 +224,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 */
 	function bliskapaczka_add_widget_div( $checkout ) {
 
-		echo '<div id="myModal">';
+		echo '<div id="bliskapaczka-modal">';
 		echo '	<div id="bpWidget_wrapper">';
 		echo '		<a name="bpWidget_wrapper"><a/>';
 		echo '		<div id="bpWidget"></div>';
@@ -430,10 +430,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 		wp_register_style( 'widget-styles', 'https://widget.bliskapaczka.pl/v5/main.css', array(), 'v5', false );
 		wp_enqueue_style( 'widget-styles' );
-		wp_register_style( 'widget-styles-bliskapaczka', plugin_dir_url( __FILE__ ) . 'assets/css/bliskapaczka.css', array(), 'v6', false );
+		wp_register_style( 'widget-styles-bliskapaczka', plugin_dir_url( __FILE__ ) . 'assets/css/bliskapaczka.css', array(), 'v7', false );
 		wp_enqueue_style( 'widget-styles-bliskapaczka' );
 
-		wp_register_script( 'plugin-script', plugin_dir_url( __FILE__ ) . 'assets/js/bliskapaczka.js', array(), 'v8', false );
+		wp_register_script( 'plugin-script', plugin_dir_url( __FILE__ ) . 'assets/js/bliskapaczka.js', array(), 'v9', false );
 		wp_enqueue_script( 'plugin-script' );
 		wp_localize_script(
 			'plugin-script',
