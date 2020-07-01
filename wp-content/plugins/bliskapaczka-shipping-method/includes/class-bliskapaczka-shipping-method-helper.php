@@ -475,11 +475,13 @@ class Bliskapaczka_Shipping_Method_Helper
     	
     	// Verify if any courier is enabled for this method. 
     	$price_list = $method->get_price_list(0, false);
-    	
+
     	if ( count( $price_list ) > 0 ) {
     		$methods[$method::get_identity()] = $method_name;
+    	} else {
+    		wc_get_logger()->warning( ' Operators with avaible status not found for  "' . $method->id . '" method. Please verify your configuration in bliskapaczka panel and settings in WooCommerce.' );
     	}
-    	
+
     	return $methods;
     }
 }
