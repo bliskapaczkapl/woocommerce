@@ -20,7 +20,7 @@ class Bliskapaczka_Map_Shipping_Method extends Bliskapaczka_Shipping_Method_Base
 
         $this->enabled = isset( $this->settings['enabled'] ) ? $this->settings['enabled'] : 'yes';
         $this->title   = isset( $this->settings['title'] ) ? $this->settings['title'] : __( 'Bliskapaczka Shipping', 'bliskapaczka-shipping-method' );
-        add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
+        
     }
     
     /**
@@ -41,6 +41,12 @@ class Bliskapaczka_Map_Shipping_Method extends Bliskapaczka_Shipping_Method_Base
     private function init() {
         $this->init_form_fields();
         $this->init_settings();
+
+        $action_tag = 'woocommerce_update_options_shipping_' . $this->id;
+
+        if ( ! has_action( $action_tag ) ) {
+        	add_action( $action_tag, array( $this, 'process_admin_options' ) );
+        }
     }
 
     /**

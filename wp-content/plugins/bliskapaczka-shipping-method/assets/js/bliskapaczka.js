@@ -9,10 +9,10 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
     }
     bpWidget = document.getElementById('bpWidget');
 
-    myModal = document.getElementById('myModal');
-    bpWidget.classList.add('modal-content');
+    myModal = document.getElementById('bliskapaczka-modal');
+    bpWidget.classList.add('bliskapaczka-modal-content');
     bpWidget.style.display = 'block';
-    myModal.classList.add('modal');
+    myModal.classList.add('bliskapaczka-modal');
     myModal.style.display = 'block';
 
     let posCode = jQuery('#bliskapaczka-point-code').val();
@@ -54,7 +54,7 @@ Bliskapaczka.showMap = function (operators, googleMapApiKey, testMode, codOnly =
 
 Bliskapaczka.pointSelected = function (data, operators) {
     Bliskapaczka.updatePrice(data.operator, operators);
-    var modal = document.getElementById("myModal");
+    var modal = document.getElementById("bliskapaczka-modal");
     modal.style.display = "none";
     jQuery( document.body ).trigger( 'update_checkout' );
 }
@@ -141,8 +141,8 @@ Bliskapaczka.loadUnblock = function( selector ) {
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    jQuery('#myModal').on('click', function (event) {
-        if ((jQuery(event.target).children().hasClass('modal-content')) || event.target.className === 'modal') {
+    jQuery('#bliskapaczka-modal').on('click', function (event) {
+        if ((jQuery(event.target).children().hasClass('bliskapaczka-modal-content')) || event.target.className === 'bliskapaczka-modal') {
             jQuery(this).hide();
         }
 
