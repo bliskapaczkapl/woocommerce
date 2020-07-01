@@ -16,7 +16,6 @@ class Bliskapaczka_Map_Shipping_Method extends Bliskapaczka_Shipping_Method_Base
         $this->countries    = array(
             'PL',
         );
-
         $this->init();
 
         $this->enabled = isset( $this->settings['enabled'] ) ? $this->settings['enabled'] : 'yes';
@@ -189,6 +188,107 @@ class Bliskapaczka_Map_Shipping_Method extends Bliskapaczka_Shipping_Method_Base
             ),
         );
 
+    }
+
+    /**
+     * Validations of admin options fields. Required attribute is delivered through HTML5 required attribute.
+     * @access public
+     * @return string
+     */
+    public function validate_BLISKAPACZKA_SENDER_EMAIL_field($key, $value)
+    {
+        if (!preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/i", $value) || strlen($value) > 60) {
+            WC_Admin_Settings::add_error(esc_html__('E-mail is invalid or longer than 60 characters.', 'bliskapaczka-shipping-method'));
+            return;
+        }
+        return $value;
+    }
+
+    public function validate_BLISKAPACZKA_SENDER_FIRST_NAME_field($key, $value)
+    {
+        if (strlen($value) > 30) {
+            WC_Admin_Settings::add_error(esc_html__('First name is longer than 30 characters.', 'bliskapaczka-shipping-method'));
+            return;
+        }
+        return ($value);
+    }
+
+    public function validate_BLISKAPACZKA_SENDER_LAST_NAME_field($key, $value)
+    {
+        if (strlen($value) > 30) {
+            WC_Admin_Settings::add_error(esc_html__('Last name is logner than 30 characters.', 'bliskapaczka-shipping-method'));
+            return;
+        }
+        return $value;
+    }
+
+    public function validate_BLISKAPACZKA_SENDER_PHONE_NUMBER_field($key, $value)
+    {
+        $value = preg_replace(array("/\s+/", "/-/"), "", $value);
+        if (!preg_match("/^\d{9}$/", $value)) {
+
+            WC_Admin_Settings::add_error(esc_html__('Phone number is invalid (only 9 letters phone numbers are allowed).', 'bliskapaczka-shipping-method'));
+            return;
+        }
+        return $value;
+    }
+
+    public function validate_BLISKAPACZKA_SENDER_STREET_field($key, $value)
+    {
+        if (strlen($value) > 30) {
+            WC_Admin_Settings::add_error(esc_html__('Street name cannot exceed 30 characters.', 'bliskapaczka-shipping-method'));
+            return;
+        }
+        return $value;
+    }
+
+    public function validate_BLISKAPACZKA_SENDER_BUILDING_NUMBER_field($key, $value)
+    {
+        if (strlen($value) > 10) {
+            WC_Admin_Settings::add_error(esc_html__('Building number cannot exceed 10 characters.', 'bliskapaczka-shipping-method'));
+            return;
+        }
+        return $value;
+    }
+
+    public function validate_BLISKAPACZKA_SENDER_FLAT_NUMBER_field($key, $value)
+    {
+        if (strlen($value) > 10) {
+            WC_Admin_Settings::add_error(esc_html__('Flat number cannot exceed 10 characters.', 'bliskapaczka-shipping-method'));
+            return;
+        }
+        return $value;
+    }
+
+    public function validate_BLISKAPACZKA_SENDER_POST_CODE_field($key, $value)
+    {
+        if (strlen($value) > 10) {
+            WC_Admin_Settings::add_error(esc_html__('Post code cannot exceed 10 characters.', 'bliskapaczka-shipping-method'));
+            return;
+        }
+        return $value;
+    }
+
+    public function validate_BLISKAPACZKA_SENDER_CITY_field($key, $value)
+    {
+        if (strlen($value) > 30) {
+            WC_Admin_Settings::add_error(esc_html__('City name cannot exceed 30 characters.', 'bliskapaczka-shipping-method'));
+            return;
+        }
+        return $value;
+    }
+
+    public function validate_BLISKAPACZKA_BANK_ACCOUNT_NUMBER_field($key, $value)
+    {
+        $value = preg_replace(array("/\s+/", "/-/", "/PL/", "/pl/"), "", $value);
+        $iban = 'PL' . $value;
+        $myIban = new IBAN($iban);
+        if ($myIban->Verify() === false) {
+            WC_Admin_Settings::add_error(esc_html__('Bank account is not valid IBAN number.', 'bliskapaczka-shipping-method'));
+            return;
+        } else {
+            return $value;
+        }
     }
 
     /**

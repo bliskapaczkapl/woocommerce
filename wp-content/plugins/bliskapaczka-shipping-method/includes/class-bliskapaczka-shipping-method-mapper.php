@@ -82,15 +82,41 @@ class Bliskapaczka_Shipping_Method_Mapper
     protected function _prepareDestinationData($data, WC_Order $order)
     {
         $shippingAddress = $order->get_address('shipping');
-        if (!empty($shippingAddress['address_2'])) {
-            $buildingNumber = explode('/', $shippingAddress['address_2'])[0];
-            $flatNumber = explode('/', $shippingAddress['address_2'])[1];
-            $street = $shippingAddress['address_1'];
-        } else {
-            $buildingNumber = $this->getBuildingNumber($shippingAddress['address_1']);
-            $flatNumber = $this->getFlatNumber($shippingAddress['address_1']);
-            $street = implode(' ', explode(' ', $shippingAddress['address_1'], -1));
+        $bliskapaczka_addres1 = $shippingAddress['address_1'];
+        $bliskapaczka_addres2 = $shippingAddress['address_2'];
+
+        if (!empty($bliskapaczka_addres2)) {
+           $bliskapaczka_addres1 = $bliskapaczka_addres1 . ' ' . $bliskapaczka_addres2;
         }
+        //Pattern
+        $pattern = '/((?<=[\s])[\w]{1,}[\s]{1,})?((?<=[\s])[\w,\s]{1,}[\s,\/]{1,})?((?<=[\s,\/])[\w,\s]{1,})$/';
+
+        $street = preg_replace($pattern, "", $bliskapaczka_addres1);
+        preg_match($pattern, $bliskapaczka_addres1, $pattern_matches);
+
+        //Cleaning empty values
+        foreach ($pattern_matches as $key => $value) {
+            if (is_null($value) || $value == '')
+                unset($pattern_matches[$key]);
+        }
+
+        //Re-index array
+        $pattern_matches = array_values($pattern_matches);
+
+        //Counter
+        $pattern_group_counter = count($pattern_matches);
+
+        if ($pattern_group_counter > 2) {
+            $buildingNumber = $pattern_matches[$pattern_group_counter - 2];
+            $flatNumber = $pattern_matches[$pattern_group_counter - 1];
+        } else if ($pattern_group_counter == 2) {
+            $buildingNumber = $pattern_matches[$pattern_group_counter - 1];
+            $flatNumber = "";
+        }
+
+        //Cleaning separator
+        $buildingNumber = str_replace("/", "", $buildingNumber);
+
         $data['receiverStreet'] = $street;
         $data['receiverBuildingNumber'] = $buildingNumber;
         $data['receiverFlatNumber'] = $flatNumber;

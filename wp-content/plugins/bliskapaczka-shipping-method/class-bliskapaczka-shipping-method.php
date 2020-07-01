@@ -445,6 +445,30 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		);
 	}
 
+	/**
+	 * Custom checkout validation.
+	 * Plugin uses default Woocommerce validation for e-mail, postal code and phone with some clean-up functions to meet API requirements.
+	 *
+	 * @param array $fields List of fiels.
+	 * @param array $errors List of errors.
+	 */
+	function bliskapaczka_checkout_validation( $fields, $errors ) {
+
+		$bliskapaczka_method_checker = WC()->session->get( 'chosen_shipping_methods' )[0];
+		if ( Bliskapaczka_Map_Shipping_Method::get_identity() === $bliskapaczka_method_checker || Bliskapaczka_Courier_Shipping_Method::get_identity() === $bliskapaczka_method_checker ) {
+
+			if ( strlen( $fields['billing_first_name'] > 30 || strlen( $fields['shipping_first_name'] ) > 30 ) ) {
+				$errors->add( 'validation', esc_html__( 'First name is longer than 30 characters.', 'bliskapaczka-shipping-method' ) );
+			}
+			if ( strlen( $fields['billing_last_name'] > 30 || strlen( $fields['shipping_last_name'] ) > 30 ) ) {
+				$errors->add( 'validation', esc_html__( 'Last name is logner than 30 characters.', 'bliskapaczka-shipping-method' ) );
+			}
+			if ( strlen( $fields['billing_city'] > 30 || strlen( $fields['shipping_city'] ) > 30 ) ) {
+				$errors->add( 'validation', esc_html__( 'City name cannot exceed 30 characters.', 'bliskapaczka-shipping-method' ) );
+			}
+		}
+	}
+	add_action( 'woocommerce_after_checkout_validation', 'bliskapaczka_checkout_validation', 10, 2 );
 
 	/**
 	 * Include custom CSS.
@@ -494,8 +518,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 		$chosen_shipping_method = WC()->session->get( 'chosen_shipping_methods' )[0];
 		$pos_code               = WC()->session->get( 'bliskapaczka_point_code' );
-		$door_operator           = WC()->session->get( 'bliskapaczka_door_operator' );
-		$point_operator           = WC()->session->get( 'bliskapaczka_point_operator' );
+		$door_operator          = WC()->session->get( 'bliskapaczka_door_operator' );
+		$point_operator         = WC()->session->get( 'bliskapaczka_point_operator' );
 		$disabled               = false;
 
 		if ( Bliskapaczka_Courier_Shipping_Method::get_identity() === $chosen_shipping_method && empty( $door_operator ) ) {
