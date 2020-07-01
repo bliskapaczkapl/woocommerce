@@ -487,25 +487,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 	add_action( 'woocommerce_calculate_totals', 'bliskapaczka_set_shipping_cost', 10 );
 	add_filter( 'woocommerce_order_button_html', 'bliskapaczka_disabled_checkout_button' );
-	add_filter( 'woocommerce_add_error', 'bliskapaczka_woocommerce_add_error' );
-
-	/**
-	 * Display polish error.
-	 *
-	 * @param string $error Error.
-	 *
-	 * @return string
-	 */
-	function bliskapaczka_woocommerce_add_error( $error ) {
-        // @codingStandardsIgnoreStart
-		if ( false === strpos( $_SERVER['HTTP_HOST'], 'bliskapaczka' ) ) {
-			return $error;
-		}
-        // @codingStandardsIgnoreEnd
-		wc_get_logger()->error( $error );
-		return 'Wystąpił błąd w przetwarzaniu zamówienia. Jeśli błąd będzie się powtarzał,
-		prosimy o kontakt.';
-	}
 
 	/**
 	 * Disable button if needed
