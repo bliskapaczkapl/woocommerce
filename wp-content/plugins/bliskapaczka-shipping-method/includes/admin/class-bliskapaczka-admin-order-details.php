@@ -26,7 +26,7 @@ class Bliskapaczka_Admin_Order_Details {
 		// We take a shiping method, and check for bliskapaczka data.
 		$method_id = $this->helper()->getWCShipingMethodId( $order );
 
-		if ( 'bliskapaczka-courier' !== $method_id && bliskapaczka !== $method_id ) {
+		if ( Bliskapaczka_Courier_Shipping_Method::get_identity() !== $method_id && Bliskapaczka_Map_Shipping_Method::get_identity() !== $method_id ) {
 			return; // Shiping aren't from bliskapaczka, so we do nothing.
 		}
 
