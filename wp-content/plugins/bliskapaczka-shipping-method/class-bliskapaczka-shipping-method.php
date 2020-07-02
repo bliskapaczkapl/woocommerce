@@ -16,7 +16,7 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
-load_plugin_textdomain('bliskapaczka-shipping-method', false, basename( dirname( __FILE__ ) ) . '/languages' );
+load_plugin_textdomain( 'bliskapaczka-shipping-method', false, basename( dirname( __FILE__ ) ) . '/languages' );
 define( 'BLISKAPACZKA_ABSPATH', dirname( __FILE__ ) . '/' );
 require_once 'includes/class-bliskapaczka-loader.php';
 
