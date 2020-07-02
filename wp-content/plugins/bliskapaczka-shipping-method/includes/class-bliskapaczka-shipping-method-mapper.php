@@ -89,7 +89,7 @@ class Bliskapaczka_Shipping_Method_Mapper
            $bliskapaczka_addres1 = $bliskapaczka_addres1 . ' ' . $bliskapaczka_addres2;
         }
         //Pattern
-        $pattern = '/((?<=[\s])[\w]{1,}[\s]{1,})?((?<=[\s])[\w,\s]{1,}[\s,\/]{1,})?((?<=[\s,\/])[\w,\s]{1,})$/';
+        $pattern = '/((?<=[\s])[\w]{1,}[\s,\/]{1,})?((?<=[\s,\/])[\w]{1,})$/';
 
         $street = preg_replace($pattern, "", $bliskapaczka_addres1);
         preg_match($pattern, $bliskapaczka_addres1, $pattern_matches);
