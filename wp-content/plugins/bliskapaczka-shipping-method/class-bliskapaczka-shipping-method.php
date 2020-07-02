@@ -457,13 +457,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		$bliskapaczka_method_checker = WC()->session->get( 'chosen_shipping_methods' )[0];
 		if ( Bliskapaczka_Map_Shipping_Method::get_identity() === $bliskapaczka_method_checker || Bliskapaczka_Courier_Shipping_Method::get_identity() === $bliskapaczka_method_checker ) {
 
-			if ( strlen( $fields['billing_first_name'] > 30 || strlen( $fields['shipping_first_name'] ) > 30 ) ) {
+			if ( strlen( $fields['billing_first_name'] ) > 30 || strlen( $fields['shipping_first_name'] ) > 30 ) {
 				$errors->add( 'validation', esc_html__( 'First name is longer than 30 characters.', 'bliskapaczka-shipping-method' ) );
 			}
-			if ( strlen( $fields['billing_last_name'] > 30 || strlen( $fields['shipping_last_name'] ) > 30 ) ) {
+			if ( strlen( $fields['billing_last_name'] ) > 30 || strlen( $fields['shipping_last_name'] ) > 30 ) {
 				$errors->add( 'validation', esc_html__( 'Last name is logner than 30 characters.', 'bliskapaczka-shipping-method' ) );
 			}
-			if ( strlen( $fields['billing_city'] > 30 || strlen( $fields['shipping_city'] ) > 30 ) ) {
+			if ( strlen( $fields['billing_city'] ) > 30 || strlen( $fields['shipping_city'] ) > 30 ) {
 				$errors->add( 'validation', esc_html__( 'City name cannot exceed 30 characters.', 'bliskapaczka-shipping-method' ) );
 			}
 		}
