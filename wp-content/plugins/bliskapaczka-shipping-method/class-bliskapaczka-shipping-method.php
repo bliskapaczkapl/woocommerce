@@ -117,6 +117,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		}
 
 		// Generete the view.
+		$dir_img = plugin_dir_url( __FILE__ ) . 'assets/img/operators/';
+
 		echo '<div class="bliskapaczka_courier_wrapper">';
 		foreach ( $price_list as $item ) {
 
@@ -125,7 +127,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			echo '<label class="bliskapaczka_courier_item_wrapper ' . esc_html( $css_selected_class ) . '" for="bliskapaczka_door_operator" data-operator="' . esc_html( $item->operator() ) . '">';
 			echo '<input type="radio" name="bliskapaczka_door_operator" value="' . esc_html( $item->operator() ) . '">';
 			echo '<div class="bliskapaczka_courier_item">';
-			echo '<div class="bliskapaczka_courier_item_logo"><img src="https://bliskapaczka.pl/static/images/' . esc_html( $item->operator() ) . '.png" alt="' . esc_html( $item->operator() ) . '" style="height: 25px; width: auto"></div>';
+			echo '<div class="bliskapaczka_courier_item_logo"><img src="' . esc_html( $dir_img . $item->operator() ) . '.png" alt="' . esc_html( $item->operator() ) . '" style="height: 25px; width: auto"></div>';
 			echo '<div class="bliskapaczka_courier_item_price">';
 			echo '<span class="bliskapaczka_courier_item_price_value">' . esc_html( $item->gross() ) . '</span><span>zł</span>';
 			echo '</div>';
