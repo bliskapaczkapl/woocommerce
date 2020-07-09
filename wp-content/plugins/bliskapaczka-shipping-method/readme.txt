@@ -1,9 +1,10 @@
 === Bliskapaczka.pl: integracja z WooCommerce ===
-Contributors: Bliskapaczka.pl
+Contributors: senditsa
 Tags: bliskapaczka, kurier, woocommerce, shipping, courier, delivery
 Requires at least: 4.0
 Tested up to: 5.3.2
 Stable tag: 1.2.0
+Requires PHP: 5.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
