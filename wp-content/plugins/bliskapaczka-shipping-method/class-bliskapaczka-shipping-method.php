@@ -702,6 +702,31 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 	add_action( 'woocommerce_checkout_update_order_review', 'bliskapaczka_checkout_update_order_review' );
 
+	/**
+	 * Replacing default Shipping information on thank you page.
+	 *
+	 * @param array $order Order data.
+	 * @param int   $order_id Order id.
+	 */
+	function thank_you_page_display_shipped_via( $order, $order_id ) {
+		$order = wc_get_order( $order_id );
+		foreach ( array_keys( $order->get_items( array( 'shipping' ) ) ) as $item_id ) {
+			$shipping_item_id = $item_id;
+		}
+		$operator                    = wc_get_order_item_meta( $shipping_item_id, '_bliskapaczka_posOperator' );
+		$bliskapaczka_method_checker = WC()->session->get( 'chosen_shipping_methods' )[0];
+		if ( Bliskapaczka_Courier_Shipping_Method::get_identity() === $bliskapaczka_method_checker ) {
+			/* translators: %s: method */
+			return '&nbsp;<small class="shipped_via">' . sprintf( __( 'via %s', 'woocommerce' ), $order->get_shipping_method() ) . ' ' . $operator . '</small>';
+		}
+		if ( Bliskapaczka_Map_Shipping_Method::get_identity() === $bliskapaczka_method_checker ) {
+			/* translators: %s: method */
+			return '&nbsp;<small class="shipped_via">' . sprintf( __( 'via %s', 'woocommerce' ), $order->get_shipping_method() ) . ' ' . $operator . '</small>';
+		}
+	}
+
+	add_filter( 'woocommerce_order_shipping_to_display_shipped_via', 'thank_you_page_display_shipped_via', 10, 2 );
+
 	// Registry operation in admin panel.
 	if ( is_admin() ) {
 		Bliskapaczka_Admin_Bootstrap::instance()->boot();
