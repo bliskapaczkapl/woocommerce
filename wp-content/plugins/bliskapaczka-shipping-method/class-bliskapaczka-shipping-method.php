@@ -327,9 +327,15 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			return;
 		}
 
-		foreach ( array_keys( $order->get_items( array( 'shipping' ) ) ) as $item_id ) {
-			$shipping_item_id = $item_id;
+		// Update the price of shipping item.
+		$shipping_items = $order->get_items( array( 'shipping' ) );
 
+		foreach ( $shipping_items as $item_id => $shipping_item ) {
+			$shipping_item_id = $item_id;
+		}
+
+		if ( $shipping_item instanceof \WC_Order_Item_Shipping ) {
+			$shipping_item->set_total( bliskapaczka_get_price() );
 		}
 
 		if ( Bliskapaczka_Courier_Shipping_Method::get_identity() === $shipping_method_id ) {
