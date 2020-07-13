@@ -348,6 +348,14 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		}
 
 		if ( isset( $pos_code ) ) {
+			$api_client = $helper->getApiClientPos();
+			$api_client->setPointCode( $pos_code );
+			$api_client->setOperator( $operator );
+			$pos_info = json_decode( $api_client->get() );
+            // @codingStandardsIgnoreStart
+			$pos_detailed = implode( ' ', array( $pos_info->description, $pos_info->street, $pos_info->postalCode, $pos_info->city ) );
+            // @codingStandardsIgnoreEnd
+			wc_add_order_item_meta( $shipping_item_id, '_bliskapaczka_posInfo', $pos_detailed );
 			wc_add_order_item_meta( $shipping_item_id, '_bliskapaczka_posCode', $pos_code );
 		}
 
