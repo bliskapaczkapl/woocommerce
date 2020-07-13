@@ -51,7 +51,7 @@ class Bliskapaczka_Admin_Order_Details {
 
 		$content =
 			'<div class="bliskapaczka-wc-admin-shipping-details">
-				<h3>Bliskapczka.pl - ' . esc_html( $order->get_shipping_method() ) . '</h3>
+				<h3>Bliskapaczka.pl - ' . esc_html( $order->get_shipping_method() ) . '</h3>
 				<table>
 					<tr>
 						<td>' . esc_html( __( 'Order number', 'bliskapaczka-shipping-method' ) ) . ':</td>
@@ -74,3 +74,24 @@ class Bliskapaczka_Admin_Order_Details {
 	}
 
 }
+/**
+ * Detailed info about point to point delivery
+ *
+ * @param array $formatted_meta Formatted order metadata.
+ */
+function bliskapaczka_order_meta_data_view($formatted_meta){
+    foreach ($formatted_meta as $obj) {
+        if ($obj->display_key == "_bliskapaczka_posCode") {
+            $obj->display_key = esc_html(__( 'Point code' , 'bliskapaczka-shipping-method' ) );
+        }
+        if ($obj->display_key == "_bliskapaczka_posOperator"){
+            $obj->display_key = esc_html(__('Operator' , 'bliskapaczka-shipping-method') );
+        }
+        if ($obj->display_key == "_bliskapaczka_posInfo"){
+            $obj->display_key = esc_html(__('Point info' , 'bliskapaczka-shipping-method' ) );
+        }
+    }
+
+    return $formatted_meta;
+}
+add_filter( 'woocommerce_order_item_get_formatted_meta_data', 'bliskapaczka_order_meta_data_view', 10, 2);
