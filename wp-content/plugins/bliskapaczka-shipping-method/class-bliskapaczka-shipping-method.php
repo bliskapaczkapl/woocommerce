@@ -709,17 +709,18 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * @param int   $order_id Order id.
 	 */
 	function thank_you_page_display_shipped_via( $order, $order_id ) {
-		$order = wc_get_order( $order_id );
+		$helper = Bliskapaczka_Shipping_Method_Helper::instance();
+		$order  = wc_get_order( $order_id );
 		foreach ( array_keys( $order->get_items( array( 'shipping' ) ) ) as $item_id ) {
 			$shipping_item_id = $item_id;
 		}
-		$operator                    = wc_get_order_item_meta( $shipping_item_id, '_bliskapaczka_posOperator' );
-		$bliskapaczka_method_checker = WC()->session->get( 'chosen_shipping_methods' )[0];
-		if ( Bliskapaczka_Courier_Shipping_Method::get_identity() === $bliskapaczka_method_checker ) {
+		$operator           = wc_get_order_item_meta( $shipping_item_id, '_bliskapaczka_posOperator' );
+		$shipping_method_id = $helper->getWCShipingMethodId( $order );
+		if ( Bliskapaczka_Courier_Shipping_Method::get_identity() === $shipping_method_id ) {
 			/* translators: %s: method */
 			return '&nbsp;<small class="shipped_via">' . sprintf( __( 'via %s', 'woocommerce' ), $order->get_shipping_method() ) . ' ' . $operator . '</small>';
 		}
-		if ( Bliskapaczka_Map_Shipping_Method::get_identity() === $bliskapaczka_method_checker ) {
+		if ( Bliskapaczka_Map_Shipping_Method::get_identity() === $shipping_method_id ) {
 			/* translators: %s: method */
 			return '&nbsp;<small class="shipped_via">' . sprintf( __( 'via %s', 'woocommerce' ), $order->get_shipping_method() ) . ' ' . $operator . '</small>';
 		}
