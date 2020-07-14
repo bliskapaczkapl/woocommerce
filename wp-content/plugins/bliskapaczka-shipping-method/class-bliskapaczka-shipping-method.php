@@ -722,7 +722,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * @param array $order Order data.
 	 * @param int   $order_id Order id.
 	 */
-	function thank_you_page_display_shipped_via( $order, $order_id ) {
+	function bliskapaczka_thank_you_page_display_shipped_via( $order, $order_id ) {
 		$helper = Bliskapaczka_Shipping_Method_Helper::instance();
 		$order  = wc_get_order( $order_id );
 		foreach ( array_keys( $order->get_items( array( 'shipping' ) ) ) as $item_id ) {
@@ -740,7 +740,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		}
 	}
 
-	add_filter( 'woocommerce_order_shipping_to_display_shipped_via', 'thank_you_page_display_shipped_via', 10, 2 );
+	add_filter( 'woocommerce_order_shipping_to_display_shipped_via', 'bliskapaczka_thank_you_page_display_shipped_via', 10, 2 );
 
 	// Registry operation in admin panel.
 	if ( is_admin() ) {
