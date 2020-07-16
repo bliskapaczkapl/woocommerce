@@ -36,6 +36,7 @@ class Bliskapaczka_Shipping_Method_Helper
 
     const ENABLE_COURIER = 'BLISKAPACZKA_COURIER_ENABLE';
     const AUTO_ADVICE = 'BLISKAPACZKA_AUTO_ADVICE';
+    const FLEXIBLE_SHIPPING = 'BLISKAPACZKA_FLEXIBLE_SHIPPING';
 
     /**
      * Temporarily blocked this functionality, because is not yet finished.

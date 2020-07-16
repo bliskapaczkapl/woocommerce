@@ -6,7 +6,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bliskapaczka-shipping-"
 "method\n"
 "POT-Creation-Date: 2020-06-18T10:20:18+00:00\n"
-"PO-Revision-Date: 2020-07-13 20:33+0200\n"
+"PO-Revision-Date: 2020-07-16 18:43+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pl\n"
@@ -259,6 +259,14 @@ msgstr "Operator"
 #: includes/admin/class-bliskapaczka-admin-order-details.php:84
 msgid "Point info"
 msgstr "Szczegóły punktu"
+
+#: includes/class-bliskapaczka-map-shipping-method.php:90
+msgid "WP Desk Flexible Shipping integration"
+msgstr "Integracja z wtyczką WP Desk Flexible Shipping"
+
+#: includes/class-bliskapaczka-map-shipping-method.php:93
+msgid "Enable integration of Bliskapaczka with WP Desk Flexible Shipping plugin."
+msgstr "Włącz integrację Bliskapaczka z wtyczką WP Desk Flexible Shipping."
 
 #~ msgid "Title"
 #~ msgstr "Tytuł"

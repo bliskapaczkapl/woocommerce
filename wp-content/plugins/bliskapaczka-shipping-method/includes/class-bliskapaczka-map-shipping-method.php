@@ -86,6 +86,13 @@ class Bliskapaczka_Map_Shipping_Method extends Bliskapaczka_Shipping_Method_Base
                 'default'     => 'no',
             ),
 */
+            $helper::FLEXIBLE_SHIPPING        => array(
+                'title'       => __( 'WP Desk Flexible Shipping integration' , 'bliskapaczka-shipping-method' ),
+                'type'        => 'checkbox',
+                'label'       => __( 'Enable' , 'bliskapaczka-shipping-method' ),
+                'description' => __( 'Enable integration of Bliskapaczka with WP Desk Flexible Shipping plugin.' , 'bliskapaczka-shipping-method' ),
+                'default'     => 'no',
+            ),
             $helper::TEST_MODE              => array(
                 'title'       => __( 'Test mode enabled', 'bliskapaczka-shipping-method' ),
                 'type'        => 'checkbox',
