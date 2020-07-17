@@ -6,6 +6,7 @@
  * Version: 1.2.0
  * Author: Bliskapaczka.pl
  * Text Domain: bliskapaczka-shipping-method
+ * Domain Path: /languages
  *
  * @package  Bliskapaczka
  * @subpackage Woocommerce
