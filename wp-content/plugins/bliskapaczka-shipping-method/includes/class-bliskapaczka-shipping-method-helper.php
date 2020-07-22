@@ -42,7 +42,7 @@ class Bliskapaczka_Shipping_Method_Helper
      * Temporarily blocked this functionality, because is not yet finished.
      * @var string
      */
-    const FUNCTIONALITY_AUTO_ADVICE_ENABLED = false;
+    const FUNCTIONALITY_AUTO_ADVICE_ENABLED = true;
 
     /**
      * Instance of helper
@@ -352,6 +352,39 @@ class Bliskapaczka_Shipping_Method_Helper
     }
 	
     /**
+     * Get inforamation about delivery point 
+     * 
+     * @param string $operator Operator indentity (UPS, DPD, ...)
+     * @param string $code Point identity
+     * 
+     * @return \stdClass
+     */
+    public function getPosInfo( $operator, $code )
+    {
+    	$api = $this->getApiClientPos();
+    	$api->setPointCode( $code );
+    	$api->setOperator( $operator );
+    	return json_decode( $api->get() );
+    }
+    
+    /**
+     * Convert point delivery information from api to string representations;
+     * 
+     * @param \stdClass $pos_info Object returned by Bliskapaczka_Shipping_Method_Helper::getPosInfo()
+     * 
+     * @throws InvalidArgumentException
+     * @return string
+     */
+    public function convertPosIntoString( $pos_info ) 
+    {
+    	if ( $pos_info instanceof  \stdClass ) {
+    		throw new InvalidArgumentException('Excepted the stdClass ');
+    	}
+    	
+    	return implode( ' ', [ $pos_info->description, $pos_info->street, $pos_info->postalCode, $pos_info->city ] );
+    }
+
+    /**
      * Returns  information about sandbox api mode
      * @return boolean  TRUE is sandbox
      */
@@ -369,6 +402,16 @@ class Bliskapaczka_Shipping_Method_Helper
     {
     	return self::FUNCTIONALITY_AUTO_ADVICE_ENABLED === true 
     			&& $this->getMapShippingMethod()->get_option( self::AUTO_ADVICE, 'no' ) === 'yes';
+    }
+
+    /**
+     * Return information if Flexible Shipping integretation is enabled
+     * 
+     * @return boolean  TRUE only when Flexible Shipping integretation is enabled
+     */
+    public function isFlexibleShippingIntegrationEnabled()
+    {
+    	return $this->getMapShippingMethod()->get_option( self::FLEXIBLE_SHIPPING, 'no' ) === 'yes';
     }
     
     /**
@@ -465,6 +508,11 @@ class Bliskapaczka_Shipping_Method_Helper
     		return $methods;
     	}
     	
+    	// Skip if Flexible Shipping Intergration is enabled
+    	if ( Bliskapaczka_Flexible_Shipping_Integration::is_integration_enabled() ) {
+    		return $methods;
+    	}
+    	
     	// Verify API Key configuration.
     	try {
     		$this->getApiKey();
@@ -484,5 +532,80 @@ class Bliskapaczka_Shipping_Method_Helper
     	}
 
     	return $methods;
+    }
+    
+    /**
+     * Remember settings for shipping item in order
+     * 
+     * @param integer $shipping_item_id ID od shippping item
+     * @param string $operator Identity of operator ( courier )
+     * @param string $pos_code"null Identtity of point deleivery
+     */
+    public function remember_shipping_item_data( $shipping_item_id, $operator, $pos_code )
+    {
+    	if ( isset( $pos_code ) ) {
+    		$pos_info = $this->getPosInfo( $operator, $pos_code );
+    		$pos_detailed = $this->convertPosIntoString($pos_info);
+    		
+    		wc_add_order_item_meta( $shipping_item_id, '_bliskapaczka_posInfo', $pos_detailed );
+    		wc_add_order_item_meta( $shipping_item_id, '_bliskapaczka_posCode', $pos_code );
+    	}
+    	
+    	wc_add_order_item_meta( $shipping_item_id, '_bliskapaczka_posOperator', $operator );
+    }
+    
+    /**
+     * Process send order to api
+     * 
+     * @param WC_Order $order 
+     * @param boolean $delivery_to_point TRUE if delivery method is delivery to point FALSE otherwise.
+     * 
+     * @throws Exception
+     */
+    public function send_order_to_api( WC_Order $order, $delivery_to_point)
+    {
+    	$mapper = new Bliskapaczka_Shipping_Method_Mapper();
+    	$bliskapaczka = $this->getMapShippingMethod();
+    	$bliskapaczka->init_settings();
+    	
+    	// delivery to door
+    	if (false === $delivery_to_point) {
+    		$order_data = $mapper->getDataForCourier( $order, $this, $bliskapaczka->settings );
+    		$need_to_pickup = true;
+    		$advice_api_client = $this->getApiClientTodoorAdvice();
+    		
+		// delivery to point
+    	} else {
+    		$order_data = $mapper->getData( $order, $this, $bliskapaczka->settings );
+    		$need_to_pickup = false;
+    		$advice_api_client = $this->getApiClientOrderAdvice();
+    	}
+    	
+    	if ( $order->get_payment_method() === 'cod' ) {
+    		$order_data = $mapper->prepareCOD( $order_data, $order );
+    		$order_data = $mapper->prepareInsuranceDataIfNeeded( $order_data, $order );
+    	}
+    	
+    	try {
+	    	$api_client = $this->getApiClientOrder();
+	    	$result     = $api_client->create( $order_data );
+	    	$order_number = json_decode( $result, true )['number'];
+	    	
+	    	$order->update_meta_data( '_bliskapaczka_order_id', $order_number);
+	    	$order->save();
+	    	
+	    	if ( $this->isAutoAdvice() === true ) {
+	    		
+	    		$advice_api_client->setOrderId( $order_number );
+	    		$advice_api_client->create( $order_data );
+	    		$order->update_meta_data( '_bliskapaczka_need_to_pickup', $need_to_pickup );
+	    		$order->save();
+	    	}
+	    	
+	    } catch ( \Exception $e ) {
+//     		wc_get_logger()->error( $e->getMessage() );
+    		throw new Exception( $e->getMessage(), 1 );
+	    }
+    	
     }
 }

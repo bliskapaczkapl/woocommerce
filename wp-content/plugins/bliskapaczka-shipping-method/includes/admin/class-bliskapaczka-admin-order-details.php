@@ -26,14 +26,17 @@ class Bliskapaczka_Admin_Order_Details {
 		// We take a shiping method, and check for bliskapaczka data.
 		$method_id = $this->helper()->getWCShipingMethodId( $order );
 
-		if ( Bliskapaczka_Courier_Shipping_Method::get_identity() !== $method_id && Bliskapaczka_Map_Shipping_Method::get_identity() !== $method_id ) {
+		if ( Bliskapaczka_Courier_Shipping_Method::get_identity() !== $method_id 
+				&& Bliskapaczka_Map_Shipping_Method::get_identity() !== $method_id
+				&& 'flexible_shipping' !== $method_id
+			) {
 			return; // Shiping aren't from bliskapaczka, so we do nothing.
 		}
-
+		
 		$bliska_order_id = $order->get_meta( '_bliskapaczka_order_id', true, 'view' );
-
+	
 		if ( empty( $bliska_order_id ) ) {
-			return; // Sth was wrong if we didn't have order id from bliskapaczka.pl.
+			return; // We didn't have bliska paczka data
 		}
 
 		$waybill_urls = $this->helper()->getWaybillUrls( $bliska_order_id );
