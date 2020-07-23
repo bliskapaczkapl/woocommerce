@@ -276,6 +276,34 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 			if ( ! self::is_integration_enabled() ) {
 				return false;
 			}
+
+			$operator = $shipping_method[ $this->get_name_of_operator_setting() ];
+
+			// For map widget, we don't availability verify.
+			if ( self::OPTION_KEY_NAME_MAP === $operator ) {
+				return $add_method;
+			}
+
+			$helper = Bliskapaczka_Shipping_Method_Helper::instance();
+			$total  = WC()->cart->get_cart_contents_total();
+			$is_cod = $helper->isChoosedPaymentCOD();
+
+			$prices = $helper->getCourierShippingMethod()->get_price_list(
+				$total,
+				$is_cod
+			);
+
+			foreach ( $prices as $item ) {
+				if ( $item->operator() === $operator ) {
+					return $add_method;
+				}
+			}
+
+			// Courier are not avaible for this settings.
+			$msg = sprintf( 'Bliskapaczka operator "%s" has missed configuration for paramaters: (price: %s, COD: %s). Please verify settings in BliskaPaczka panel.', $operator, $total, $is_cod ? 'yes' : 'no' );
+			wc_get_logger()->warning( $msg );
+
+			return false;
 		}
 		return $add_method;
 	}
@@ -375,7 +403,7 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 
 		$fs_meta = $shipping_item->get_meta( '_fs_method' );
 
-		// if its not shiiping.
+		// if its not shipping.
 		if ( ! isset( $fs_meta['method_integration'] ) || self::INTEGRATION_NAME !== $fs_meta['method_integration'] || ! isset( $fs_meta [ $this->get_name_of_operator_setting() ] ) ) {
 			return;
 		}
