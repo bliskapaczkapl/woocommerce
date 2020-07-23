@@ -149,21 +149,17 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 	 */
 	public function fs_method_settings( $flexible_shipping_settings, $shipping_method ) {
 
-		if ( self::is_integration_enabled() ) {
-			$operator_setting = $this->get_name_of_operator_setting();
+		$operator_setting = $this->get_name_of_operator_setting();
 
-			$settings = array(
-				$operator_setting => array(
-					'title'   => __( 'Operator', 'bliskapaczka-shipping-method' ),
-					'type'    => 'select',
-					'default' => isset( $shipping_method[ $operator_setting ] ) ? $shipping_method[ $operator_setting ] : '',
-					'options' => self::$operators,
-				),
-			);
-			return array_merge( $flexible_shipping_settings, $settings );
-		}
-
-		return $flexible_shipping_settings;
+		$settings = array(
+			$operator_setting => array(
+				'title'   => __( 'Operator', 'bliskapaczka-shipping-method' ),
+				'type'    => 'select',
+				'default' => isset( $shipping_method[ $operator_setting ] ) ? $shipping_method[ $operator_setting ] : '',
+				'options' => self::$operators,
+			),
+		);
+		return array_merge( $flexible_shipping_settings, $settings );
 	}
 
 	/**
