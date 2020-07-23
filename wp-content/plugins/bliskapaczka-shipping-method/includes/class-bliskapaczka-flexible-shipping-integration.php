@@ -263,6 +263,8 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 	 * @return array
 	 */
 	public function fs_add_method( $add_method, $shipping_method, $package ) {
+		// Guard  showing widget only once.
+		static $widget_showed;
 
 		if ( isset( $shipping_method['method_integration'] )
 			&& self::INTEGRATION_NAME === $shipping_method['method_integration']
@@ -277,6 +279,12 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 
 			// For map widget, we don't availability verify.
 			if ( self::OPTION_KEY_NAME_MAP === $operator ) {
+
+				if ( isset( $widget_showed ) ) {
+					return false;
+				}
+
+				$widget_showed = true;
 				return $add_method;
 			}
 
