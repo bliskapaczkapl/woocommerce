@@ -267,7 +267,9 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 	 * @return array
 	 */
 	public function fs_add_method( $add_method, $shipping_method, $package ) {
-		if ( isset( $shipping_method['method_integration'] ) && self::INTEGRATION_NAME === $shipping_method['method_integration']
+
+		if ( isset( $shipping_method['method_integration'] )
+			&& self::INTEGRATION_NAME === $shipping_method['method_integration']
 			&& isset( $shipping_method[ $this->get_name_of_operator_setting() ] )
 			) {
 
@@ -283,7 +285,6 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 	 */
 	private function initialize() {
 
-		if ( self::is_integration_enabled() ) {
 			static::$operators = [
 				'DHL'                     => __( 'DHL', 'bliskapaczka-shipping-method' ),
 				'DPD'                     => __( 'DPD', 'bliskapaczka-shipping-method' ),
@@ -297,7 +298,7 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 				self::OPTION_KEY_NAME_MAP => __( 'Paczkomaty / Punkt', 'bliskapaczka-shipping-method' ),
 			];
 			$this->register_hooks();
-		}
+
 	}
 
 	/**
@@ -401,6 +402,8 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 	 * Registering the admin hooks.
 	 */
 	private function register_hooks() {
+
+		// IMPORTANT 1. This hooks work always when plugin is installed.
 		// admin configuration.
 		add_filter( 'flexible_shipping_integration_options', array( $this, 'fs_integration_options' ), 10 );
 		add_filter( 'flexible_shipping_method_settings', array( $this, 'fs_method_settings' ), 10, 2 );
@@ -408,15 +411,20 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 		add_filter( 'flexible_shipping_method_integration_col', array( $this, 'fs_method_integration_col' ), 10, 2 );
 
 		add_action( 'flexible_shipping_method_script', array( $this, 'fs_method_script' ) );
-		add_action( 'admin_notices', array( $this, 'notice_plugin_fs_required' ) );
 
 		// checkout.
 		add_filter( 'flexible_shipping_method_rate_id', array( $this, 'fs_method_rate_id' ), 10, 2 );
 		add_filter( 'flexible_shipping_add_method', array( $this, 'fs_add_method' ), 10, 3 );
 
-		add_action( 'woocommerce_after_shipping_rate', array( $this, 'wc_after_shipping_rate' ), 10, 2 );
+		// IMPORTANT 2. This hooks work only when intgeration is enabled.
+		if ( self::is_integration_enabled() ) {
+			// admin.
+			add_action( 'admin_notices', array( $this, 'notice_plugin_fs_required' ) );
 
-		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'send_order_to_api' ), 10, 1 );
+			// checkout.
+			add_action( 'woocommerce_after_shipping_rate', array( $this, 'wc_after_shipping_rate' ), 10, 2 );
+			add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'send_order_to_api' ), 10, 1 );
+		}
 	}
 
 }
