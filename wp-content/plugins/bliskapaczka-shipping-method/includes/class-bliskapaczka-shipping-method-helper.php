@@ -377,10 +377,10 @@ class Bliskapaczka_Shipping_Method_Helper
      */
     public function convertPosIntoString( $pos_info ) 
     {
-    	if ( $pos_info instanceof  \stdClass ) {
+    	if ( ! ( $pos_info instanceof \stdClass ) ) {
     		throw new InvalidArgumentException('Excepted the stdClass ');
     	}
-    	
+
     	return implode( ' ', [ $pos_info->description, $pos_info->street, $pos_info->postalCode, $pos_info->city ] );
     }
 
