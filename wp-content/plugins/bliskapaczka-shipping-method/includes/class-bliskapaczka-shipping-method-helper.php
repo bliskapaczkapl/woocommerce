@@ -1,5 +1,7 @@
 <?php
 
+use Bliskapaczka\ApiClient\AbstractBliskapaczka;
+
 /**
  * Bliskapaczka Core class
  */
@@ -192,10 +194,10 @@ class Bliskapaczka_Shipping_Method_Helper
      */
     public function getApiClientPricing()
     {
-        return new \Bliskapaczka\ApiClient\Bliskapaczka\Pricing(
+        return $this->decorate_bp_api_request( new \Bliskapaczka\ApiClient\Bliskapaczka\Pricing(
         	$this->getApiKey(),
             $this->getApiMode()
-        );
+        ) );
     }
 
     /**
@@ -205,10 +207,10 @@ class Bliskapaczka_Shipping_Method_Helper
      */
     public function getApiClientPos()
     {
-        return new \Bliskapaczka\ApiClient\Bliskapaczka\Pos(
+    	return $this->decorate_bp_api_request( new \Bliskapaczka\ApiClient\Bliskapaczka\Pos(
         	$this->getApiKey(),
             $this->getApiMode()
-        );
+        ) );
     }
 
     /**
@@ -218,10 +220,10 @@ class Bliskapaczka_Shipping_Method_Helper
      */
     public function getApiClientOrder()
     {
-    	return new \Bliskapaczka\ApiClient\Bliskapaczka\Order(
+    	return $this->decorate_bp_api_request( new \Bliskapaczka\ApiClient\Bliskapaczka\Order(
         	$this->getApiKey(),
             $this->getApiMode()
-        );
+        ) );
     }
 
     /**
@@ -231,10 +233,10 @@ class Bliskapaczka_Shipping_Method_Helper
      */
     public function getApiClientOrderAdvice()
     {
-        return new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Advice(
+    	return $this->decorate_bp_api_request( new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Advice(
         	$this->getApiKey(),
             $this->getApiMode()
-        );
+        ) );
     }
 
     /**
@@ -244,10 +246,10 @@ class Bliskapaczka_Shipping_Method_Helper
      */
     public function getApiClientTodoorAdvice()
     {
-        return new \Bliskapaczka\ApiClient\Bliskapaczka\Todoor\Advice(
+    	return $this->decorate_bp_api_request( new \Bliskapaczka\ApiClient\Bliskapaczka\Todoor\Advice(
         	$this->getApiKey(),
             $this->getApiMode()
-        );
+        ) );
     }
 
     /**
@@ -257,12 +259,29 @@ class Bliskapaczka_Shipping_Method_Helper
      */
     public function getApiClientPickup()
     {
-        return new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Pickup(
+    	return $this->decorate_bp_api_request( new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Pickup(
         	$this->getApiKey(),
             $this->getApiMode()
-        );
+        ) );
     }
-
+	
+    /**
+     * Decorate API request by appedn special information
+     * 
+     * @param AbstractBliskapaczka $client
+     * @return \Bliskapaczka\ApiClient\AbstractBliskapaczka
+     */
+    private function decorate_bp_api_request( AbstractBliskapaczka $client ) 
+    {
+    	$v = new Bliskapaczka\ApiClient\ShopVersion\Woocommerce();
+    	
+    	// append shop engine and version
+    	$client
+    		->setShopName( 'woocommerce' )
+    		->setShopVersion( $v->getShopVersion() );
+    	
+    	return $client;
+    }
     /**
      * Remove all non numeric chars from phone number
      *
