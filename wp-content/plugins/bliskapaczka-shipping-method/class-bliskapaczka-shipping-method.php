@@ -6,6 +6,7 @@
  * Version: 1.2.0
  * Author: Bliskapaczka.pl
  * Text Domain: bliskapaczka-shipping-method
+ * Domain Path: /languages
  *
  * @package  Bliskapaczka
  * @subpackage Woocommerce
@@ -24,6 +25,8 @@ require_once 'includes/class-bliskapaczka-loader.php';
  * Check if WooCommerce is active
  */
 if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true ) ) {
+
+	include_once __DIR__ . '/../woocommerce/woocommerce.php';
 
 	/**
 	 * Bliskapaczka Shipping Method
@@ -74,9 +77,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	/**
 	 * Add link for select parcel point displayed on checkout page.
 	 *
-	 * @param Bliskapaczka_Shipping_Courier_Method $method Bliskapaczka Courier Shipping method.
+	 * @param Bliskapaczka_Courier_Shipping_Method $method Bliskapaczka Courier Shipping method.
 	 */
 	function bliskapaczka_delivery_to_door_front_view( $method ) {
+
 		if ( Bliskapaczka_Courier_Shipping_Method::get_identity() !== $method->id ) {
 			return;
 		}
@@ -142,82 +146,109 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	/**
 	 * Add link for select parcel point displayed on checkout page.
 	 *
-	 * @param Bliskapaczka_Shipping_Method $method Bliskapaczka Shipping method.
+	 * @param Bliskapaczka_Map_Shipping_Method $method Bliskapaczka Shipping method.
 	 */
 	function bliskapaczka_delivery_to_point_front_view( $method ) {
 
-		$helper = Bliskapaczka_Shipping_Method_Helper::instance();
-
-		$bliskapaczka = $helper->getMapShippingMethod();
-
 		if ( Bliskapaczka_Map_Shipping_Method::get_identity() === $method->id && is_checkout() === true ) {
 
+			bliskapaczka_delivery_to_point_print_widget_in_checkout_view( true );
+
 			$chosen_shipping_method = WC()->session->get( 'chosen_shipping_methods' )[0];
-			$cod_only               = $helper->isChoosedPaymentCOD();
-			$pos_code               = WC()->session->get( 'bliskapaczka_point_code' );
-			$pos_operator           = WC()->session->get( 'bliskapaczka_point_operator', null );
-
-			$price_list = $bliskapaczka->get_price_list( WC()->cart->get_cart_contents_total(), $cod_only );
-
-			if ( count( $price_list ) === 0 ) {
-				return '';
-			}
-
-			$operators = [];
-
-			foreach ( $price_list as $item ) {
-				$operators[] = [
-					'operator' => $item->operator(),
-					'price'    => $item->gross(),
-				];
-			}
-
-			// @codingStandardsIgnoreStart
-			echo " <a id='bliskapaczka-delivery-to-point-btn' href='#bpWidget_wrapper' " .
-				"onclick='Bliskapaczka.showMap(" .
-					esc_html( json_encode($operators) ) .
-					', "' .
-					esc_html( $helper->getGoogleMapApiKey( $bliskapaczka->settings ) ) .
-					'", ' .
-					esc_html( ( 'test' === $helper->getApiMode() ? 'true' : 'false' ) ) .
-					',' .
-					esc_html( json_encode($cod_only)) .
-					")'>" .
-					esc_html( 'Wybierz punkt dostawy' ) . '</a>';
-			// @codingStandardsIgnoreEnd
-			echo '<input name="bliskapaczka_point_code" type="hidden" id="bliskapaczka-point-code" value="' . esc_html( $pos_code ) . '" />';
-			echo '<input name="bliskapaczka_point_operator" type="hidden" id="bliskapaczka-point-operator" value="' . esc_html( $pos_operator ) . '" />';
 
 			if ( Bliskapaczka_Map_Shipping_Method::get_identity() === $chosen_shipping_method ) {
-				if ( $pos_code && $pos_operator ) {
-
-					$api_client = $helper->getApiClientPos();
-					$api_client->setPointCode( $pos_code );
-					$api_client->setOperator( $pos_operator );
-					$pos_info = json_decode( $api_client->get() );
-				}
-
-				echo '<div id="bpWidget_aboutPoint" style="width: 100%; ' . ( ( ! isset( $pos_info ) ) ? ' display: none; ' : '' ) . '">';
-				echo '<p>' . esc_html( __( 'Selected Point', 'bliskapaczka-shipping-method' ) ) . ': <span id="bpWidget_aboutPoint_posData">';
-				if ( isset( $pos_info ) ) {
-					// @codingStandardsIgnoreStart
-					echo '</br>' . esc_html( $pos_info->operator ) . '</br>' .
-						 ( ( $pos_info->description ) ? esc_html( $pos_info->description ) . '</br>' : '' ) .
-						 esc_html( $pos_info->street ) . '</br>' .
-
-						 ( ( $pos_info->postalCode ) ? esc_html( $pos_info->postalCode ) . ' ' : '' ) . esc_html( $pos_info->city );
-					// @codingStandardsIgnoreEnd
-
-				}
-				echo '</span></p>';
-				echo '</div>';
-
-				echo '<div><strong>' . esc_html( __( 'Shipping cost', 'bliskapaczka-shipping-method' ) ) . ': ' . wp_kses_post( wc_price( bliskapaczka_get_price() ) ) . '</strong></div>';
+				bliskapaczka_delivery_to_point_print_choosed_point_address( true );
 			}
 		}
 	}
 
 	add_action( 'woocommerce_after_shipping_rate', 'bliskapaczka_delivery_to_point_front_view' );
+
+	/**
+	 * Render widget link and form fields for the front checkout view.
+	 *
+	 * @param boolean $with_price Set to true if you whant show prices.
+	 * @return string
+	 */
+	function bliskapaczka_delivery_to_point_print_widget_in_checkout_view( $with_price = true ) {
+		$helper       = Bliskapaczka_Shipping_Method_Helper::instance();
+		$bliskapaczka = $helper->getMapShippingMethod();
+
+		$cod_only     = $helper->isChoosedPaymentCOD();
+		$pos_code     = WC()->session->get( 'bliskapaczka_point_code' );
+		$pos_operator = WC()->session->get( 'bliskapaczka_point_operator', null );
+
+		$price_list = $bliskapaczka->get_price_list( WC()->cart->get_cart_contents_total(), $cod_only );
+		if ( count( $price_list ) === 0 ) {
+			return '';
+		}
+
+		$operators = [];
+		$idx       = 0;
+
+		foreach ( $price_list as $item ) {
+			$operators[ $idx ] = [
+				'operator' => $item->operator(),
+			];
+
+			if ( true === $with_price ) {
+				$operators[ $idx ]['price'] = $item->gross();
+			}
+			$idx++;
+		}
+
+		// @codingStandardsIgnoreStart
+		echo " <a id='bliskapaczka-delivery-to-point-btn' href='#bpWidget_wrapper' " .
+			"onclick='Bliskapaczka.showMap(" .
+			esc_html( json_encode($operators) ) .
+			', "' .
+			esc_html( $helper->getGoogleMapApiKey( $bliskapaczka->settings ) ) .
+			'", ' .
+			esc_html( ( 'test' === $helper->getApiMode() ? 'true' : 'false' ) ) .
+			',' .
+			esc_html( json_encode($cod_only)) .
+			")'>" .
+			esc_html( 'Wybierz punkt dostawy' ) . '</a>';
+			// @codingStandardsIgnoreEnd
+			echo '<input name="bliskapaczka_point_code" type="hidden" id="bliskapaczka-point-code" value="' . esc_html( $pos_code ) . '" />';
+			echo '<input name="bliskapaczka_point_operator" type="hidden" id="bliskapaczka-point-operator" value="' . esc_html( $pos_operator ) . '" />';
+
+	}
+
+	/**
+	 * Show the address of selected point via widget
+	 *
+	 * @param boolean $with_price Set to true if you whant show prices.
+	 */
+	function bliskapaczka_delivery_to_point_print_choosed_point_address( $with_price = true ) {
+		$pos_code     = WC()->session->get( 'bliskapaczka_point_code' );
+		$pos_operator = WC()->session->get( 'bliskapaczka_point_operator', null );
+		$helper       = Bliskapaczka_Shipping_Method_Helper::instance();
+
+		if ( $pos_code && $pos_operator ) {
+			$pos_info = $helper->getPosInfo( $pos_operator, $pos_code );
+		}
+
+		echo '<div id="bpWidget_aboutPoint" style="width: 100%; ' . ( ( ! isset( $pos_info ) ) ? ' display: none; ' : '' ) . '">';
+		echo '<p>' . esc_html( __( 'Selected Point', 'bliskapaczka-shipping-method' ) ) . ': <span id="bpWidget_aboutPoint_posData">';
+		if ( isset( $pos_info ) ) {
+			// @codingStandardsIgnoreStart
+			echo '</br>' . esc_html( $pos_info->operator ) . '</br>' .
+				( ( $pos_info->description ) ? esc_html( $pos_info->description ) . '</br>' : '' ) .
+				esc_html( $pos_info->street ) . '</br>' .
+				
+				( ( $pos_info->postalCode ) ? esc_html( $pos_info->postalCode ) . ' ' : '' ) . esc_html( $pos_info->city );
+				// @codingStandardsIgnoreEnd
+
+		}
+		echo '</span></p>';
+		echo '</div>';
+
+		if ( true === $with_price ) {
+			echo '<div><strong>' . esc_html( __( 'Shipping cost', 'bliskapaczka-shipping-method' ) ) . ': ' . wp_kses_post( wc_price( bliskapaczka_get_price() ) ) . '</strong></div>';
+		}
+
+	}
 
 	/**
 	 * Add wrapper div for wigdet and map with parcel points.
@@ -266,7 +297,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 		$chosen_shipping_method = WC()->session->get( 'chosen_shipping_methods' )[0];
 
-		if ( Bliskapaczka_Map_Shipping_Method::get_identity() !== $chosen_shipping_method ) {
+		if ( Bliskapaczka_Map_Shipping_Method::get_identity() !== $chosen_shipping_method
+			&& 0 !== strpos( $chosen_shipping_method, 'flexible_shipping_' )
+		) {
 			return $packages;
 		}
 
@@ -281,7 +314,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		// @codingStandardsIgnoreEnd
 
 		if ( ! isset( $checkout_data['bliskapaczka_point_code'] ) || ! isset( $checkout_data['bliskapaczka_point_code'] ) ) {
-			return;
+			return $packages;
 		}
 
 		$pos_code     = wc_clean( $checkout_data['bliskapaczka_point_code'] );
@@ -316,10 +349,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			return false;
 		}
 
-		$logger       = wc_get_logger();
-		$helper       = Bliskapaczka_Shipping_Method_Helper::instance();
-		$bliskapaczka = $helper->getMapShippingMethod();
-
+		$helper             = Bliskapaczka_Shipping_Method_Helper::instance();
+		$pos_code           = null;
 		$shipping_method_id = $helper->getWCShipingMethodId( $order );
 
 		// If shipping is not from bliskpaczka. We do nothing.
@@ -328,98 +359,29 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		}
 
 		// Update the price of shipping item.
-		$shipping_items = $order->get_items( array( 'shipping' ) );
+		$shipping_items     = $order->get_items( array( 'shipping' ) );
+		$shipping_items_ids = array_keys( $shipping_items );
 
-		foreach ( $shipping_items as $item_id => $shipping_item ) {
-			$shipping_item_id = $item_id;
-		}
+		$shipping_item_id = $shipping_items_ids[0];
+		$shipping_item    = $shipping_items[ $shipping_item_id ];
 
 		if ( $shipping_item instanceof \WC_Order_Item_Shipping ) {
 			$shipping_item->set_total( bliskapaczka_get_price() );
 		}
 
 		if ( Bliskapaczka_Courier_Shipping_Method::get_identity() === $shipping_method_id ) {
-			$operator = WC()->session->get( 'bliskapaczka_door_operator' );
+			$delivery_to_point = false;
+			$operator          = WC()->session->get( 'bliskapaczka_door_operator' );
+		} elseif ( Bliskapaczka_Map_Shipping_Method::get_identity() === $shipping_method_id ) {
+			$operator          = WC()->session->get( 'bliskapaczka_point_operator' );
+			$pos_code          = WC()->session->get( 'bliskapaczka_point_code' );
+			$delivery_to_point = true;
+		} else {
+			return;
 		}
 
-		if ( Bliskapaczka_Map_Shipping_Method::get_identity() === $shipping_method_id ) {
-			$operator = WC()->session->get( 'bliskapaczka_point_operator' );
-			$pos_code = WC()->session->get( 'bliskapaczka_point_code' );
-		}
-
-		if ( isset( $pos_code ) ) {
-			$api_client = $helper->getApiClientPos();
-			$api_client->setPointCode( $pos_code );
-			$api_client->setOperator( $operator );
-			$pos_info = json_decode( $api_client->get() );
-            // @codingStandardsIgnoreStart
-			$pos_detailed = implode( ' ', array( $pos_info->description, $pos_info->street, $pos_info->postalCode, $pos_info->city ) );
-            // @codingStandardsIgnoreEnd
-			wc_add_order_item_meta( $shipping_item_id, '_bliskapaczka_posInfo', $pos_detailed );
-			wc_add_order_item_meta( $shipping_item_id, '_bliskapaczka_posCode', $pos_code );
-		}
-
-		wc_add_order_item_meta( $shipping_item_id, '_bliskapaczka_posOperator', $operator );
-
-		$mapper = new Bliskapaczka_Shipping_Method_Mapper();
-
-		if ( Bliskapaczka_Courier_Shipping_Method::get_identity() === $shipping_method_id ) {
-			$order_data = $mapper->getDataForCourier( $order, $helper, $bliskapaczka->settings );
-
-			if ( $order->get_payment_method() === 'cod' ) {
-				$order_data = $mapper->prepareCOD( $order_data, $order );
-				$order_data = $mapper->prepareInsuranceDataIfNeeded( $order_data, $order );
-			}
-			try {
-				$logger->info( wp_json_encode( $order_data ) );
-				$api_client = $helper->getApiClientOrder();
-				$result     = $api_client->create( $order_data );
-				$order->update_meta_data( '_bliskapaczka_order_id', json_decode( $result, true )['number'] );
-				$order->save();
-
-				if ( $helper->isAutoAdvice() === true ) {
-					$advice_api_client = $helper->getApiClientTodoorAdvice();
-					$advice_api_client->setOrderId( json_decode( $result, true )['number'] );
-					$advice_api_client->create( $order_data );
-					$order->update_meta_data( '_bliskapaczka_need_to_pickup', true );
-					$order->save();
-				}
-			} catch ( Exception $e ) {
-				$logger->error( $e->getMessage() );
-				throw new Exception( $e->getMessage(), 1 );
-			}
-		}
-
-		if ( Bliskapaczka_Map_Shipping_Method::get_identity() !== $shipping_method_id ) {
-			return false;
-		}
-
-		$order_data = $mapper->getData( $order, $helper, $bliskapaczka->settings );
-
-		try {
-			if ( $order->get_payment_method() === 'cod' ) {
-				$order_data = $mapper->prepareCOD( $order_data, $order );
-				$order_data = $mapper->prepareInsuranceDataIfNeeded( $order_data, $order );
-			}
-			$api_client = $helper->getApiClientOrder();
-			$result     = $api_client->create( $order_data );
-			$order->update_meta_data( '_bliskapaczka_order_id', json_decode( $result, true )['number'] );
-			$order->save();
-
-			if ( $helper->isAutoAdvice() === true ) {
-				$advice_api_client = $helper->getApiClientOrderAdvice();
-
-				$advice_api_client->setOrderId( json_decode( $result, true )['number'] );
-				$advice_api_client->create( $order_data );
-				$order->update_meta_data( '_bliskapaczka_need_to_pickup', false );
-			}
-
-			WC()->session->__unset( 'bliskapaczka_point_code' );
-			WC()->session->__unset( 'bliskapaczka_point_operator' );
-		} catch ( Exception $e ) {
-			$logger->error( $e->getMessage() );
-			throw new Exception( $e->getMessage(), 1 );
-		}
+		$helper->remember_shipping_item_data( $shipping_item_id, $operator, $pos_code );
+		$helper->send_order_to_api( $order, $delivery_to_point );
 	}
 
 	/**
@@ -449,7 +411,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		wp_register_style( 'widget-styles-bliskapaczka', plugin_dir_url( __FILE__ ) . 'assets/css/bliskapaczka.css', array(), 'v7', false );
 		wp_enqueue_style( 'widget-styles-bliskapaczka' );
 
-		wp_register_script( 'plugin-script', plugin_dir_url( __FILE__ ) . 'assets/js/bliskapaczka.js', array(), 'v9', false );
+		wp_register_script( 'plugin-script', plugin_dir_url( __FILE__ ) . 'assets/js/bliskapaczka.js', array(), 'v10', false );
 		wp_enqueue_script( 'plugin-script' );
 		wp_localize_script(
 			'plugin-script',
@@ -687,7 +649,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$is_cod = $helper->isChoosedPaymentCOD();
 		}
 
-		if ( Bliskapaczka_Map_Shipping_Method::get_identity() === $chosen_method ) {
+		if ( Bliskapaczka_Map_Shipping_Method::get_identity() === $chosen_method
+			|| 0 === strpos( $chosen_method, 'flexible_shipping_' )
+		) {
 			$bliskapaczka   = $helper->getMapShippingMethod();
 			$operator_index = 'bliskapaczka_point_operator';
 		} elseif ( Bliskapaczka_Courier_Shipping_Method::get_identity() === $chosen_method ) {
@@ -696,9 +660,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		} else {
 			return;
 		}
-
-		$operator   = WC()->session->get( $operator_index );
-		$price_list = $bliskapaczka->get_price_list( $cart_total, $is_cod );
+				$operator = WC()->session->get( $operator_index );
+		$price_list       = $bliskapaczka->get_price_list( $cart_total, $is_cod );
 
 		// Verfify that the choosen operator exists.
 		foreach ( $price_list as $item ) {
@@ -742,9 +705,31 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 	add_filter( 'woocommerce_order_shipping_to_display_shipped_via', 'bliskapaczka_thank_you_page_display_shipped_via', 10, 2 );
 
+	Bliskapaczka_Flexible_Shipping_Integration::instance();
+
 	// Registry operation in admin panel.
 	if ( is_admin() ) {
 		Bliskapaczka_Admin_Bootstrap::instance()->boot();
 	}
 }
+/**
+ * Detailed info about point to point delivery
+ *
+ * @param array $formatted_meta Formatted order metadata.
+ */
+function bliskapaczka_order_meta_data_view( $formatted_meta ) {
+	foreach ( $formatted_meta as $obj ) {
+		if ( '_bliskapaczka_posCode' === $obj->display_key ) {
+			$obj->display_key = esc_html( __( 'Point code', 'bliskapaczka-shipping-method' ) );
+		}
+		if ( '_bliskapaczka_posOperator' === $obj->display_key ) {
+			$obj->display_key = esc_html( __( 'Operator', 'bliskapaczka-shipping-method' ) );
+		}
+		if ( '_bliskapaczka_posInfo' === $obj->display_key ) {
+			$obj->display_key = esc_html( __( 'Point info', 'bliskapaczka-shipping-method' ) );
+		}
+	}
 
+	return $formatted_meta;
+}
+add_filter( 'woocommerce_order_item_get_formatted_meta_data', 'bliskapaczka_order_meta_data_view', 10, 2 );

@@ -18,6 +18,7 @@ script:
   - composer install
   - $VENDOR_DIR/bin/phpcs --config-set installed_paths ../../wp-coding-standards/wpcs
   - $VENDOR_DIR/bin/phpcs -s --colors --standard=WordPress wp-content/plugins/bliskapaczka-shipping-method/class-bliskapaczka-shipping-method.php
+  - $VENDOR_DIR/bin/phpcs -s --colors --standard=WordPress wp-content/plugins/bliskapaczka-shipping-method/includes/class-bliskapaczka-flexible-shipping-integration.php
   - $VENDOR_DIR/bin/phpcpd wp-content/plugins/bliskapaczka-shipping-method/class-bliskapaczka-shipping-method.php
   - $VENDOR_DIR/bin/phploc wp-content/plugins/bliskapaczka-shipping-method/class-bliskapaczka-shipping-method.php
   - $VENDOR_DIR/bin/phpcs -s --colors --standard=WordPress wp-content/plugins/bliskapaczka-shipping-method/includes/admin

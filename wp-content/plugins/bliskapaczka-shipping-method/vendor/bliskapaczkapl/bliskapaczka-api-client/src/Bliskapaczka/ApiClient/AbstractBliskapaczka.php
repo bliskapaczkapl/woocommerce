@@ -193,27 +193,53 @@ abstract class AbstractBliskapaczka
     protected function setShopNameAndVersionFromPath($path)
     {
         if (strstr($path, 'wp-content')) {
-            $this->shopName = 'woocommerce';
-            $this->shopVersion = GetterShopVersionFactory::getByShopName('Woocommerce');
-            return $this;
+            return $this
+                ->setShopName('woocommerce')
+                ->setShopVersion(GetterShopVersionFactory::getByShopName('Woocommerce'));
         }
         if (strstr($path, 'modules/bliskapaczka/vendor')) {
-            $this->shopName = 'prestashop';
-            $this->shopVersion = GetterShopVersionFactory::getByShopName('PrestaShop');
-            return $this;
+            return $this
+                ->setShopName('prestashop')
+                ->setShopVersion(GetterShopVersionFactory::getByShopName('PrestaShop'));
         }
         if (strstr('app/code/community', 'magento')) {
-            $this->shopName = 'magento';
-            $this->shopVersion = GetterShopVersionFactory::getByShopName('Magento1');
-            return $this;
+            return $this
+                ->setShopName('magento')
+                ->setShopVersion(GetterShopVersionFactory::getByShopName('Magento1'));
         }
         if (strstr($path, '/vendor/bliskapaczkapl')) {
-            $this->shopName = 'magento';
-            $this->shopVersion = GetterShopVersionFactory::getByShopName('Magento2');
-            return $this;
+            return $this
+                ->setShopName('magento')
+                ->setShopVersion(GetterShopVersionFactory::getByShopName('Magento2'));
         }
         return $this;
     }
+    
+    /**
+     * Set shop engine name
+     *
+     * @param string $name Engine name ex. woocommerce,magento.
+     *
+     * @return \Bliskapaczka\ApiClient\AbstractBliskapaczka
+     */
+    public function setShopName($name)
+    {
+        $this->shopName = $name;
+        return $this;
+    }
+    
+    /**
+     * Set shop engine version.
+     *
+     * @param string $version
+     * @return \Bliskapaczka\ApiClient\AbstractBliskapaczka
+     */
+    public function setShopVersion($version)
+    {
+        $this->shopVersion = $version;
+        return $this;
+    }
+
     /**
      * Create cURL configuration and call
      *
@@ -229,7 +255,7 @@ abstract class AbstractBliskapaczka
         $headers[] = 'Authorization: Bearer ' . $this->bearer;
         $headers[] = 'Content-Type: application/json';
         $headers[] = 'Bp-Source: ' .  $this->shopName;
-        $headers[] = 'Bp-Source-Version' . $this->shopVersion;
+        $headers[] = 'Bp-Source-Version: ' . $this->shopVersion;
 
         // set options
         $options[CURLOPT_URL] = $this->apiUrl . '/' . static::API_VERSION . '/' . $url;

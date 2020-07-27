@@ -26,14 +26,17 @@ class Bliskapaczka_Admin_Order_Details {
 		// We take a shiping method, and check for bliskapaczka data.
 		$method_id = $this->helper()->getWCShipingMethodId( $order );
 
-		if ( Bliskapaczka_Courier_Shipping_Method::get_identity() !== $method_id && Bliskapaczka_Map_Shipping_Method::get_identity() !== $method_id ) {
+		if ( Bliskapaczka_Courier_Shipping_Method::get_identity() !== $method_id
+				&& Bliskapaczka_Map_Shipping_Method::get_identity() !== $method_id
+				&& 'flexible_shipping' !== $method_id
+			) {
 			return; // Shiping aren't from bliskapaczka, so we do nothing.
 		}
 
 		$bliska_order_id = $order->get_meta( '_bliskapaczka_order_id', true, 'view' );
 
 		if ( empty( $bliska_order_id ) ) {
-			return; // Sth was wrong if we didn't have order id from bliskapaczka.pl.
+			return; // We didn't have bliska paczka data.
 		}
 
 		$waybill_urls = $this->helper()->getWaybillUrls( $bliska_order_id );
@@ -74,24 +77,4 @@ class Bliskapaczka_Admin_Order_Details {
 	}
 
 }
-/**
- * Detailed info about point to point delivery
- *
- * @param array $formatted_meta Formatted order metadata.
- */
-function bliskapaczka_order_meta_data_view( $formatted_meta ) {
-	foreach ( $formatted_meta as $obj ) {
-		if ( '_bliskapaczka_posCode' === $obj->display_key ) {
-			$obj->display_key = esc_html( __( 'Point code', 'bliskapaczka-shipping-method' ) );
-		}
-		if ( '_bliskapaczka_posOperator' === $obj->display_key ) {
-			$obj->display_key = esc_html( __( 'Operator', 'bliskapaczka-shipping-method' ) );
-		}
-		if ( '_bliskapaczka_posInfo' === $obj->display_key ) {
-			$obj->display_key = esc_html( __( 'Point info', 'bliskapaczka-shipping-method' ) );
-		}
-	}
 
-	return $formatted_meta;
-}
-add_filter( 'woocommerce_order_item_get_formatted_meta_data', 'bliskapaczka_order_meta_data_view', 10, 2 );

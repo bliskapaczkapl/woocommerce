@@ -61,7 +61,7 @@ Bliskapaczka.pointSelected = function (data, operators) {
 
 Bliskapaczka.updatePrice = function (posOperator, operators) {
     item = Bliskapaczka.getTableRow();
-    var shippingMethod = jQuery('input[class="shipping_method"]:checked');
+
     if (item) {
         priceDiv = item.find('.delivery_option_price').first();
 
@@ -102,15 +102,6 @@ Bliskapaczka.getTableRow = function () {
     return item;
 }
 
-//Bliskapaczka.checkFirstCourier = function() {
-//    if (jQuery('.bliskapaczka_courier_item_wrapper.checked').length === 0) {
-//        if (jQuery('.bliskapaczka_courier_item_wrapper').length !== 0) {
-//            jQuery(jQuery('.bliskapaczka_courier_item_wrapper')[0]).addClass('checked');
-//            jQuery('#bliskapaczka-point-operator').val(jQuery(jQuery('.bliskapaczka_courier_item_wrapper')[0])
-//              .attr('data-operator'));
-//        }
-//    }
-//}
 /**
  * Show loader spinner on element.
  * 
