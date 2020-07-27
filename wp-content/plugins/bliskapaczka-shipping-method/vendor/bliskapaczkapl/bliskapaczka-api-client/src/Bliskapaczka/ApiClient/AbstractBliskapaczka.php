@@ -236,7 +236,7 @@ abstract class AbstractBliskapaczka
      */
     public function setShopVersion($version)
     {
-        $this->version = $version;
+        $this->shopVersion = $version;
         return $this;
     }
 
