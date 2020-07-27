@@ -255,7 +255,7 @@ abstract class AbstractBliskapaczka
         $headers[] = 'Authorization: Bearer ' . $this->bearer;
         $headers[] = 'Content-Type: application/json';
         $headers[] = 'Bp-Source: ' .  $this->shopName;
-        $headers[] = 'Bp-Source-Version' . $this->shopVersion;
+        $headers[] = 'Bp-Source-Version: ' . $this->shopVersion;
 
         // set options
         $options[CURLOPT_URL] = $this->apiUrl . '/' . static::API_VERSION . '/' . $url;
