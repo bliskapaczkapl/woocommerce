@@ -7,8 +7,8 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Shipping_Method_
     public function __construct() {
     	
     	$this->id                 = self::get_identity();
-        $this->method_title       = __( 'Bliskapaczka Courier Shipping', 'bliskapaczka-shipping-method' );
-        $this->method_description = __( 'Custom Coureir Shipping Method for Bliskapaczka', 'bliskapaczka-shipping-method' );
+        $this->method_title       = __( 'Bliskapaczka Courier Shipping', 'bliskapaczka-pl' );
+        $this->method_description = __( 'Custom Coureir Shipping Method for Bliskapaczka', 'bliskapaczka-pl' );
 
         $this->availability = 'including';
         $this->countries    = array(
@@ -18,7 +18,7 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Shipping_Method_
         $this->init();
 
         $this->enabled = isset( $this->settings['enabled'] ) ? $this->settings['enabled'] : 'yes';
-        $this->title   = isset( $this->settings['title'] ) ? $this->settings['title'] : __( 'Bliskapaczka Shipping', 'bliskapaczka-shipping-method' );
+        $this->title   = isset( $this->settings['title'] ) ? $this->settings['title'] : __( 'Bliskapaczka Shipping', 'bliskapaczka-pl' );
     }
     
     /**
@@ -46,16 +46,16 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Shipping_Method_
     function init_form_fields() {
         $this->form_fields = array(
             'courier_enabled' => array(
-                'title'       => __( 'Enable', 'bliskapaczka-shipping-method' ),
+                'title'       => __( 'Enable', 'bliskapaczka-pl' ),
                 'type'        => 'checkbox',
-                'description' => __( 'Enable this shipping method', 'bliskapaczka-shipping-method' ),
+                'description' => __( 'Enable this shipping method', 'bliskapaczka-pl' ),
                 'default'     => 'yes',
             ),
         	Bliskapaczka_Shipping_Method_Helper::TITLE_COURIER => array(
-                'title'       => __( 'Delivery name', 'bliskapaczka-shipping-method' ),
+                'title'       => __( 'Delivery name', 'bliskapaczka-pl' ),
                 'type'        => 'text',
-                'description' => __( 'Deliver name to be display on site', 'bliskapaczka-shipping-method' ),
-                'default'     => __( 'Delivery to the door', 'bliskapaczka-shipping-method' ),
+                'description' => __( 'Deliver name to be display on site', 'bliskapaczka-pl' ),
+                'default'     => __( 'Delivery to the door', 'bliskapaczka-pl' ),
             	'custom_attributes' => array( 'required' => 'required' ),
             	'class' => 'bliskapaczka_admin_field_required',
             ),
@@ -79,7 +79,7 @@ class Bliskapaczka_Courier_Shipping_Method extends Bliskapaczka_Shipping_Method_
 
         $label = $bliskapaczka->settings[$helper::TITLE_COURIER];
         if (empty($label)) {
-            $label = __( 'Delivery to the door', 'bliskapaczka-shipping-method' );
+            $label = __( 'Delivery to the door', 'bliskapaczka-pl' );
         }
         $rate = array(
             'id'       => $this->id,

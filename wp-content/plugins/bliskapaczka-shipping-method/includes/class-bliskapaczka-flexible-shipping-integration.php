@@ -98,7 +98,7 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 	 */
 	public function fs_integration_options( $options ) {
 		if ( \is_array( $options ) || ( \is_object( $options ) && $options instanceof \ArrayAccess ) ) {
-			$options[ self::INTEGRATION_NAME ] = __( 'Bliskapaczka', 'bliskapaczka-shipping-method' );
+			$options[ self::INTEGRATION_NAME ] = __( 'Bliskapaczka', 'bliskapaczka-pl' );
 		}
 
 		return $options;
@@ -122,7 +122,7 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 		$activate_url = 'plugins.php?action=activate&plugin=' . rawurlencode( 'flexible-shipping/flexible-shipping.php' ) . '&plugin_status=all&paged=1&s&_wpnonce=' . rawurlencode( wp_create_nonce( 'activate-plugin_flexible-shipping/flexible-shipping.php' ) );
 
 		/* translators: %s: Instalation url. */
-		$msg_text = __( 'Flexible Shipping Bliskapaczka Integration requires Flexible Shipping Plugin. <a href="%s">Install Flexible Shipping →</a>', 'bliskapaczka-shipping-method' );
+		$msg_text = __( 'Flexible Shipping Bliskapaczka Integration requires Flexible Shipping Plugin. <a href="%s">Install Flexible Shipping →</a>', 'bliskapaczka-pl' );
 		$message  = sprintf( wp_kses( $msg_text, array( 'a' => array( 'href' => array() ) ) ), esc_url( $install_url ) );
 
 		$plugins = array_keys( get_plugins() );
@@ -130,7 +130,7 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 		foreach ( $plugins as $plugin ) {
 			if ( strpos( $plugin, 'flexible-shipping/flexible-shipping.php' ) === 0 ) {
 				/* translators: %s: Activation url. */
-				$msg_text = __( 'Flexible Shipping Bliskapaczka Integration requires Flexible Shipping Plugin. <a href="%s">Activate Flexible Shipping →</a>', 'bliskapaczka-shipping-method' );
+				$msg_text = __( 'Flexible Shipping Bliskapaczka Integration requires Flexible Shipping Plugin. <a href="%s">Activate Flexible Shipping →</a>', 'bliskapaczka-pl' );
 				$message  = sprintf( wp_kses( $msg_text, array( 'a' => array( 'href' => array() ) ) ), esc_url( admin_url( $activate_url ) ) );
 				break;
 			}
@@ -153,7 +153,7 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 
 		$settings = array(
 			$operator_setting => array(
-				'title'   => __( 'Operator', 'bliskapaczka-shipping-method' ),
+				'title'   => __( 'Operator', 'bliskapaczka-pl' ),
 				'type'    => 'select',
 				'default' => isset( $shipping_method[ $operator_setting ] ) ? $shipping_method[ $operator_setting ] : '',
 				'options' => self::$operators,
@@ -318,16 +318,16 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 	private function initialize() {
 
 			static::$operators = [
-				'DHL'                     => __( 'DHL', 'bliskapaczka-shipping-method' ),
-				'DPD'                     => __( 'DPD', 'bliskapaczka-shipping-method' ),
-				'FEDEX'                   => __( 'FedEx', 'bliskapaczka-shipping-method' ),
-				'GLS'                     => __( 'GLS', 'bliskapaczka-shipping-method' ),
-				'INPOST'                  => __( 'Inpost', 'bliskapaczka-shipping-method' ),
-				'POCZTA'                  => __( 'Poczta Polska', 'bliskapaczka-shipping-method' ),
-				'RUCH'                    => __( 'RUCH', 'bliskapaczka-shipping-method' ),
-				'UPS'                     => __( 'UPS', 'bliskapaczka-shipping-method' ),
-				'XPRESS'                  => __( 'X-press', 'bliskapaczka-shipping-method' ),
-				self::OPTION_KEY_NAME_MAP => __( 'Paczkomaty / Punkt', 'bliskapaczka-shipping-method' ),
+				'DHL'                     => __( 'DHL', 'bliskapaczka-pl' ),
+				'DPD'                     => __( 'DPD', 'bliskapaczka-pl' ),
+				'FEDEX'                   => __( 'FedEx', 'bliskapaczka-pl' ),
+				'GLS'                     => __( 'GLS', 'bliskapaczka-pl' ),
+				'INPOST'                  => __( 'Inpost', 'bliskapaczka-pl' ),
+				'POCZTA'                  => __( 'Poczta Polska', 'bliskapaczka-pl' ),
+				'RUCH'                    => __( 'RUCH', 'bliskapaczka-pl' ),
+				'UPS'                     => __( 'UPS', 'bliskapaczka-pl' ),
+				'XPRESS'                  => __( 'X-press', 'bliskapaczka-pl' ),
+				self::OPTION_KEY_NAME_MAP => __( 'Paczkomaty / Punkt', 'bliskapaczka-pl' ),
 			];
 			$this->register_hooks();
 
