@@ -318,6 +318,7 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 	private function initialize() {
 
 			static::$operators = [
+<<<<<<< HEAD
 				'DHL'                     => __( 'DHL', 'bliskapaczka-pl' ),
 				'DPD'                     => __( 'DPD', 'bliskapaczka-pl' ),
 				'FEDEX'                   => __( 'FedEx', 'bliskapaczka-pl' ),
@@ -328,6 +329,17 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 				'UPS'                     => __( 'UPS', 'bliskapaczka-pl' ),
 				'XPRESS'                  => __( 'X-press', 'bliskapaczka-pl' ),
 				self::OPTION_KEY_NAME_MAP => __( 'Paczkomaty / Punkt', 'bliskapaczka-pl' ),
+=======
+				'DHL'                     => __( 'DHL', 'bliskapaczka-shipping-method' ),
+				'DPD'                     => __( 'DPD', 'bliskapaczka-shipping-method' ),
+				'FEDEX'                   => __( 'FedEx', 'bliskapaczka-shipping-method' ),
+				'GLS'                     => __( 'GLS', 'bliskapaczka-shipping-method' ),
+				'INPOST'                  => __( 'Inpost', 'bliskapaczka-shipping-method' ),
+				'POCZTA'                  => __( 'Poczta Polska', 'bliskapaczka-shipping-method' ),
+				'UPS'                     => __( 'UPS', 'bliskapaczka-shipping-method' ),
+				'XPRESS'                  => __( 'X-press', 'bliskapaczka-shipping-method' ),
+				self::OPTION_KEY_NAME_MAP => __( 'Paczkomaty / Punkty', 'bliskapaczka-shipping-method' ),
+>>>>>>> master
 			];
 			$this->register_hooks();
 
