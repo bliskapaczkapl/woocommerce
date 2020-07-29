@@ -5,7 +5,7 @@
  * Description: Integracja metod dostaw z serwisem Bliskapaczka.pl
  * Version: 1.2.0
  * Author: Bliskapaczka.pl
- * Text Domain: bliskapaczka-shipping-method
+ * Text Domain: bliskapaczka-pl
  * Domain Path: /languages
  *
  * @package  Bliskapaczka
@@ -17,7 +17,7 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
-load_plugin_textdomain( 'bliskapaczka-shipping-method', false, basename( dirname( __FILE__ ) ) . '/languages' );
+load_plugin_textdomain( 'bliskapaczka-pl', false, basename( dirname( __FILE__ ) ) . '/languages' );
 define( 'BLISKAPACZKA_ABSPATH', dirname( __FILE__ ) . '/' );
 require_once 'includes/class-bliskapaczka-loader.php';
 
@@ -230,7 +230,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		}
 
 		echo '<div id="bpWidget_aboutPoint" style="width: 100%; ' . ( ( ! isset( $pos_info ) ) ? ' display: none; ' : '' ) . '">';
-		echo '<p>' . esc_html( __( 'Selected Point', 'bliskapaczka-shipping-method' ) ) . ': <span id="bpWidget_aboutPoint_posData">';
+		echo '<p>' . esc_html( __( 'Selected Point', 'bliskapaczka-pl' ) ) . ': <span id="bpWidget_aboutPoint_posData">';
 		if ( isset( $pos_info ) ) {
 			// @codingStandardsIgnoreStart
 			echo '</br>' . esc_html( $pos_info->operator ) . '</br>' .
@@ -245,7 +245,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		echo '</div>';
 
 		if ( true === $with_price ) {
-			echo '<div><strong>' . esc_html( __( 'Shipping cost', 'bliskapaczka-shipping-method' ) ) . ': ' . wp_kses_post( wc_price( bliskapaczka_get_price() ) ) . '</strong></div>';
+			echo '<div><strong>' . esc_html( __( 'Shipping cost', 'bliskapaczka-pl' ) ) . ': ' . wp_kses_post( wc_price( bliskapaczka_get_price() ) ) . '</strong></div>';
 		}
 
 	}
@@ -275,11 +275,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	function bliskapaczka_override_checkout_fields( $fields ) {
 		$fields['bliskapaczka'] = array(
 			'bliskapaczka_point_code'     => array(
-				'label' => __( 'POS Code', 'bliskapaczka-shipping-method' ),
+				'label' => __( 'POS Code', 'bliskapaczka-pl' ),
 				'type'  => 'text',
 			),
 			'bliskapaczka_point_operator' => array(
-				'label' => __( 'POS Operator', 'bliskapaczka-shipping-method' ),
+				'label' => __( 'POS Operator', 'bliskapaczka-pl' ),
 				'type'  => 'text',
 			),
 		);
@@ -392,7 +392,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	function bliskapaczka_plugin_action_links( $links ) {
 		$action_links = array(
 			'settings' => '<a href="' . admin_url( 'admin.php?page=wc-settings&tab=shipping&section=bliskapaczka' ) .
-				'" title="' . esc_attr( __( 'View Bliskapaczka Settings', 'bliskapaczka-shipping-method' ) ) . '">' . __( 'Settings', 'bliskapaczka' ) . '</a>',
+				'" title="' . esc_attr( __( 'View Bliskapaczka Settings', 'bliskapaczka-pl' ) ) . '">' . __( 'Settings', 'bliskapaczka' ) . '</a>',
 		);
 
 		return array_merge( $action_links, $links );
@@ -436,13 +436,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		if ( Bliskapaczka_Map_Shipping_Method::get_identity() === $bliskapaczka_method_checker || Bliskapaczka_Courier_Shipping_Method::get_identity() === $bliskapaczka_method_checker ) {
 
 			if ( strlen( $fields['billing_first_name'] ) > 30 || strlen( $fields['shipping_first_name'] ) > 30 ) {
-				$errors->add( 'validation', esc_html__( 'First name is longer than 30 characters.', 'bliskapaczka-shipping-method' ) );
+				$errors->add( 'validation', esc_html__( 'First name is longer than 30 characters.', 'bliskapaczka-pl' ) );
 			}
 			if ( strlen( $fields['billing_last_name'] ) > 30 || strlen( $fields['shipping_last_name'] ) > 30 ) {
-				$errors->add( 'validation', esc_html__( 'Last name is logner than 30 characters.', 'bliskapaczka-shipping-method' ) );
+				$errors->add( 'validation', esc_html__( 'Last name is logner than 30 characters.', 'bliskapaczka-pl' ) );
 			}
 			if ( strlen( $fields['billing_city'] ) > 30 || strlen( $fields['shipping_city'] ) > 30 ) {
-				$errors->add( 'validation', esc_html__( 'City name cannot exceed 30 characters.', 'bliskapaczka-shipping-method' ) );
+				$errors->add( 'validation', esc_html__( 'City name cannot exceed 30 characters.', 'bliskapaczka-pl' ) );
 			}
 		}
 	}
@@ -720,13 +720,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 function bliskapaczka_order_meta_data_view( $formatted_meta ) {
 	foreach ( $formatted_meta as $obj ) {
 		if ( '_bliskapaczka_posCode' === $obj->display_key ) {
-			$obj->display_key = esc_html( __( 'Point code', 'bliskapaczka-shipping-method' ) );
+			$obj->display_key = esc_html( __( 'Point code', 'bliskapaczka-pl' ) );
 		}
 		if ( '_bliskapaczka_posOperator' === $obj->display_key ) {
-			$obj->display_key = esc_html( __( 'Operator', 'bliskapaczka-shipping-method' ) );
+			$obj->display_key = esc_html( __( 'Operator', 'bliskapaczka-pl' ) );
 		}
 		if ( '_bliskapaczka_posInfo' === $obj->display_key ) {
-			$obj->display_key = esc_html( __( 'Point info', 'bliskapaczka-shipping-method' ) );
+			$obj->display_key = esc_html( __( 'Point info', 'bliskapaczka-pl' ) );
 		}
 	}
 
