@@ -1,68 +1,92 @@
 === Bliskapaczka.pl: integracja z WooCommerce ===
 Contributors: senditsa
-Tags: bliskapaczka, kurier, woocommerce, shipping, courier, delivery
+Tags: bliskapaczka, sendit, kurier, dostawa, paczkomaty, mapa
 Requires at least: 4.0
 Tested up to: 5.3.2
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 Requires PHP: 5.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Integracja WooCommerce z Bliskapaczka.pl pozowli Ci nadawać przesyłki z przewoźnikami takimi jak DPD, FedEx, UPS, InPost, RUCH, Poczta Polska.
 
 == Description ==
 
-WooCommerce i Bliskapaczka.pl
+Wtyczka WooCommerce od Bliskapaczka.pl z usługą Flexible Shipping (Sendit S.A.) umożliwia automatyczne nadawanie przesyłek z DPD, FedEx, UPS, InPost Paczkomaty, RUCH, Poczta Polska.
 
-Jeśli w swoim e-sklepie chcesz uzyskać dostęp do oferty największych firm kurierskich, zainstaluj wtyczkę WooCommerce dla Bliskapaczka.pl. Dzięki niej bez problemu zintegrujesz e-sklep z naszą platformą technologiczną i zyskasz możliwość korzystania z usług kurierskich najpopularniejszych Przewoźników w Polsce, bez konieczności podpisywania z nimi umowy. A wszystko to w jednym miejscu!
+Instalując wtyczkę otrzymujesz intuicyjne rozwiązanie mapy z ponad 31 000 punktów nadawczo - odbiorczych bez konieczności podpisywania dodatkowych umów. 
 
-Co zyskasz, korzystając z wtyczki?
+Korzystając z rozwiązania otrzymujesz:
+- opcję Flexible Shipping (reguły wagowe i koszykowe, opcja ustawienia darmowej dostawy w sklepie)
+- obniżenie kosztów - oferujemy ceny niższe nawet o 70%, 
+- informacje o dostawie widoczne w szczegółach zlecenia,
+- intuicyjny widget mapy dla twoich klientów z ponad 31 000 punktów nadawczo – odbiorczych,
+- wbudowany tryb testowy, pozwalający przetestować integrację wtyczki przed udostępnieniem klientom,
+- domyślne ustawienia przesyłki, skonfigurowane w ustawieniach przyspieszające przygotowanie i wysyłkę paczek,
+- opcję pobierania listów przewozowych z poziomu zamówienia,
+- możliwość podpięcia umów własnych.
 
-- wybór usług oferowanych przez największe firmy kurierskie, takie jak DPD, UPS, InPost czy Fedex;
+Nadajesz stale duże wolumeny przesyłek?
+Negocjuj z nami rabaty: sprzedaz@sendit.pl
 
-- nadawanie przesyłek w atrakcyjnych cenach;
+Do korzystania z wtyczki jest wymagane założenie darmowego konta na: [Bliskapaczka.pl](https://bliskapaczka.pl/profil/rejestracja?utm_source=WordPress&utm_medium=b2b&utm_campaign=wtyczka_WooCoo&utm_term=opis&utm_content=link)
 
-- generowanie listów przewozowych z poziomu panelu WooCommerce;
+[youtube https://www.youtube.com/watch?v=ty9jGHkaPDU]
 
-- udostępnienie klientom widget mapy, zawierającej ponad 31 000 punktów nadawczo-odbiorczych;
 
-- brak konieczności deklaracji wolumenów;
+== Screenshots ==
 
-- brak dodatkowych umów
-
-Aby skorzystać z wtyczki WooCommerce, musisz posiadać konto na [Bliskapaczka.pl](https://bliskapaczka.pl/profil/rejestracja).
-
-Masz pytania dotyczące instalacji wtyczki lub założenia konta na Bliskapacza.pl? 
-Skontaktuj się z nami:
-
-Tel: 71 75 00 310
-
-E-mail: wsparcie@sendit.pl
+1. Rejestracja konta na Bliskapaczka.pl
+2. Konfiguracja integracji
+3. Konfiguracja integracji
+4. Konfiguracja integracji
 
 == Installation ==
 
-* W pierwszej kolejności musisz pobrać wtyczkę Bliskapaczka.pl
-* Kolejnym krokiem jest zainstalowanie pobranej wtyczki w panelu administracyjnym WordPress. Uruchom panel administracyjny WordPress i otwórz zakładkę “Wtyczki”, a następnie -> Dodaj nową.
-* Kliknij w przycisk “Wyślij wtyczkę na serwer” i wskaż pobrany wcześniej plik na swoim komputerze.
-* Teraz upewnij się, że dodany przez Ciebie moduł znajduje się na liście dostępnych wtyczek w panelu administracyjnym WordPress. W tym celu przejdź w panelu administracyjnym WordPress do menu po lewej stronie, do zakładki Wtyczki -> Zainstalowane wtyczki
-* Na liście ukażą się wszystkie zainstalowane moduły. Przejdź do ustawień rozszerzenia Bliskapaczka.pl klikając w przycisk Settings.
-Szczegóły uzupełnienia konfiguracji we wtyczce oraz serwisie Bliskapaczka.pl znajdziesz na stronie: (https://bliskapaczka.pl/narzedzia/integracja-sklep-wordpress-woocommerce)
+Proces instalacji:
 
-== Frequently Asked Questions === 
+1. Zainstaluj pobraną wtyczkę w panelu administracyjnym WordPress. 
+2. Uruchom panel administracyjny WordPress i otwórz zakładkę “Wtyczki”, a następnie -> „Dodaj nową”.
+3. Kliknij w przycisk “Wyślij wtyczkę na serwer” i wskaż pobrany wcześniej plik na swoim komputerze.
+4. Upewnij się, że dodany przez Ciebie moduł znajduje się na liście dostępnych wtyczek w panelu administracyjnym WordPress. 
+W tym celu przejdź w panelu administracyjnym WordPress do menu po lewej stronie, do zakładki „Wtyczki” -> „Zainstalowane wtyczki”
+5. Na liście pojawią się wszystkie zainstalowane moduły. Przejdź do ustawień rozszerzenia Bliskapaczka.pl klikając w przycisk ”Settings”.
+6. Uzupełnij konfigurację wtyczki i zapisz ustawienia przyciskiem "Zapisz zmiany".
+7. Przejdź na stronę Bliskapaczka.pl do zakładki NARZĘDZIA > INTEGRACJE i wskaż przewoźników, którzy widoczni będą na Twoim sklepie w koszyku zakupowym.
+8. Gotowe! Wskazane ustawienia pozoliły dodać nasze metody dostawy do Twojego sklepu.
 
-= Czy plugin wyświetli mi mapę punktów w koszyku sklepu? 
-Tak. Wtyczka posiada mapę z punktami.
+Szczegóły konfiguracji możesz znaleźć pod adresem [https://bliskapaczka.pl/narzedzia/integracja-sklep-wordpress-woocommerce](https://bliskapaczka.pl/narzedzia/integracja-sklep-wordpress-woocommerce?utm_source=WordPress&utm_medium=b2b&utm_campaign=wtyczka_WooCoo&utm_term=opis&utm_content=link)
 
-=Posiadanie konta na Bliskapaczka.pl jest wymagane?
-Tak, aby korzystać z tej wtyczki, należy mieć utworzone konto na Bliskapaczka.pl (https://bliskapaczka.pl/profil/rejestracja).
+W razie pytań lub niejastności jesteśmy do dyspozycji w dni robocze w godzinach od 8.00 – 16.00. 
+
+Tel: 71 75 00 310, e-mail: wsparcie@sendit.pl.
+
+
+== Frequently Asked Questions ===
+
+1. Czy jest wymagane posiadanie konta na Bliskapaczka.pl?
+Tak, aby skorzystać z rozwiązania wtyczki należy utworzyć bezpłatne konto na platformie Bliskapaczka.pl pod adresem: [https://bliskapaczka.pl/profil/rejestracja](https://bliskapaczka.pl/profil/rejestracja?utm_source=WordPress&utm_medium=b2b&utm_campaign=wtyczka_WooCoo&utm_term=opis-faq&utm_content=link)
+
+2. Gdzie znajdę mapę z punktami nadawczo – odbiorczymi? Czy będzie ona widoczna w koszyku zakupowym mojego e-sklepu?
+Tak. Funkcjonalność mapy wyświetli się w koszyku sklepu po prawidłowym zakończeniu procesu integracji.
+
+3. Czy do poprawnego działania widgetu mapy punktów potrzebuje klucz Google API?
+Tak, wtyczka wymaga umieszczenia klucza API w konfiguracji, szczegółowe informacje jak pozyskać klucz Google API dostępne są na stronie: [https://bliskapaczka.pl/narzedzia/instrukcja-uzyskania-klucza-api-google-maps](https://bliskapaczka.pl/narzedzia/instrukcja-uzyskania-klucza-api-google-maps?utm_source=WordPress&utm_medium=b2b&utm_campaign=wtyczka_WooCoo&utm_term=opis-faq-api-google&utm_content=link)
 
 == Changelog ==
 
-1.0.0
-* first version of plugin
+= 1.0.0 =
+* pierwsza wersja wtyczki
 
-1.1.0
-* modal fixes, bugfixes
+= 1.1.0 =
+* poprawki mapy punktów, inne drobne poprawki
 
-1.2.0
-* data validation, code refactoring and optimization
+= 1.2.0 =
+* walidacja formularzy, poprawki w kodzie, optymalizacja wydajności aplikacji
+
+= 1.3.0 =
+* Obsługa WP Flixible Shipping, dodatkowe informacje o zamówionej dostawie.
+
+== Upgrade Notice ==
+
+= 1.3.0 =
+Dodana obsługa Flexible Shipping.
