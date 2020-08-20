@@ -198,7 +198,6 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 	 */
 	public function fs_process_admin_options( $shipping_method ) {
 
-		if ( self::is_integration_enabled() ) {
 			$req_key = 'woocommerce_flexible_shipping_' . $this->get_name_of_operator_setting();
 
 			// @codingStandardsIgnoreStart
@@ -206,7 +205,7 @@ class Bliskapaczka_Flexible_Shipping_Integration {
 				$shipping_method[ $this->get_name_of_operator_setting() ] = esc_html( sanitize_text_field( wp_unslash( $_POST[ $req_key ] ) ) );
 			}
 			// @codingStandardsIgnoreEnd
-		}
+
 		return $shipping_method;
 	}
 
