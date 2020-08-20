@@ -3,7 +3,7 @@ Contributors: senditsa
 Tags: bliskapaczka, sendit, kurier, dostawa, paczkomaty, mapa
 Requires at least: 4.0
 Tested up to: 5.3.2
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 Requires PHP: 5.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -86,7 +86,13 @@ Tak, wtyczka wymaga umieszczenia klucza API w konfiguracji, szczegółowe inform
 = 1.3.0 =
 * Obsługa WP Flixible Shipping, dodatkowe informacje o zamówionej dostawie.
 
+= 1.3.1 =
+* Poprawka w integracji z Flexible Shipping.
+
 == Upgrade Notice ==
 
 = 1.3.0 =
 Dodana obsługa Flexible Shipping.
+
+= 1.3.1 =
+Poprawka w integracji z Flexible Shipping.
