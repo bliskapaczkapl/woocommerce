@@ -78,27 +78,29 @@ class Bliskapaczka_Map_Shipping_Method extends Bliskapaczka_Shipping_Method_Base
                 'custom_attributes' => array( 'required' => 'required' ),
                 'class' => 'bliskapaczka_admin_field_required',
             ),
-/*
+        	
+        	$helper::TEST_MODE              => array(
+        		'title'       => __( 'Test mode enabled', 'bliskapaczka-pl' ),
+        		'type'        => 'checkbox',
+        		'description' => __( 'Required to connect with www.sandbox-bliskapaczka.pl', 'bliskapaczka-pl' ),
+        		'default'     => 'yes',
+        	),
+        	
             $helper::AUTO_ADVICE            => array(
                 'title'       => __( 'Auto advice enabled', 'bliskapaczka-pl' ),
                 'type'        => 'checkbox',
                 'description' => __( 'Sending the order to the service Bliskapaczka.pl, where the status "Ready to send" will be automatically set', 'bliskapaczka-pl' ),
                 'default'     => 'no',
             ),
-*/
-            $helper::FLEXIBLE_SHIPPING        => array(
+
+        	$helper::FLEXIBLE_SHIPPING        => array(
                 'title'       => __( 'WP Desk Flexible Shipping integration' , 'bliskapaczka-pl' ),
                 'type'        => 'checkbox',
                 'label'       => __( 'Enable' , 'bliskapaczka-pl' ),
                 'description' => __( 'Enable integration of Bliskapaczka with WP Desk Flexible Shipping plugin.' , 'bliskapaczka-pl' ),
                 'default'     => 'no',
             ),
-            $helper::TEST_MODE              => array(
-                'title'       => __( 'Test mode enabled', 'bliskapaczka-pl' ),
-                'type'        => 'checkbox',
-                'description' => __( 'Required to connect with www.sandbox-bliskapaczka.pl', 'bliskapaczka-pl' ),
-                'default'     => 'yes',
-            ),
+            
             $helper::GOOGLE_MAP_API_KEY     => array(
                 'title'       => __( 'Google Map API Key', 'bliskapaczka-pl' ),
                 'type'        => 'text',

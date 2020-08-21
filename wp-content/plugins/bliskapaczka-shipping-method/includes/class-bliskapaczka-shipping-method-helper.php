@@ -616,15 +616,78 @@ class Bliskapaczka_Shipping_Method_Helper
 	    	if ( $this->isAutoAdvice() === true ) {
 	    		
 	    		$advice_api_client->setOrderId( $order_number );
-	    		$advice_api_client->create( $order_data );
+	    		
+	    		if ($need_to_pickup) {
+	    			$order_data['autoPickup'] = true;
+	    		}
+	    		$advice_response = $advice_api_client->create( $order_data , ['bp-check-price: false']);
+	    		
 	    		$order->update_meta_data( '_bliskapaczka_need_to_pickup', $need_to_pickup );
 	    		$order->save();
+	    		
+	    		$this->request_auto_pickup($order);
 	    	}
 	    	
 	    } catch ( \Exception $e ) {
 //     		wc_get_logger()->error( $e->getMessage() );
     		throw new Exception( $e->getMessage(), 1 );
 	    }
-    	
     }
+    
+    /**
+     * Create auto pickup.
+     * 
+     * Order must have _bliskapaczka_need_to_pickup, _bliskapaczka_order_id in metda data.
+     *  
+     * @param WC_Order $order
+     */
+    public function request_auto_pickup(WC_Order $order)
+	{
+		$logger = wc_get_logger();
+
+		$bliskapczka_order_id = $order->get_meta('_bliskapaczka_order_id');
+
+		if (false == $order->get_meta('_bliskapaczka_need_to_pickup')) {
+			return;
+		}
+
+		$mapper = new Bliskapaczka_Shipping_Method_Mapper();
+		$bliskapaczka = $this->getMapShippingMethod();
+		$bliskapaczka->init_settings();
+
+		// Auto order pickup when auto advice is enabled WIW-127.
+		$api_pickup = $this->getApiClientPickup();
+
+		try {
+			$mapper->prepareDataForPickup($bliskapaczka, [
+				$bliskapczka_order_id
+			], true);
+			$pickup_params = $mapper->prepareDataForPickup($bliskapaczka, [
+				$bliskapczka_order_id
+			]);
+			$api_pickup_response = json_decode($api_pickup->create($pickup_params), true);
+
+			if (isset($api_pickup_response['id']) && isset($api_pickup_response['number'])) {
+
+				$order->update_meta_data('_bliskapaczka_need_to_pickup', false);
+				$order->update_meta_data('_bliskapaczka_pickup_id', $api_pickup_response['id']);
+				$order->update_meta_data('_bliskapaczka_pickup_number', $api_pickup_response['number']);
+				$order->save();
+			} else {
+				$logger->error('BLISKAPACZKA: Order pickup faild: Undefined resposne from API', [
+					'order_id' => $order->id,
+					'_bliskapaczka_order_id' => $bliskapczka_order_id,
+					'response' => $api_pickup_response
+				]);
+			}
+		} catch (\Exception $e) {
+
+			$logger->error('BLISKAPACZKA: Order pickup faild: ' . $e->getMessage(), [
+				'order_id' => $order->id,
+				'_bliskapaczka_order_id' => $bliskapczka_order_id,
+				'response' => $api_pickup_response
+			]);
+		}
+	}
+    
 }

@@ -254,31 +254,49 @@ class Bliskapaczka_Shipping_Method_Mapper
     /**
      * Prepare data for pickup.
      *
-     * @param array $data
-     *
-     * @param $orderNumber
-     *
+     * @param \Bliskapaczka_Map_Shipping_Method $bliskapaczka
+     * @param string[] $orders_numbers Array of shipping numbers from bliskapaczka API
+     * @param boolean $auto_first_avaible If true that we request the pickup on the first availbe time.
      * @return array
      */
-    public function prepareDataForPickup(array $data, $orderNumber)
-    {
-        $nextDay = (new \DateTime())->modify('+1 day');
-        $numbers = [$orderNumber];
-        return ['orderNumbers' => $numbers,
-                'pickupWindow' => [
-                    'date' => $nextDay->format('Y-m-d'),
-                    'timeRange' => [
-                        'from' => '08:00',
-                        'to' => '16:00'
-                    ]
-                ],
-                'pickupAddress' => [
-            'street' => $data['senderStreet'],
-            'buildingNumber' => $data['senderBuildingNumber'],
-            'flatNumber' => $data['senderFlatNumber'],
-            'city' => $data['senderCity'],
-            'postCode' => $data['senderPostCode']
-        ]];
+    public function prepareDataForPickup(\Bliskapaczka_Map_Shipping_Method $bliskapaczka, array $orders_numbers, $auto_first_avaible = true)
+	{
+		if (true === $auto_first_avaible) {
+			$first_available = true;
+			$pickup_window = null;
+		} else {
+			$first_available = false;
 
-    }
+			// Default pickup are next day.
+			$day_of_week = intval(date("N"));
+			$days = 1;
+
+			// If today is Monday or Saturday than order the picup on Monday.
+			if ($day_of_week >= 5 && $day_of_week < 7) {
+				$days = (7 - $day_of_week) + 1;
+			}
+
+			$pickup_day = (new \DateTime())->modify(sprintf('+%d days', $days));
+			$pickup_window = [
+				'date' => $pickup_day->format('Y-m-d'),
+				'timeRange' => [
+					'from' => '08:00',
+					'to' => '16:00'
+				]
+			];
+		}
+
+		return [
+			'orderNumbers' => $orders_numbers,
+			'pickupWindow' => $pickup_window,
+			'pickupAddress' => [
+				'street' => $bliskapaczka->settings[\Bliskapaczka_Shipping_Method_Helper::SENDER_STREET],
+				'buildingNumber' => $bliskapaczka->settings[\Bliskapaczka_Shipping_Method_Helper::SENDER_BUILDING_NUMBER],
+				'flatNumber' => $bliskapaczka->settings[\Bliskapaczka_Shipping_Method_Helper::SENDER_FLAT_NUMBER],
+				'city' => $bliskapaczka->settings[\Bliskapaczka_Shipping_Method_Helper::SENDER_CITY],
+				'postCode' => $bliskapaczka->settings[\Bliskapaczka_Shipping_Method_Helper::SENDER_POST_CODE]
+			],
+			'firstAvailable' => $first_available
+		];
+	}
 }
