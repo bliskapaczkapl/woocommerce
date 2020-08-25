@@ -68,6 +68,23 @@ class Bliskapaczka_Admin_Order_Details {
 	}
 
 	/**
+	 * Print warning message from bliskapaczka.pl, which was appended to the order meta.
+	 *
+	 * @param WC_Order $order Woo Commerce order.
+	 */
+	public function shipping_show_msg_warn( WC_Order $order ) {
+		$msg = $order->get_meta( '_bliskapaczka_msg_warn', true, 'view' );
+
+		if ( empty( $msg ) ) {
+			return;
+		}
+
+		$content = '<div class="bliskapaczka-wc-admin-shipping-details-msg-warn alert alert-warining"><h3>' . __( 'Message from Bliskapaczka.pl', 'bliskapaczka-pl' ) . '</h3>' . $msg . '</div>';
+
+		echo wp_kses_post( $content );
+	}
+
+	/**
 	 * Returns Bliskapaczaka helper
 	 *
 	 * @return Bliskapaczka_Shipping_Method_Helper

@@ -63,6 +63,8 @@ class Bliskapaczka_Admin_Bootstrap {
 	 */
 	private function registry_actions() {
 		add_filter( 'woocommerce_admin_order_data_after_shipping_address', [ new Bliskapaczka_Admin_Order_Details(), 'shipping_details' ], 1 );
+		add_filter( 'woocommerce_admin_order_data_after_shipping_address', [ new Bliskapaczka_Admin_Order_Details(), 'shipping_show_msg_warn' ], 2 );
+
 		return $this;
 	}
 
