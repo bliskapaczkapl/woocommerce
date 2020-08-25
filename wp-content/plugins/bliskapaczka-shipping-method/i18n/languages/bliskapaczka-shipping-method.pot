@@ -2,17 +2,17 @@
 # This file is distributed under the same license as the Bliskapaczka.pl plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Bliskapaczka.pl 1.1.0\n"
+"Project-Id-Version: Bliskapaczka.pl 1.3.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bliskapaczka-shipping-method\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-06-18T10:20:18+00:00\n"
+"POT-Creation-Date: 2020-08-25T09:51:48+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
-"X-Domain: bliskapaczka-shipping-method\n"
+"X-Domain: bliskapaczka-pl\n"
 
 #. Plugin Name of the plugin
 #. Author of the plugin
@@ -27,178 +27,313 @@ msgstr ""
 msgid "Integracja metod dostaw z serwisem Bliskapaczka.pl"
 msgstr ""
 
-#: class-bliskapaczka-shipping-method.php:229
+#: class-bliskapaczka-shipping-method.php:233
 msgid "Selected Point"
 msgstr ""
 
-#: class-bliskapaczka-shipping-method.php:243
+#: class-bliskapaczka-shipping-method.php:248
 msgid "Shipping cost"
 msgstr ""
 
-#: class-bliskapaczka-shipping-method.php:272
+#: class-bliskapaczka-shipping-method.php:278
 msgid "POS Code"
 msgstr ""
 
-#: class-bliskapaczka-shipping-method.php:276
+#: class-bliskapaczka-shipping-method.php:282
 msgid "POS Operator"
 msgstr ""
 
-#: class-bliskapaczka-shipping-method.php:419
+#: class-bliskapaczka-shipping-method.php:395
 msgid "View Bliskapaczka Settings"
 msgstr ""
 
-#: includes/admin/class-bliskapaczka-admin-order-details.php:46
+#: class-bliskapaczka-shipping-method.php:439
+#: includes/class-bliskapaczka-map-shipping-method.php:225
+msgid "First name is longer than 30 characters."
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:442
+#: includes/class-bliskapaczka-map-shipping-method.php:234
+msgid "Last name is logner than 30 characters."
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:445
+#: includes/class-bliskapaczka-map-shipping-method.php:290
+msgid "City name cannot exceed 30 characters."
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:723
+msgid "Point code"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:726
+#: includes/class-bliskapaczka-flexible-shipping-integration.php:156
+msgid "Operator"
+msgstr ""
+
+#: class-bliskapaczka-shipping-method.php:729
+msgid "Point info"
+msgstr ""
+
+#: includes/admin/class-bliskapaczka-admin-order-details.php:49
 msgid "Waybill"
 msgstr ""
 
-#: includes/admin/class-bliskapaczka-admin-order-details.php:57
+#: includes/admin/class-bliskapaczka-admin-order-details.php:60
 msgid "Order number"
 msgstr ""
 
-#: includes/class-bliskapaczka-courier-shipping-method.php:8
+#: includes/admin/class-bliskapaczka-admin-order-details.php:82
+msgid "Message from Bliskapaczka.pl"
+msgstr ""
+
+#: includes/class-bliskapaczka-courier-shipping-method.php:10
 msgid "Bliskapaczka Courier Shipping"
 msgstr ""
 
-#: includes/class-bliskapaczka-courier-shipping-method.php:9
+#: includes/class-bliskapaczka-courier-shipping-method.php:11
 msgid "Custom Coureir Shipping Method for Bliskapaczka"
 msgstr ""
 
-#: includes/class-bliskapaczka-courier-shipping-method.php:19
-#: includes/class-bliskapaczka-map-shipping-method.php:11
+#: includes/class-bliskapaczka-courier-shipping-method.php:21
+#: includes/class-bliskapaczka-map-shipping-method.php:12
 #: includes/class-bliskapaczka-map-shipping-method.php:22
 msgid "Bliskapaczka Shipping"
 msgstr ""
 
-#: includes/class-bliskapaczka-courier-shipping-method.php:39
-#: includes/class-bliskapaczka-map-shipping-method.php:46
+#: includes/class-bliskapaczka-courier-shipping-method.php:49
+#: includes/class-bliskapaczka-map-shipping-method.php:61
+#: includes/class-bliskapaczka-map-shipping-method.php:99
 msgid "Enable"
 msgstr ""
 
-#: includes/class-bliskapaczka-courier-shipping-method.php:41
-#: includes/class-bliskapaczka-map-shipping-method.php:48
+#: includes/class-bliskapaczka-courier-shipping-method.php:51
+#: includes/class-bliskapaczka-map-shipping-method.php:63
 msgid "Enable this shipping method"
 msgstr ""
 
-#: includes/class-bliskapaczka-courier-shipping-method.php:45
-#: includes/class-bliskapaczka-map-shipping-method.php:52
+#: includes/class-bliskapaczka-courier-shipping-method.php:55
+#: includes/class-bliskapaczka-map-shipping-method.php:67
 msgid "Delivery name"
 msgstr ""
 
-#: includes/class-bliskapaczka-courier-shipping-method.php:47
-#: includes/class-bliskapaczka-map-shipping-method.php:54
+#: includes/class-bliskapaczka-courier-shipping-method.php:57
+#: includes/class-bliskapaczka-map-shipping-method.php:69
 msgid "Deliver name to be display on site"
 msgstr ""
 
-#: includes/class-bliskapaczka-courier-shipping-method.php:48
-#: includes/class-bliskapaczka-courier-shipping-method.php:73
+#: includes/class-bliskapaczka-courier-shipping-method.php:58
+#: includes/class-bliskapaczka-courier-shipping-method.php:82
 msgid "Delivery to the door"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:12
+#: includes/class-bliskapaczka-flexible-shipping-integration.php:101
+msgid "Bliskapaczka"
+msgstr ""
+
+#. translators: %s: Instalation url.
+#: includes/class-bliskapaczka-flexible-shipping-integration.php:125
+msgid "Flexible Shipping Bliskapaczka Integration requires Flexible Shipping Plugin. <a href=\"%s\">Install Flexible Shipping →</a>"
+msgstr ""
+
+#. translators: %s: Activation url.
+#: includes/class-bliskapaczka-flexible-shipping-integration.php:133
+msgid "Flexible Shipping Bliskapaczka Integration requires Flexible Shipping Plugin. <a href=\"%s\">Activate Flexible Shipping →</a>"
+msgstr ""
+
+#: includes/class-bliskapaczka-flexible-shipping-integration.php:321
+msgid "DHL"
+msgstr ""
+
+#: includes/class-bliskapaczka-flexible-shipping-integration.php:322
+msgid "DPD"
+msgstr ""
+
+#: includes/class-bliskapaczka-flexible-shipping-integration.php:323
+msgid "FedEx"
+msgstr ""
+
+#: includes/class-bliskapaczka-flexible-shipping-integration.php:324
+msgid "GLS"
+msgstr ""
+
+#: includes/class-bliskapaczka-flexible-shipping-integration.php:325
+msgid "Inpost"
+msgstr ""
+
+#: includes/class-bliskapaczka-flexible-shipping-integration.php:326
+msgid "Poczta Polska"
+msgstr ""
+
+#: includes/class-bliskapaczka-flexible-shipping-integration.php:327
+msgid "UPS"
+msgstr ""
+
+#: includes/class-bliskapaczka-flexible-shipping-integration.php:328
+msgid "X-press"
+msgstr ""
+
+#: includes/class-bliskapaczka-flexible-shipping-integration.php:329
+msgid "Paczkomaty / Punkty"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:13
 msgid "Custom Shipping Method for Bliskapaczka"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:55
-#: includes/class-bliskapaczka-map-shipping-method.php:200
+#: includes/class-bliskapaczka-map-shipping-method.php:70
+#: includes/class-bliskapaczka-map-shipping-method.php:322
 msgid "Delivery to point"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:60
+#: includes/class-bliskapaczka-map-shipping-method.php:75
 msgid "API Key"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:62
+#: includes/class-bliskapaczka-map-shipping-method.php:77
 msgid "The API key from www.bliskapaczka.pl panel"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:75
+#: includes/class-bliskapaczka-map-shipping-method.php:83
 msgid "Test mode enabled"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:77
+#: includes/class-bliskapaczka-map-shipping-method.php:85
 msgid "Required to connect with www.sandbox-bliskapaczka.pl"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:81
-msgid "Google Map API Key"
+#: includes/class-bliskapaczka-map-shipping-method.php:90
+msgid "Auto advice enabled"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:87
-msgid "Dimensions and weight of the shipment"
+#: includes/class-bliskapaczka-map-shipping-method.php:92
+msgid "Sending the order to the service Bliskapaczka.pl, where the status \"Ready to send\" will be automatically set"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:91
-msgid "Height"
-msgstr ""
-
-#: includes/class-bliskapaczka-map-shipping-method.php:93
-msgid "Enter the parcel height (cm)"
-msgstr ""
-
-#: includes/class-bliskapaczka-map-shipping-method.php:98
-msgid "Length"
+#: includes/class-bliskapaczka-map-shipping-method.php:97
+msgid "WP Desk Flexible Shipping integration"
 msgstr ""
 
 #: includes/class-bliskapaczka-map-shipping-method.php:100
-msgid "Enter the parcel length (cm)"
+msgid "Enable integration of Bliskapaczka with WP Desk Flexible Shipping plugin."
 msgstr ""
 
 #: includes/class-bliskapaczka-map-shipping-method.php:105
-msgid "Width"
+msgid "Google Map API Key"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:107
-msgid "Enter the parcel width (cm)"
+#: includes/class-bliskapaczka-map-shipping-method.php:111
+msgid "Dimensions and weight of the shipment"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:112
-msgid "Weight"
+#: includes/class-bliskapaczka-map-shipping-method.php:115
+msgid "Height"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:114
-msgid "Enter the parcel weight (kg)"
+#: includes/class-bliskapaczka-map-shipping-method.php:117
+msgid "Enter the parcel height (cm)"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:119
-msgid "Sender data"
+#: includes/class-bliskapaczka-map-shipping-method.php:122
+msgid "Length"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:123
-msgid "Email"
+#: includes/class-bliskapaczka-map-shipping-method.php:124
+msgid "Enter the parcel length (cm)"
 msgstr ""
 
 #: includes/class-bliskapaczka-map-shipping-method.php:129
-msgid "First name"
+msgid "Width"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:135
-msgid "Last name"
+#: includes/class-bliskapaczka-map-shipping-method.php:131
+msgid "Enter the parcel width (cm)"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:141
-msgid "Phone number"
+#: includes/class-bliskapaczka-map-shipping-method.php:136
+msgid "Weight"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:138
+msgid "Enter the parcel weight (kg)"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:143
+msgid "Sender data"
 msgstr ""
 
 #: includes/class-bliskapaczka-map-shipping-method.php:147
-msgid "Street"
+msgid "Email"
 msgstr ""
 
 #: includes/class-bliskapaczka-map-shipping-method.php:153
-msgid "Building number"
+msgid "First name"
 msgstr ""
 
 #: includes/class-bliskapaczka-map-shipping-method.php:159
+msgid "Last name"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:165
+msgid "Phone number"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:171
+msgid "Street"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:177
+msgid "Building number"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:183
 msgid "Flat number"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:163
+#: includes/class-bliskapaczka-map-shipping-method.php:187
 msgid "Zip"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:169
+#: includes/class-bliskapaczka-map-shipping-method.php:193
 msgid "City"
 msgstr ""
 
-#: includes/class-bliskapaczka-map-shipping-method.php:175
+#: includes/class-bliskapaczka-map-shipping-method.php:199
 msgid "Bank account number"
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:216
+msgid "E-mail is invalid or longer than 60 characters."
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:245
+msgid "Phone number is invalid (only 9 letters phone numbers are allowed)."
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:254
+msgid "Street name cannot exceed 30 characters."
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:263
+msgid "Building number cannot exceed 10 characters."
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:272
+msgid "Flat number cannot exceed 10 characters."
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:281
+msgid "Post code cannot exceed 10 characters."
+msgstr ""
+
+#: includes/class-bliskapaczka-map-shipping-method.php:302
+msgid "Bank account is not valid IBAN number."
+msgstr ""
+
+#: includes/class-bliskapaczka-shipping-method-helper.php:636
+msgid "Dear Seller, Xpress courier are not avaible from technical reason."
+msgstr ""
+
+#: includes/class-bliskapaczka-shipping-method-helper.php:646
+msgid "Dear Seller, Xpress courier are not avaible from technical reason. Details: "
 msgstr ""

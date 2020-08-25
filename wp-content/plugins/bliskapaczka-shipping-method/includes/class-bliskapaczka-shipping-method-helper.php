@@ -1,6 +1,7 @@
 <?php
 
 use Bliskapaczka\ApiClient\AbstractBliskapaczka;
+use Bliskapaczka\ApiClient\Bliskapaczka\Order\AvailableServices;
 
 /**
  * Bliskapaczka Core class
@@ -40,6 +41,13 @@ class Bliskapaczka_Shipping_Method_Helper
     const AUTO_ADVICE = 'BLISKAPACZKA_AUTO_ADVICE';
     const FLEXIBLE_SHIPPING = 'BLISKAPACZKA_FLEXIBLE_SHIPPING';
 
+    /**
+     * Default service type for XPREES Curier.
+     * Allowed values are LOCAL, COUNTRY, INTERNATIONAL, VOIVODESHIP, ECOMMERCE
+     * 
+     * @var string
+     */
+    const XPRESS_DEFAULT_SERVICE_TYPE = 'ECOMMERCE';
     /**
      * Temporarily blocked this functionality, because is not yet finished.
      * @var string
@@ -263,6 +271,19 @@ class Bliskapaczka_Shipping_Method_Helper
         	$this->getApiKey(),
             $this->getApiMode()
         ) );
+    }
+    
+    /**
+     * Get Bliskapaczka Available Services API Client
+     * 
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka\Order\AvailableServices
+     */
+    public function getApiClientAvailableServices()
+    {
+    	return $this->decorate_bp_api_request( new \Bliskapaczka\ApiClient\Bliskapaczka\Order\AvailableServices(
+    		$this->getApiKey(),
+    		$this->getApiMode()
+    	));
     }
 	
     /**
@@ -583,6 +604,7 @@ class Bliskapaczka_Shipping_Method_Helper
      */
     public function send_order_to_api( WC_Order $order, $delivery_to_point)
     {
+    	
     	$mapper = new Bliskapaczka_Shipping_Method_Mapper();
     	$bliskapaczka = $this->getMapShippingMethod();
     	$bliskapaczka->init_settings();
@@ -604,6 +626,27 @@ class Bliskapaczka_Shipping_Method_Helper
     		$order_data = $mapper->prepareCOD( $order_data, $order );
     		$order_data = $mapper->prepareInsuranceDataIfNeeded( $order_data, $order );
     	}
+    	try {
+    		if ('XPRESS' === $order_data['operatorName']) {
+    			$order_data['serviceType'] = self::XPRESS_DEFAULT_SERVICE_TYPE;
+	    		$avaibleServices = json_decode($this->getApiClientAvailableServices()->get($order_data), true);
+	    		
+	    		if ( ! is_array($avaibleServices) || 0 == count($avaibleServices) ) {
+	    			
+	    			$order->update_meta_data('_bliskapaczka_msg_warn', __('Dear Seller, Xpress courier are not avaible from technical reason.', 'bliskapaczka-pl'));
+	    			$order->save(); 
+	    			return;
+	    		}
+	    		
+	    		// We choose the first service.
+	    		$order_data['serviceId'] = $avaibleServices[0];
+	    		
+    		} 
+    	} catch (\Exception $e) {
+    		$order->update_meta_data('_bliskapaczka_msg_warn', __('Dear Seller, Xpress courier are not avaible from technical reason. Details: ', 'bliskapaczka-pl') . $e->getMessage() );
+    			$order->save();
+    			return;
+    	}
     	
     	try {
 	    	$api_client = $this->getApiClientOrder();
@@ -620,7 +663,8 @@ class Bliskapaczka_Shipping_Method_Helper
 	    		if ($need_to_pickup) {
 	    			$order_data['autoPickup'] = true;
 	    		}
-	    		$advice_response = $advice_api_client->create( $order_data , ['bp-check-price: false']);
+				
+	    		$advice_api_client->create( $order_data , ['bp-check-price: false']);
 	    		
 	    		$order->update_meta_data( '_bliskapaczka_need_to_pickup', $need_to_pickup );
 	    		$order->save();
@@ -629,9 +673,10 @@ class Bliskapaczka_Shipping_Method_Helper
 	    	}
 	    	
 	    } catch ( \Exception $e ) {
-//     		wc_get_logger()->error( $e->getMessage() );
+	    	
     		throw new Exception( $e->getMessage(), 1 );
 	    }
+	    
     }
     
     /**
@@ -689,5 +734,4 @@ class Bliskapaczka_Shipping_Method_Helper
 			]);
 		}
 	}
-    
 }
