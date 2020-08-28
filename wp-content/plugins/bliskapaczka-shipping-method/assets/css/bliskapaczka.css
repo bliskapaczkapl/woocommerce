@@ -92,3 +92,7 @@
         padding:20px
     }
 }
+/* Fix for conflict with Apaczka plugin styles */
+#BPWidget .bp-marker-desc .bp-brand-logo-wrapper .bp-brand-logo img {
+    max-width:60px !important;
+}
