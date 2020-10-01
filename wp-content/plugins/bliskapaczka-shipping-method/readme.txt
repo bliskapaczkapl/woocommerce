@@ -11,7 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 == Description ==
 
-Wtyczka WooCommerce od Bliskapaczka.pl z usługą Flexible Shipping (Sendit S.A.) umożliwia automatyczne nadawanie przesyłek z DPD, FedEx, UPS, InPost Paczkomaty, RUCH, Poczta Polska.
+Wtyczka WooCommerce od bliskapaczka.pl (Sendit S.A.) umożliwia automatyczne nadawanie przesyłek z DPD, FedEx, UPS, InPost Paczkomaty, RUCH, Poczta Polska.
 
 Instalując wtyczkę otrzymujesz intuicyjne rozwiązanie mapy z prawie 34 000 punktów nadawczo - odbiorczych bez konieczności podpisywania dodatkowych umów.
 
