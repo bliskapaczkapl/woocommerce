@@ -3,7 +3,7 @@ Contributors: senditsa
 Tags: bliskapaczka, sendit, kurier, dostawa, paczkomaty, mapa
 Requires at least: 4.0
 Tested up to: 5.5.1
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 Requires PHP: 5.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -13,14 +13,14 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 Wtyczka WooCommerce od Bliskapaczka.pl z usługą Flexible Shipping (Sendit S.A.) umożliwia automatyczne nadawanie przesyłek z DPD, FedEx, UPS, InPost Paczkomaty, RUCH, Poczta Polska.
 
-Instalując wtyczkę otrzymujesz intuicyjne rozwiązanie mapy z ponad 32 000 punktów nadawczo - odbiorczych bez konieczności podpisywania dodatkowych umów. 
+Instalując wtyczkę otrzymujesz intuicyjne rozwiązanie mapy z prawie 34 000 punktów nadawczo - odbiorczych bez konieczności podpisywania dodatkowych umów.
 
 Korzystając z rozwiązania otrzymujesz:
-- opcję Flexible Shipping (reguły wagowe i koszykowe, opcja ustawienia darmowej dostawy w sklepie)
+- możliwość integracji z Flexible Shipping (reguły wagowe i koszykowe, opcja ustawienia darmowej dostawy w sklepie)
 - obniżenie kosztów - oferujemy ceny niższe nawet o 70%, 
 - informacje o dostawie widoczne w szczegółach zlecenia,
 - automatyczne procesowanie zleceń wraz z zamówieniem podjazdu kuriera,
-- intuicyjny widget mapy dla twoich klientów z ponad 32 000 punktów nadawczo – odbiorczych,
+- intuicyjny widget mapy dla twoich klientów z prawie 34 000 punktów nadawczo – odbiorczych,
 - wbudowany tryb testowy, pozwalający przetestować integrację wtyczki przed udostępnieniem klientom,
 - domyślne ustawienia przesyłki, skonfigurowane w ustawieniach przyspieszające przygotowanie i wysyłkę paczek,
 - opcję pobierania listów przewozowych z poziomu zamówienia,
