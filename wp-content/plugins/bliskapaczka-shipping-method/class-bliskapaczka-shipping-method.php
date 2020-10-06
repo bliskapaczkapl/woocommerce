@@ -524,7 +524,60 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 */
 	function bliskapaczka_calculated_total( $total, $cart ) {
 
-		return $total + bliskapaczka_get_price();
+		$virtual_total     = '';
+		$non_virtual_total = '';
+		$is_cart_set       = is_cart();
+		$chosen_methods    = WC()->session->get( 'chosen_shipping_methods' );
+		$chosen_method     = $chosen_methods[0];
+
+		foreach ( WC()->cart->get_cart() as $cart_item ) {
+			if ( $cart_item['data']->is_virtual() ) {
+				$virtual_total += $cart_item['quantity'];
+			}
+			if ( ! $cart_item['data']->is_virtual() ) {
+				$non_virtual_total += $cart_item['quantity'];
+			}
+		};
+
+		if ( ( 'bliskapaczka-courier' === $chosen_method ) && ( $non_virtual_total > 0 ) && ( $virtual_total > 0 ) ) {
+			if ( true === $is_cart_set ) {
+				return $total + bliskapaczka_get_price();
+			} else {
+				return $total + bliskapaczka_get_price();
+			}
+		} elseif ( ( 'bliskapaczka-courier' === $chosen_method ) && ( $non_virtual_total > 0 ) ) {
+			if ( true === $is_cart_set ) {
+				return $total + bliskapaczka_get_price();
+			} else {
+				return $total + bliskapaczka_get_price();
+			}
+		} elseif ( ( 'bliskapaczka-courier' === $chosen_method ) && ( $virtual_total > 0 ) ) {
+			if ( true === $is_cart_set ) {
+				return $total;
+			} else {
+				return $total + bliskapaczka_get_price();
+			}
+		} elseif ( ( 'bliskapaczka' === $chosen_method ) && ( $non_virtual_total > 0 ) && ( $virtual_total > 0 ) ) {
+			if ( true === $is_cart_set ) {
+				return $total + bliskapaczka_get_price();
+			} else {
+				return $total + bliskapaczka_get_price();
+			}
+		} elseif ( ( 'bliskapaczka' === $chosen_method ) && ( $non_virtual_total > 0 ) ) {
+			if ( true === $is_cart_set ) {
+				return $total + bliskapaczka_get_price();
+			} else {
+				return $total + bliskapaczka_get_price();
+			}
+		} elseif ( ( 'bliskapaczka' === $chosen_method ) && ( $virtual_total > 0 ) ) {
+			if ( true === $is_cart_set ) {
+				return $total;
+			} else {
+				return $total + bliskapaczka_get_price();
+			}
+		} else {
+			return $total;
+		}
 	}
 
 	/**

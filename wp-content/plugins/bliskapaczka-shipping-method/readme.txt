@@ -93,6 +93,9 @@ Tak, wtyczka wymaga umieszczenia klucza API w konfiguracji, szczegółowe inform
 = 1.4.0 =
 * automatyczne procesowanie zleceń wraz z zamówieniem podjazdu kuriera.
 
+= 1.4.1 =
+* poprawka dla przeliczania cen w koszyku.
+
 == Upgrade Notice ==
 
 = 1.3.0 =
@@ -103,3 +106,6 @@ Poprawka w integracji z Flexible Shipping.
 
 = 1.4.0 =
 Dodano opcję automatycznego procesowania zleceń wraz z zamówieniem podjazdu kuriera.
+
+= 1.4.1 =
+Poprawiono przeliczanie cen przy współwystępowaniu produktów wirtualnych.
