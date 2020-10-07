@@ -538,6 +538,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$non_virtual_total += $cart_item['quantity'];
 			}
 		};
+		$virtual_total     = (int) $virtual_total;
+		$non_virtual_total = (int) $non_virtual_total;
 
 		if ( ( 'bliskapaczka-courier' === $chosen_method ) && ( $non_virtual_total > 0 ) && ( $virtual_total > 0 ) ) {
 			if ( true === $is_cart_set ) {
