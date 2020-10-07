@@ -3,7 +3,7 @@
  * Plugin Name: Bliskapaczka.pl
  * Plugin URI: https://bliskapaczka.pl/narzedzia/integracja-sklep-wordpress-woocommerce
  * Description: Integracja metod dostaw z serwisem Bliskapaczka.pl
- * Version: 1.4.1
+ * Version: 1.4.2
  * Author: Bliskapaczka.pl
  * Text Domain: bliskapaczka-pl
  * Domain Path: /languages
