@@ -3,7 +3,7 @@
  * Plugin Name: Bliskapaczka.pl
  * Plugin URI: https://bliskapaczka.pl/narzedzia/integracja-sklep-wordpress-woocommerce
  * Description: Integracja metod dostaw z serwisem Bliskapaczka.pl
- * Version: 1.4.2
+ * Version: 1.4.3
  * Author: Bliskapaczka.pl
  * Text Domain: bliskapaczka-pl
  * Domain Path: /languages
@@ -524,22 +524,20 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 */
 	function bliskapaczka_calculated_total( $total, $cart ) {
 
-		$virtual_total     = '';
-		$non_virtual_total = '';
+		$virtual_total     = 0;
+		$non_virtual_total = 0;
 		$is_cart_set       = is_cart();
 		$chosen_methods    = WC()->session->get( 'chosen_shipping_methods' );
 		$chosen_method     = $chosen_methods[0];
 
 		foreach ( WC()->cart->get_cart() as $cart_item ) {
 			if ( $cart_item['data']->is_virtual() ) {
-				$virtual_total += $cart_item['quantity'];
+				$virtual_total += (int) $cart_item['quantity'];
 			}
 			if ( ! $cart_item['data']->is_virtual() ) {
-				$non_virtual_total += $cart_item['quantity'];
+				$non_virtual_total += (int) $cart_item['quantity'];
 			}
 		};
-		$virtual_total     = (int) $virtual_total;
-		$non_virtual_total = (int) $non_virtual_total;
 
 		if ( ( 'bliskapaczka-courier' === $chosen_method ) && ( $non_virtual_total > 0 ) && ( $virtual_total > 0 ) ) {
 			if ( true === $is_cart_set ) {
@@ -557,7 +555,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			if ( true === $is_cart_set ) {
 				return $total;
 			} else {
-				return $total + bliskapaczka_get_price();
+				return $total;
 			}
 		} elseif ( ( 'bliskapaczka' === $chosen_method ) && ( $non_virtual_total > 0 ) && ( $virtual_total > 0 ) ) {
 			if ( true === $is_cart_set ) {
@@ -575,7 +573,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			if ( true === $is_cart_set ) {
 				return $total;
 			} else {
-				return $total + bliskapaczka_get_price();
+				return $total;
 			}
 		} else {
 			return $total;

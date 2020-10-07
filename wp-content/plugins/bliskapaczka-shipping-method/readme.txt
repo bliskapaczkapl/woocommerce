@@ -3,7 +3,7 @@ Contributors: senditsa
 Tags: bliskapaczka, sendit, kurier, dostawa, paczkomaty, mapa
 Requires at least: 4.0
 Tested up to: 5.5.1
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 Requires PHP: 5.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -96,6 +96,12 @@ Tak, wtyczka wymaga umieszczenia klucza API w konfiguracji, szczegółowe inform
 = 1.4.1 =
 * poprawka dla przeliczania cen w koszyku.
 
+= 1.4.2 =
+* poprawka do przeliczania produktów wirtualnych
+
+= 1.4.3 =
+* poprawka kompatybilnośći dla różnych wersji PHP
+
 == Upgrade Notice ==
 
 = 1.3.0 =
@@ -109,3 +115,9 @@ Dodano opcję automatycznego procesowania zleceń wraz z zamówieniem podjazdu k
 
 = 1.4.1 =
 Poprawiono przeliczanie cen przy współwystępowaniu produktów wirtualnych.
+
+= 1.4.2 =
+Poprawiono przeliczanie cen w koszyku i kasie.
+
+= 1.4.3 =
+Poprawiona kompatybilność dla różnych wersji PHP.
