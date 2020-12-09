@@ -7,11 +7,11 @@
 		"squizlabs/php_codesniffer" : "2.*",
 		"phpmd/phpmd" : "^2.4",
 		"sebastian/phpcpd" : "^2.0",
-		"block8/php-docblock-checker" : "^1.1",
 		"phploc/phploc" : "^3.0",
 		"wordpress/wordpress" : "4.8.1",
 		"woocommerce/woocommerce" : "^2.1",
-		"wp-coding-standards/wpcs" : "*"
+		"wp-coding-standards/wpcs" : "*",
+		"dancryer/php-docblock-checker" : "^1.10"
 	},
 	"repositories" : [{
 			"type" : "vcs",

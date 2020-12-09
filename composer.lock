@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2151d35d6b102b08f1af2de8e1138a11",
+    "content-hash": "b8140ad0b2581082b491f2061425522a",
     "packages": [
         {
             "name": "bliskapaczkapl/bliskapaczka-api-client",
@@ -404,6 +404,72 @@
                 }
             ],
             "time": "2020-11-13T08:04:11+00:00"
+        },
+        {
+            "name": "dancryer/php-docblock-checker",
+            "version": "1.10.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dancryer/php-docblock-checker.git",
+                "reference": "687bb03a1cf6dd6d0115c018d97fa68e42203299"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dancryer/php-docblock-checker/zipball/687bb03a1cf6dd6d0115c018d97fa68e42203299",
+                "reference": "687bb03a1cf6dd6d0115c018d97fa68e42203299",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "nikic/php-parser": "3.*|4.*",
+                "php": ">=5.5",
+                "symfony/console": "3.4.*|4.*",
+                "symfony/yaml": "3.4.*|4.*"
+            },
+            "require-dev": {
+                "jakub-onderka/php-parallel-lint": "0.8.*",
+                "phperf/xh-tool": "^1.1",
+                "phpstan/phpstan": "^0.11.5",
+                "phpunit/phpunit": "^4.8",
+                "squizlabs/php_codesniffer": "^3.4"
+            },
+            "bin": [
+                "bin/phpdoccheck"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PhpDocBlockChecker\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Dan Cryer",
+                    "email": "dan.cryer@block8.co.uk",
+                    "homepage": "http://www.block8.co.uk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A simple tool for checking that your PHP classes and methods use docblocks.",
+            "homepage": "https://www.phptesting.org/",
+            "keywords": [
+                "checker",
+                "code quality",
+                "comment",
+                "docblock",
+                "php",
+                "phpci",
+                "testing"
+            ],
+            "support": {
+                "issues": "https://github.com/dancryer/php-docblock-checker/issues",
+                "source": "https://github.com/dancryer/php-docblock-checker"
+            },
+            "time": "2019-04-26T10:38:36+00:00"
         },
         {
             "name": "doctrine/instantiator",
