@@ -1,38 +1,56 @@
 {
-    "config": {
-        "vendor-dir": "wp-content/plugins/bliskapaczka-shipping-method/vendor"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "5.7",
-        "squizlabs/php_codesniffer": "2.*",
-        "phpmd/phpmd": "^2.4",
-        "sebastian/phpcpd":"^2.0",
-        "block8/php-docblock-checker":"^1.1",
-        "phploc/phploc":"^3.0",
-        "wordpress/wordpress":"4.8.1",
-        "woocommerce/woocommerce":"^2.1",
-        "wp-coding-standards/wpcs":"*"
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/bliskapaczkapl/bliskapaczka-api-client.git"
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "wordpress/wordpress",
-                "version": "4.8.1",
-                "type": "package",
-                "source": {
-                    "url": "https://github.com/WordPress/WordPress.git",
-                    "type": "git",
-                    "reference": "4.8.1"
-                }
-            }
-        }
-    ],
-    "require": {
-        "bliskapaczkapl/bliskapaczka-api-client": "^3.0"
-    }
+	"config" : {
+		"vendor-dir" : "wp-content/plugins/bliskapaczka-shipping-method/vendor"
+	},
+	"require-dev" : {
+		"phpunit/phpunit" : "5.7",
+		"squizlabs/php_codesniffer" : "2.*",
+		"phpmd/phpmd" : "^2.4",
+		"sebastian/phpcpd" : "^2.0",
+		"block8/php-docblock-checker" : "^1.1",
+		"phploc/phploc" : "^3.0",
+		"wordpress/wordpress" : "4.8.1",
+		"woocommerce/woocommerce" : "^2.1",
+		"wp-coding-standards/wpcs" : "*"
+	},
+	"repositories" : [{
+			"type" : "vcs",
+			"url" : "https://github.com/bliskapaczkapl/bliskapaczka-api-client.git"
+		}, {
+			"type" : "package",
+			"package" : {
+				"name" : "wordpress/wordpress",
+				"version" : "4.8.1",
+				"type" : "package",
+				"source" : {
+					"url" : "https://github.com/WordPress/WordPress.git",
+					"type" : "git",
+					"reference" : "4.8.1"
+				}
+			}
+		}
+	],
+	"require" : {
+		"bliskapaczkapl/bliskapaczka-api-client" : "^3.0"
+	},
+	"description" : "Moduł Bliskapaczka dla WooCommerce",
+	"name" : "bliskapaczka/bliskapaczka-shipping-method",
+	"type" : "library",
+	"homepage" : "https://bliskapaczka.pl/narzedzia/integracja-sklep-wordpress-woocommerce",
+	"license" : "GPLv3 or later",
+	"authors" : [{
+			"name" : "senditsa"
+		}
+	],
+	"support" : {
+		"email" : "wsparcie@sendit.pl"
+	},
+	"keywords" : [
+		"bliskapaczka",
+		"sendit",
+		"kurier",
+		"dostawa",
+		"paczkomaty",
+		"mapa"
+	]
 }
