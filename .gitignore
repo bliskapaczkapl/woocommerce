@@ -6,4 +6,3 @@ wp-content/plugins/woocommerce
 /.project
 /.settings/
 .DS_Store
-composer.lock
