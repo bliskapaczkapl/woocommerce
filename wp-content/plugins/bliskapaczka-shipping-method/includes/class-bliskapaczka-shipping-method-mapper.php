@@ -6,260 +6,344 @@
 class Bliskapaczka_Shipping_Method_Mapper
 {
 
-    const OPERATORS_WITH_INSURANCE = ['FEDEX', 'DPD'];
+	const OPERATORS_WITH_INSURANCE = [
+		'FEDEX',
+		'DPD'
+	];
+
 	/**
-     * Prepare mapped data for Bliskapaczka API
-     *
-     * @param WC_Order $order
-     * @param Bliskapaczka_Shipping_Method_Helper $helper
-     * @return array
-     */
-    public function getData(WC_Order $order, Bliskapaczka_Shipping_Method_Helper $helper, $settings)
-    {
-        $data = [];
+	 * Prepare mapped data for Bliskapaczka API
+	 *
+	 * @param WC_Order $order
+	 * @param Bliskapaczka_Shipping_Method_Helper $helper
+	 * @return array
+	 */
+	public function getData(WC_Order $order, Bliskapaczka_Shipping_Method_Helper $helper, $settings)
+	{
+		$data = [];
 
-        $shippingAddress = $order->get_address('shipping');
-        $billingAddress = $order->get_address('billing');
+		$shippingAddress = $order->get_address('shipping');
+		$billingAddress = $order->get_address('billing');
 
-        $data['receiverFirstName'] = $shippingAddress['first_name'];
-        $data['receiverLastName'] = $shippingAddress['last_name'];
-        $data['receiverPhoneNumber'] = $helper->telephoneNumberCeaning($billingAddress['phone']);
-        $data['receiverEmail'] = $billingAddress['email'];
+		$data['receiverFirstName'] = $shippingAddress['first_name'];
+		$data['receiverLastName'] = $shippingAddress['last_name'];
+		$data['receiverPhoneNumber'] = $helper->telephoneNumberCeaning($billingAddress['phone']);
+		$data['receiverEmail'] = $billingAddress['email'];
 
-        foreach ( $order->get_items( array( 'shipping' ) ) as $item_id => $item ) {
-            $shipping_item_id = $item_id;
-        }
+		foreach ($order->get_items(array(
+			'shipping'
+		)) as $item_id => $item) {
+			$shipping_item_id = $item_id;
+		}
 
-        $data['deliveryType'] = 'P2P';
+		$data['deliveryType'] = 'P2P';
 
-        $data['operatorName'] = wc_get_order_item_meta( $shipping_item_id, '_bliskapaczka_posOperator' );
-        $data['destinationCode'] = wc_get_order_item_meta( $shipping_item_id, '_bliskapaczka_posCode' );
-        if ($data['operatorName'] === 'FEDEX') {
-            $data['deliveryType'] = 'D2P';
-            $data = $this->_prepareDestinationData($data, $order);
-        }
-        $data['parcel'] = [
-            'dimensions' => $this->getParcelDimensions($helper, $settings)
-        ];
-        $data = $this->_prepareSenderData($data, $helper, $settings);
+		$data['operatorName'] = wc_get_order_item_meta($shipping_item_id, '_bliskapaczka_posOperator');
+		$data['destinationCode'] = wc_get_order_item_meta($shipping_item_id, '_bliskapaczka_posCode');
+		if ($data['operatorName'] === 'FEDEX') {
+			$data['deliveryType'] = 'D2P';
+			$data = $this->_prepareDestinationData($data, $order);
+		}
+		$data['parcel'] = [
+			'dimensions' => $this->getParcelDimensions($helper, $settings)
+		];
+		$data = $this->_prepareSenderData($data, $helper, $settings);
+		$data = $this->prepareAutoPickupFlag($data);
 
-        return $data;
-    }
+		return $data;
+	}
 
-    /**
-     * @param WC_Order $order
-     * @param Bliskapaczka_Shipping_Method_Helper $helper
-     * @param $settings
-     *
-     * @return array
-     */
-    public function getDataForCourier(WC_Order $order, Bliskapaczka_Shipping_Method_Helper $helper, $settings)
-    {
-        $data = $this->getData($order, $helper, $settings);
-        foreach ( $order->get_items( array( 'shipping' ) ) as $item_id => $item ) {
-            $shipping_item_id = $item_id;
-        }
-        $data['operatorName'] = wc_get_order_item_meta( $shipping_item_id, '_bliskapaczka_posOperator' );
-        $data['deliveryType'] = 'D2D';
-        if ($data['operatorName'] === 'POCZTA') {
-            $data['deliveryType'] = 'P2D';
-        }
-        $data['parcel'] = [
-            'dimensions' => $this->getParcelDimensions($helper, $settings)
-        ];
-        unset($data['destinationCode']);
-        $data = $this->_prepareSenderData($data, $helper, $settings);
-        $data = $this->_prepareDestinationData($data, $order);
-        return $data;
-    }
+	/**
+	 *
+	 * @param WC_Order $order
+	 * @param Bliskapaczka_Shipping_Method_Helper $helper
+	 * @param
+	 *        	$settings
+	 *        	
+	 * @return array
+	 */
+	public function getDataForCourier(WC_Order $order, Bliskapaczka_Shipping_Method_Helper $helper, $settings)
+	{
+		$data = $this->getData($order, $helper, $settings);
+		foreach ($order->get_items(array(
+			'shipping'
+		)) as $item_id => $item) {
+			$shipping_item_id = $item_id;
+		}
+		$data['operatorName'] = wc_get_order_item_meta($shipping_item_id, '_bliskapaczka_posOperator');
+		$data['deliveryType'] = 'D2D';
+		if ($data['operatorName'] === 'POCZTA') {
+			$data['deliveryType'] = 'P2D';
+		}
+		$data['parcel'] = [
+			'dimensions' => $this->getParcelDimensions($helper, $settings)
+		];
+		unset($data['destinationCode']);
+		$data = $this->_prepareSenderData($data, $helper, $settings);
+		$data = $this->_prepareDestinationData($data, $order);
+		$data = $this->prepareAutoPickupFlag($data);
+		return $data;
+	}
 
-    /**
-     * @param $data
-     * @param WC_Order $order
-     *
-     * @return mixed
-     */
-    protected function _prepareDestinationData($data, WC_Order $order)
-    {
-        $shippingAddress = $order->get_address('shipping');
-        $bliskapaczka_addres1 = $shippingAddress['address_1'];
-        $bliskapaczka_addres2 = $shippingAddress['address_2'];
+	/**
+	 * Prepare autopickup flag for orders
+	 *
+	 * @param array $data
+	 *        	Oder data with "deliveryType" and "operatorName" keys defined
+	 * @return array Order data with "autoPickup" flag defined
+	 */
+	private function prepareAutoPickupFlag(array $data)
+	{
+		return $this->forceAutoPickupFlag($data, false);
+	}
 
-        if (!empty($bliskapaczka_addres2)) {
-           $bliskapaczka_addres1 = $bliskapaczka_addres1 . ' ' . $bliskapaczka_addres2;
-        }
-        //Pattern
-        $pattern = '/((?<=[\s])[\w]{1,}[\s,\/]{1,})?((?<=[\s,\/])[\w]{1,})$/';
+	/**
+	 * Force autopickup flag
+	 *
+	 * @param array $data
+	 *        	Oder data with "deliveryType" and "operatorName" keys defined
+	 * @param bool $default
+	 *        	The "autoPickup" flag
+	 *        	
+	 * @return array Order data with "autoPickup" flag defined
+	 */
+	public function forceAutoPickupFlag($data, $default = false)
+	{
+		$autoPickup = $default;
+		$deliveryType = $data['deliveryType'];
+		$operatorName = $data['operatorName'];
 
-        $street = preg_replace($pattern, "", $bliskapaczka_addres1);
-        preg_match($pattern, $bliskapaczka_addres1, $pattern_matches);
+		// Rules from WIW-473 force autoPickup flag settings for specific delivery type and operators.
+		switch ($deliveryType) {
+			// Ruler Delivery D2D.
+			case 'D2D':
+				if (true === in_array($operatorName, [
+					'DPD',
+					'UPS',
+					'FEDEX'
+				])) {
+					$autoPickup = true;
+				} else if (true === in_array($operatorName, [
+					'POCZTA',
+					'INPOST',
+					'GLS',
+					'DHL',
+					'XPRESS'
+				])) {
+					$autoPickup = false;
+				}
+				break;
+			// Ruler Delivery D2D.
+			case 'D2P':
+				if ('D2P' === $deliveryType && true === in_array($operatorName, [
+					'FEDEX'
+				])) {
+					$autoPickup = true;
+				}
+				break;
+		}
 
-        //Cleaning empty values
-        foreach ($pattern_matches as $key => $value) {
-            if (is_null($value) || $value == '')
-                unset($pattern_matches[$key]);
-        }
+		$data['autoPickup'] = $autoPickup;
 
-        //Re-index array
-        $pattern_matches = array_values($pattern_matches);
+		return $data;
+	}
 
-        //Counter
-        $pattern_group_counter = count($pattern_matches);
+	/**
+	 *
+	 * @param
+	 *        	$data
+	 * @param WC_Order $order
+	 *
+	 * @return mixed
+	 */
+	protected function _prepareDestinationData($data, WC_Order $order)
+	{
+		$shippingAddress = $order->get_address('shipping');
+		$bliskapaczka_addres1 = $shippingAddress['address_1'];
+		$bliskapaczka_addres2 = $shippingAddress['address_2'];
 
-        if ($pattern_group_counter > 2) {
-            $buildingNumber = $pattern_matches[$pattern_group_counter - 2];
-            $flatNumber = $pattern_matches[$pattern_group_counter - 1];
-        } else if ($pattern_group_counter == 2) {
-            $buildingNumber = $pattern_matches[$pattern_group_counter - 1];
-            $flatNumber = "";
-        }
+		if (! empty($bliskapaczka_addres2)) {
+			$bliskapaczka_addres1 = $bliskapaczka_addres1 . ' ' . $bliskapaczka_addres2;
+		}
+		// Pattern
+		$pattern = '/((?<=[\s])[\w]{1,}[\s,\/]{1,})?((?<=[\s,\/])[\w]{1,})$/';
 
-        //Cleaning separator
-        $buildingNumber = str_replace("/", "", $buildingNumber);
+		$street = preg_replace($pattern, "", $bliskapaczka_addres1);
+		preg_match($pattern, $bliskapaczka_addres1, $pattern_matches);
 
-        $data['receiverStreet'] = $street;
-        $data['receiverBuildingNumber'] = $buildingNumber;
-        $data['receiverFlatNumber'] = $flatNumber;
-        $data['receiverPostCode'] = $shippingAddress['postcode'];
-        $data['receiverCity'] = $shippingAddress['city'];
-        return $data;
-    }
+		// Cleaning empty values
+		foreach ($pattern_matches as $key => $value) {
+			if (is_null($value) || $value == '')
+				unset($pattern_matches[$key]);
+		}
 
-    /**
-     * @param $address
-     *
-     * @return string
-     */
-    protected function getBuildingNumber($address)
-    {
-        $numbers = explode('/', substr(strrchr($address, ' '), 1));
-        if (isset($numbers[0])) {
-            return $numbers[0];
-        }
-        return '';
-    }
+		// Re-index array
+		$pattern_matches = array_values($pattern_matches);
 
-    /**
-     * @param $address
-     *
-     * @return string
-     */
-    protected function getFlatNumber($address)
-    {
-        $numbers = explode('/', substr(strrchr($address, ' '), 1));
-        if (isset($numbers[1])) {
-            return $numbers[1];
-        }
-        return '';
-    }
+		// Counter
+		$pattern_group_counter = count($pattern_matches);
 
-    /**
-     * @param $data
-     * @param Bliskapaczka_Shipping_Method_Helper $helper
-     *
-     * @return mixed
-     * @throws \Bliskapaczka\ApiClient\Exception
-     */
-    public function prepareCod($data, WC_Order $order)
-    {
-        $data['codValue'] = $order->get_total();
+		if ($pattern_group_counter > 2) {
+			$buildingNumber = $pattern_matches[$pattern_group_counter - 2];
+			$flatNumber = $pattern_matches[$pattern_group_counter - 1];
+		} else if ($pattern_group_counter == 2) {
+			$buildingNumber = $pattern_matches[$pattern_group_counter - 1];
+			$flatNumber = "";
+		}
 
-        return $data;
-    }
+		// Cleaning separator
+		$buildingNumber = str_replace("/", "", $buildingNumber);
 
+		$data['receiverStreet'] = $street;
+		$data['receiverBuildingNumber'] = $buildingNumber;
+		$data['receiverFlatNumber'] = $flatNumber;
+		$data['receiverPostCode'] = $shippingAddress['postcode'];
+		$data['receiverCity'] = $shippingAddress['city'];
+		return $data;
+	}
 
-    /**
-     * Add incurance if needed
-     * @param $order
-     * @param $data
-     *
-     * @return array
-     */
-    public function prepareInsuranceDataIfNeeded($data, WC_Order $order)
-    {
-        if (in_array($data['operatorName'], self::OPERATORS_WITH_INSURANCE)) {
-            $data['parcel']['insuranceValue'] = $order->get_total();
-        }
-        return $data;
-    }
-    /**
-     * Get parcel dimensions in format accptable by Bliskapaczka API
-     *
-     * @param Bliskapaczka_Shipping_Method_Helper $helper
-     * @return array
-     */
-    protected function getParcelDimensions(Bliskapaczka_Shipping_Method_Helper $helper, $settings)
-    {
-        return $helper->getParcelDimensions($settings);
-    }
+	/**
+	 *
+	 * @param
+	 *        	$address
+	 *        	
+	 * @return string
+	 */
+	protected function getBuildingNumber($address)
+	{
+		$numbers = explode('/', substr(strrchr($address, ' '), 1));
+		if (isset($numbers[0])) {
+			return $numbers[0];
+		}
+		return '';
+	}
 
-    /**
-     * Prepare sender data in fomrat accptable by Bliskapaczka API
-     *
-     * @param array $data
-     * @param Bliskapaczka_Shipping_Method_Helper $helper
-     * @param array $settings
-     * @return array
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    protected function _prepareSenderData($data, Bliskapaczka_Shipping_Method_Helper $helper, $settings)
-    {
-        if ($settings[$helper::SENDER_EMAIL]) {
-            $data['senderEmail'] = $settings[$helper::SENDER_EMAIL];
-        }
+	/**
+	 *
+	 * @param
+	 *        	$address
+	 *        	
+	 * @return string
+	 */
+	protected function getFlatNumber($address)
+	{
+		$numbers = explode('/', substr(strrchr($address, ' '), 1));
+		if (isset($numbers[1])) {
+			return $numbers[1];
+		}
+		return '';
+	}
 
-        if ($settings[$helper::SENDER_FIRST_NAME]) {
-            $data['senderFirstName'] = $settings[$helper::SENDER_FIRST_NAME];
-        }
+	/**
+	 *
+	 * @param
+	 *        	$data
+	 * @param Bliskapaczka_Shipping_Method_Helper $helper
+	 *
+	 * @return mixed
+	 * @throws \Bliskapaczka\ApiClient\Exception
+	 */
+	public function prepareCod($data, WC_Order $order)
+	{
+		$data['codValue'] = $order->get_total();
 
-        if ($settings[$helper::SENDER_LAST_NAME]) {
-            $data['senderLastName'] = $settings[$helper::SENDER_LAST_NAME];
-        }
+		return $data;
+	}
 
-        if ($settings[$helper::SENDER_PHONE_NUMBER]) {
-            $data['senderPhoneNumber'] = $helper->telephoneNumberCeaning(
-                $settings[$helper::SENDER_PHONE_NUMBER]
-            );
-        }
+	/**
+	 * Add incurance if needed
+	 *
+	 * @param
+	 *        	$order
+	 * @param
+	 *        	$data
+	 *        	
+	 * @return array
+	 */
+	public function prepareInsuranceDataIfNeeded($data, WC_Order $order)
+	{
+		if (in_array($data['operatorName'], self::OPERATORS_WITH_INSURANCE)) {
+			$data['parcel']['insuranceValue'] = $order->get_total();
+		}
+		return $data;
+	}
 
-        if ($settings[$helper::SENDER_STREET]) {
-            $data['senderStreet'] = $settings[$helper::SENDER_STREET];
-        }
+	/**
+	 * Get parcel dimensions in format accptable by Bliskapaczka API
+	 *
+	 * @param Bliskapaczka_Shipping_Method_Helper $helper
+	 * @return array
+	 */
+	protected function getParcelDimensions(Bliskapaczka_Shipping_Method_Helper $helper, $settings)
+	{
+		return $helper->getParcelDimensions($settings);
+	}
 
-        if ($settings[$helper::SENDER_BUILDING_NUMBER]) {
-            $data['senderBuildingNumber'] = $settings[$helper::SENDER_BUILDING_NUMBER];
-        }
+	/**
+	 * Prepare sender data in fomrat accptable by Bliskapaczka API
+	 *
+	 * @param array $data
+	 * @param Bliskapaczka_Shipping_Method_Helper $helper
+	 * @param array $settings
+	 * @return array
+	 * @SuppressWarnings(PHPMD.NPathComplexity)
+	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+	 */
+	protected function _prepareSenderData($data, Bliskapaczka_Shipping_Method_Helper $helper, $settings)
+	{
+		if ($settings[$helper::SENDER_EMAIL]) {
+			$data['senderEmail'] = $settings[$helper::SENDER_EMAIL];
+		}
 
-        if ($settings[$helper::SENDER_FLAT_NUMBER]) {
-            $data['senderFlatNumber'] = $settings[$helper::SENDER_FLAT_NUMBER];
-        }
+		if ($settings[$helper::SENDER_FIRST_NAME]) {
+			$data['senderFirstName'] = $settings[$helper::SENDER_FIRST_NAME];
+		}
 
-        if ($settings[$helper::SENDER_POST_CODE]) {
-            $data['senderPostCode'] = $settings[$helper::SENDER_POST_CODE];
-        }
+		if ($settings[$helper::SENDER_LAST_NAME]) {
+			$data['senderLastName'] = $settings[$helper::SENDER_LAST_NAME];
+		}
 
-        if ($settings[$helper::SENDER_CITY]) {
-            $data['senderCity'] = $settings[$helper::SENDER_CITY];
-        }
+		if ($settings[$helper::SENDER_PHONE_NUMBER]) {
+			$data['senderPhoneNumber'] = $helper->telephoneNumberCeaning($settings[$helper::SENDER_PHONE_NUMBER]);
+		}
 
-        if ($settings[$helper::BANK_ACCOUNT_NUMBER]) {
-            $data['codPayoutBankAccountNumber'] = str_replace(
-                ' ', '', $settings[$helper::BANK_ACCOUNT_NUMBER]
-            );
-        }
-        return $data;
-    }
+		if ($settings[$helper::SENDER_STREET]) {
+			$data['senderStreet'] = $settings[$helper::SENDER_STREET];
+		}
 
-    /**
-     * Prepare data for pickup.
-     *
-     * @param \Bliskapaczka_Map_Shipping_Method $bliskapaczka
-     * @param string[] $orders_numbers Array of shipping numbers from bliskapaczka API
-     * @param boolean $auto_first_avaible If true that we request the pickup on the first availbe time.
-     * @return array
-     */
-    public function prepareDataForPickup(\Bliskapaczka_Map_Shipping_Method $bliskapaczka, array $orders_numbers, $auto_first_avaible = true)
+		if ($settings[$helper::SENDER_BUILDING_NUMBER]) {
+			$data['senderBuildingNumber'] = $settings[$helper::SENDER_BUILDING_NUMBER];
+		}
+
+		if ($settings[$helper::SENDER_FLAT_NUMBER]) {
+			$data['senderFlatNumber'] = $settings[$helper::SENDER_FLAT_NUMBER];
+		}
+
+		if ($settings[$helper::SENDER_POST_CODE]) {
+			$data['senderPostCode'] = $settings[$helper::SENDER_POST_CODE];
+		}
+
+		if ($settings[$helper::SENDER_CITY]) {
+			$data['senderCity'] = $settings[$helper::SENDER_CITY];
+		}
+
+		if ($settings[$helper::BANK_ACCOUNT_NUMBER]) {
+			$data['codPayoutBankAccountNumber'] = str_replace(' ', '', $settings[$helper::BANK_ACCOUNT_NUMBER]);
+		}
+		return $data;
+	}
+
+	/**
+	 * Prepare data for pickup.
+	 *
+	 * @param \Bliskapaczka_Map_Shipping_Method $bliskapaczka
+	 * @param string[] $orders_numbers
+	 *        	Array of shipping numbers from bliskapaczka API
+	 * @param boolean $auto_first_avaible
+	 *        	If true that we request the pickup on the first availbe time.
+	 * @return array
+	 */
+	public function prepareDataForPickup(\Bliskapaczka_Map_Shipping_Method $bliskapaczka, array $orders_numbers, $auto_first_avaible = true)
 	{
 		if (true === $auto_first_avaible) {
 			$first_available = true;
