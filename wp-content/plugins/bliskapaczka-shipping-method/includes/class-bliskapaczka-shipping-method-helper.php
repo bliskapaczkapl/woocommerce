@@ -622,6 +622,7 @@ class Bliskapaczka_Shipping_Method_Helper
     		$advice_api_client = $this->getApiClientOrderAdvice();
     	}
     	
+    	// set cod data if required
     	if ( $order->get_payment_method() === 'cod' ) {
     		$order_data = $mapper->prepareCOD( $order_data, $order );
     		$order_data = $mapper->prepareInsuranceDataIfNeeded( $order_data, $order );
@@ -659,11 +660,7 @@ class Bliskapaczka_Shipping_Method_Helper
 	    	if ( $this->isAutoAdvice() === true ) {
 	    		
 	    		$advice_api_client->setOrderId( $order_number );
-	    		
-	    		if ($need_to_pickup) {
-	    			$order_data['autoPickup'] = true;
-	    		}
-				
+				$order_data = $mapper->forceAutoPickupFlag($order_data, $need_to_pickup);
 	    		$advice_api_client->create( $order_data , ['bp-check-price: false']);
 	    		
 	    		$order->update_meta_data( '_bliskapaczka_need_to_pickup', $need_to_pickup );
@@ -704,12 +701,9 @@ class Bliskapaczka_Shipping_Method_Helper
 		$api_pickup = $this->getApiClientPickup();
 
 		try {
-			$mapper->prepareDataForPickup($bliskapaczka, [
-				$bliskapczka_order_id
-			], true);
 			$pickup_params = $mapper->prepareDataForPickup($bliskapaczka, [
 				$bliskapczka_order_id
-			]);
+			], true);
 			$api_pickup_response = json_decode($api_pickup->create($pickup_params), true);
 
 			if (isset($api_pickup_response['id']) && isset($api_pickup_response['number'])) {
