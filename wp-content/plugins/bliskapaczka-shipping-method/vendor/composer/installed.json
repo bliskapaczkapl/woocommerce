@@ -1,126 +1,141 @@
-[
-    {
-        "name": "bliskapaczkapl/bliskapaczka-api-client",
-        "version": "3.3.1",
-        "version_normalized": "3.3.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/bliskapaczkapl/bliskapaczka-api-client.git",
-            "reference": "3a1bfaf65b1bff36aff193574c1d028ac434afd9"
+{
+    "packages": [
+        {
+            "name": "bliskapaczkapl/bliskapaczka-api-client",
+            "version": "3.7.0",
+            "version_normalized": "3.7.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bliskapaczkapl/bliskapaczka-api-client.git",
+                "reference": "a01dc898f42128afdbffbab0f2659c043e2784dc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/a01dc898f42128afdbffbab0f2659c043e2784dc",
+                "reference": "a01dc898f42128afdbffbab0f2659c043e2784dc",
+                "shasum": ""
+            },
+            "require": {
+                "globalcitizen/php-iban": "^2.6",
+                "psr/log": "~1.1.0"
+            },
+            "require-dev": {
+                "block8/php-docblock-checker": "^1.1",
+                "monolog/monolog": "^1.24",
+                "phploc/phploc": "^3.0",
+                "phpmd/phpmd": "^2.4",
+                "phpunit/phpunit": "^5.7",
+                "sebastian/phpcpd": "^2.0",
+                "sensiolabs/security-checker": "4.*",
+                "squizlabs/php_codesniffer": "2.*"
+            },
+            "time": "2020-08-25T10:17:12+00:00",
+            "type": "api-client",
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Bliskapaczka\\": "src/Bliskapaczka/"
+                }
+            },
+            "description": "BliczkaPaczka API Client",
+            "support": {
+                "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/3.7.0",
+                "issues": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/issues"
+            },
+            "install-path": "../bliskapaczkapl/bliskapaczka-api-client"
         },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/3a1bfaf65b1bff36aff193574c1d028ac434afd9",
-            "reference": "3a1bfaf65b1bff36aff193574c1d028ac434afd9",
-            "shasum": ""
-        },
-        "require": {
-            "globalcitizen/php-iban": "^2.6",
-            "psr/log": "~1.1.0"
-        },
-        "require-dev": {
-            "block8/php-docblock-checker": "^1.1",
-            "phploc/phploc": "^3.0",
-            "phpmd/phpmd": "^2.4",
-            "phpunit/phpunit": "^5.7",
-            "sebastian/phpcpd": "^2.0",
-            "sensiolabs/security-checker": "4.*",
-            "squizlabs/php_codesniffer": "2.*"
-        },
-        "time": "2019-01-21T15:01:34+00:00",
-        "type": "api client",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "src/helpers.php"
+        {
+            "name": "globalcitizen/php-iban",
+            "version": "v2.7.5",
+            "version_normalized": "2.7.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/globalcitizen/php-iban.git",
+                "reference": "4c0fc54877948ac667c0ab29c2d1afbe47705599"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/globalcitizen/php-iban/zipball/4c0fc54877948ac667c0ab29c2d1afbe47705599",
+                "reference": "4c0fc54877948ac667c0ab29c2d1afbe47705599",
+                "shasum": ""
+            },
+            "time": "2020-05-03T19:46:35+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "oophp-iban.php",
+                    "php-iban.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0-only"
             ],
-            "psr-4": {
-                "Bliskapaczka\\": "src/Bliskapaczka/"
-            }
+            "description": "php-iban is a library for parsing and validating IBAN (and IIBAN) bank account information.",
+            "support": {
+                "issues": "https://github.com/globalcitizen/php-iban/issues",
+                "source": "https://github.com/globalcitizen/php-iban/tree/v2.7.5"
+            },
+            "install-path": "../globalcitizen/php-iban"
         },
-        "description": "BliczkaPaczka API Client",
-        "support": {
-            "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/3.3.1",
-            "issues": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/issues"
+        {
+            "name": "psr/log",
+            "version": "1.1.3",
+            "version_normalized": "1.1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "0f73288fd15629204f9d42b7055f72dacbe811fc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/0f73288fd15629204f9d42b7055f72dacbe811fc",
+                "reference": "0f73288fd15629204f9d42b7055f72dacbe811fc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "time": "2020-03-23T09:12:05+00:00",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Log\\": "Psr/Log/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "homepage": "https://github.com/php-fig/log",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/log/tree/1.1.3"
+            },
+            "install-path": "../psr/log"
         }
-    },
-    {
-        "name": "globalcitizen/php-iban",
-        "version": "v2.6.9",
-        "version_normalized": "2.6.9.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/globalcitizen/php-iban.git",
-            "reference": "16b8c416e8a4047b52dca00794f161bfa68afb7a"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/globalcitizen/php-iban/zipball/16b8c416e8a4047b52dca00794f161bfa68afb7a",
-            "reference": "16b8c416e8a4047b52dca00794f161bfa68afb7a",
-            "shasum": ""
-        },
-        "time": "2018-08-14T00:04:02+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "oophp-iban.php",
-                "php-iban.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "LGPL-3.0"
-        ],
-        "description": "php-iban is a library for parsing and validating IBAN (and IIBAN) bank account information."
-    },
-    {
-        "name": "psr/log",
-        "version": "1.1.0",
-        "version_normalized": "1.1.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/php-fig/log.git",
-            "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/php-fig/log/zipball/6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
-            "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "time": "2018-11-20T15:27:04+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Psr\\Log\\": "Psr/Log/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "PHP-FIG",
-                "homepage": "http://www.php-fig.org/"
-            }
-        ],
-        "description": "Common interface for logging libraries",
-        "homepage": "https://github.com/php-fig/log",
-        "keywords": [
-            "log",
-            "psr",
-            "psr-3"
-        ]
-    }
-]
+    ],
+    "dev": false,
+    "dev-package-names": []
+}
