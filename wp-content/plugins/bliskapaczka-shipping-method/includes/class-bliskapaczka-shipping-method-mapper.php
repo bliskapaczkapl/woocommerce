@@ -72,9 +72,9 @@ class Bliskapaczka_Shipping_Method_Mapper
 		}
 		$data['operatorName'] = wc_get_order_item_meta($shipping_item_id, '_bliskapaczka_posOperator');
 		$data['deliveryType'] = 'D2D';
-		if ($data['operatorName'] === 'POCZTA') {
-			$data['deliveryType'] = 'P2D';
-		}
+// 		if ($data['operatorName'] === 'POCZTA') {
+// 			$data['deliveryType'] = 'P2D';
+// 		}
 		$data['parcel'] = [
 			'dimensions' => $this->getParcelDimensions($helper, $settings)
 		];
@@ -115,7 +115,7 @@ class Bliskapaczka_Shipping_Method_Mapper
 
 		// Rules from WIW-473 force autoPickup flag settings for specific delivery type and operators.
 		switch ($deliveryType) {
-			// Ruler Delivery D2D.
+			// Rule Delivery D2D.
 			case 'D2D':
 				if (true === in_array($operatorName, [
 					'DPD',
@@ -133,9 +133,9 @@ class Bliskapaczka_Shipping_Method_Mapper
 					$autoPickup = false;
 				}
 				break;
-			// Ruler Delivery D2D.
+			// Rule Delivery D2D.
 			case 'D2P':
-				if ('D2P' === $deliveryType && true === in_array($operatorName, [
+				if (true === in_array($operatorName, [
 					'FEDEX'
 				])) {
 					$autoPickup = true;
