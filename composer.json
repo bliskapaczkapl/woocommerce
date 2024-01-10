@@ -9,7 +9,7 @@
 		"sebastian/phpcpd" : "^2.0",
 		"phploc/phploc" : "^3.0",
 		"wordpress/wordpress" : "4.8.1",
-		"woocommerce/woocommerce" : "^2.1",
+		"woocommerce/woocommerce" : "^2.1 || ^5.0",
 		"wp-coding-standards/wpcs" : "*",
 		"dancryer/php-docblock-checker" : "^1.10"
 	},
